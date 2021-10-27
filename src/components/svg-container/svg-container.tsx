@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 interface SvgContainerProps extends React.SVGProps<SVGSVGElement> {
-  id?: string
   children: React.ReactNode
 }
 

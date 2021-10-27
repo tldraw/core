@@ -7,11 +7,7 @@ This package contains the core of the [tldraw](https://tldraw.com) library. It i
 - [`Renderer`](#renderer) - a React component
 - [`TLShapeUtility`](#tlshapeutility) - an abstract class for custom shape utilities
 - the library's TypeScript [`types`](#types)
-- several utility classes:
-  - [`Utils`](#utils)
-  - [`Vec`](#vec)
-  - [`Svg`](#svg)
-  - [`Intersect`](#intersect)
+- some handy [`Utils`](#utils)
 
 ## Installation
 
@@ -161,69 +157,106 @@ An object that describes a relationship between two shapes on the page.
 
 The `TLShapeUtil` is an abstract class that you can extend to create utilities for your custom shapes. See [Guide: Create a Custom Shape](#create-a-custom-shape).
 
-## `inputs`
-
-A class instance that stores the current pointer position and pressed keys.
-
 ### `Utils`
 
 A general purpose utility class.
-
-### `Vec`
-
-A utility class for vector math and related methods.
-
-### `Svg`
-
-A utility class for creating SVG path data through imperative commands.
-
-### `Intersect`
-
-A utility class for finding intersections between various geometric shapes.
 
 ## Guides
 
 ### Create a Custom Shape
 
-...
+```tsx
+export interface BoxShape extends TLShape {
+  type: 'box'
+  size: number[]
+}
+
+type Meta = { darkMode: boolean }
+
+export const boxShape: BoxShape = {
+  id: 'box1',
+  type: 'box',
+  parentId: 'page',
+  childIndex: 0,
+  point: [0, 0],
+  size: [100, 100],
+  rotation: 0,
+}
+
+export class BoxUtil extends TLShapeUtil<BoxShape, SVGSVGElement, Meta> {
+  age = 100
+
+  Component = React.forwardRef<SVGSVGElement, TLComponentProps<BoxShape, SVGSVGElement>>(
+    ({ shape, events, meta }, ref) => {
+      return (
+        <SVGContainer ref={ref}>
+          <g {...events}>
+            <rect
+              width={shape.size[0]}
+              height={shape.size[1]}
+              fill="none"
+              stroke={meta.darkMode ? 'white' : 'black'}
+            />
+          </g>
+        </SVGContainer>
+      )
+    }
+  )
+
+  Indicator: TLIndicator<BoxShape, SVGSVGElement, Meta> = ({ shape }) => {
+    return (
+      <SVGContainer>
+        <rect width={shape.size[0]} height={shape.size[1]} fill="none" stroke="black" />
+      </SVGContainer>
+    )
+  }
+
+  getBounds = (shape: BoxShape) => {
+    const bounds = Utils.getFromCache(this.boundsCache, shape, () => {
+      const [width, height] = shape.size
+      return {
+        minX: 0,
+        maxX: width,
+        minY: 0,
+        maxY: height,
+        width,
+        height,
+      } as TLBounds
+    })
+
+    return Utils.translateBounds(bounds, shape.point)
+  }
+}
+```
 
 ### Example
 
 ```tsx
 import * as React from "react"
 import { Renderer, TLShape, TLShapeUtil, Vec } from '@tldraw/core'
+import { BoxShape, BoxUtil } from "./shapes/box-util"
 
-interface RectangleShape extends TLShape {
-  type: "rectangle",
-  size: number[]
-}
-
-class Rectangle extends TLShapeUtil<RectangleShape> {
-  // See the "Create a Custom Shape" guide
-}
-
-const myShapes = { rectangle: new Rectangle() }
+const myShapes = { box: new BoxUtil() }
 
 function App() {
   const [page, setPage] = React.useState({
-    id: "page1"
+    id: "page"
     shapes: {
-      "rect1": {
-        id: 'rect1',
-        parentId: 'page1',
-        name: 'Rectangle',
+      "box1": {
+        id: 'box1',
+        type: 'box',
+        parentId: 'page',
         childIndex: 0,
-        type: 'rectangle',
         point: [0, 0],
-        rotation: 0,
         size: [100, 100],
+        rotation: 0,
       }
     },
     bindings: {}
   })
 
   const [pageState, setPageState] = React.useState({
-    id: "page1",
+    id: "page",
     selectedIds: [],
     camera: {
       point: [0,0],
@@ -256,7 +289,7 @@ Run `yarn` to install dependencies.
 
 Run `yarn start` to begin the monorepo's development server (`@tldraw/site`).
 
-Run `nx test core` to execute unit tests via [Jest](https://jestjs.io).
+Run `yarn test` to execute unit tests via [Jest](https://jestjs.io).
 
 ## Contribution
 
