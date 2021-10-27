@@ -33,7 +33,10 @@
     "stripInternal": true,
     "target": "es6",
     "typeRoots": ["node_modules/@types", "node_modules/jest"],
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "paths": {
+      "+*": ["./*"]
+    }
   },
   "typedocOptions": {
     "entryPoints": ["src/index.ts"],

@@ -2,7 +2,7 @@
   "name": "@tldraw/core",
   "version": "0.1.0",
   "private": false,
-  "description": "A tiny little drawing app (core)",
+  "description": "The TLDraw core renderer and utilities.",
   "author": "@steveruizok",
   "repository": {
     "type": "git",
