@@ -1,6 +1,8 @@
-# @tldraw/core
+<div style="text-align: center; transform: scale(.5);">
+  <img src="card-repo.png"/>
+</div>
 
-> `This library is not yet released and these docs are partially out of date!`
+# @tldraw/core
 
 This package contains the `Renderer` and core utilities used by [tldraw](https://tldraw.com). You can use this package to render React components in a canvas user interface. See the example project for a reference.
 
