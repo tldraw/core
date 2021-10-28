@@ -1,5 +1,4 @@
 {
-  "version": "0.1.4",
   "name": "@tldraw/core-repo",
   "description": "The TLDraw core renderer and utilities.",
   "author": "@steveruizok",

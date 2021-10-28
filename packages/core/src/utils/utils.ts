@@ -499,7 +499,7 @@ export class Utils {
    * @param B
    */
   static getArcLength(C: number[], r: number, A: number[], B: number[]): number {
-    const sweep = Utils.getSweepFlag(C, A, B)
+    const sweep = Utils.getSweep(C, A, B)
     return r * (2 * Math.PI) * (sweep / (2 * Math.PI))
   }
 
