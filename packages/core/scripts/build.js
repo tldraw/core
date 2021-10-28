@@ -27,6 +27,7 @@ async function main() {
       tsconfig: './tsconfig.build.json',
       external: ['react', 'react-dom'],
       metafile: true,
+      sourcemap: true,
     })
 
     const esmResult = esbuild.buildSync({
@@ -41,6 +42,7 @@ async function main() {
       jsxFragment: 'React.Fragment',
       external: ['react', 'react-dom'],
       metafile: true,
+      sourcemap: true,
     })
 
     let esmSize = 0
