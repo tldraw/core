@@ -38,7 +38,6 @@ export interface TLUser<T extends TLShape> {
   color: string
   point: number[]
   selectedIds: string[]
-  activeShapes: T[]
 }
 
 export type TLUsers<T extends TLShape, U extends TLUser<T> = TLUser<T>> = Record<string, U>
@@ -157,11 +156,11 @@ export type TLBoundsHandleEventHandler = (
 
 export interface TLCallbacks<T extends TLShape> {
   // Camera events
-  onPinchStart: TLPinchEventHandler
-  onPinchEnd: TLPinchEventHandler
-  onPinch: TLPinchEventHandler
   onPan: TLWheelEventHandler
   onZoom: TLWheelEventHandler
+  onPinchStart: TLPinchEventHandler
+  onPinch: TLPinchEventHandler
+  onPinchEnd: TLPinchEventHandler
 
   // Pointer Events
   onPointerMove: TLPointerEventHandler

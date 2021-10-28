@@ -237,6 +237,17 @@ A snapline is an array of points (formatted as `[x, y]`) that represent a "snapp
 
 The `TLShapeUtil` is an abstract class that you can extend to create utilities for your custom shapes. See the [Creating Shapes](#creating-shapes) guide to learn more.
 
+### `TLUser`
+
+A `TLUser` is the presence information for a multiplayer user. The user's pointer location and selections will be shown on the canvas. If the `TLUser`'s id matches the `Renderer`'s `userId` prop, then the user's cursor and selections will not be shown.
+
+| Property        | Type       | Description                              |
+| --------------- | ---------- | ---------------------------------------- |
+| `id`            | `string`   | A unique id for the user.                |
+| `color`         | `string`   | The user's color, used for indicators.   |
+| `point`         | `number[]` | The user's pointer location on the page. |
+| `selectedIds[]` | `string[]` | The user's selected shape ids.           |
+
 ### `Utils`
 
 A general purpose utility class. See source for more.
