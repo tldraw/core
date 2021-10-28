@@ -2,7 +2,7 @@ import type React from 'react'
 import type { TLKeyboardInfo, TLPointerInfo } from './types'
 import { Utils } from './utils'
 import { Vec } from '@tldraw/vec'
-import type { TLBounds } from '+index'
+import type { TLBounds } from '~index'
 
 const DOUBLE_CLICK_DURATION = 250
 

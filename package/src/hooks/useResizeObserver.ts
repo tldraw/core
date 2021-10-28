@@ -1,6 +1,6 @@
-import { useTLContext } from '+hooks'
+import { useTLContext } from '~hooks'
 import * as React from 'react'
-import { Utils } from '+utils'
+import { Utils } from '~utils'
 
 export function useResizeObserver<T extends Element>(ref: React.RefObject<T>) {
   const { inputs, callbacks } = useTLContext()

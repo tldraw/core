@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react'
-import type { TLShape } from '+types'
-import { usePosition, useTLContext } from '+hooks'
+import type { TLShape } from '~types'
+import { usePosition, useTLContext } from '~hooks'
 
 interface IndicatorProps<T extends TLShape, M = any> {
   shape: T

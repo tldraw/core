@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as React from 'react'
-import { useShapeEvents } from '+hooks'
-import type { IShapeTreeNode, TLShape } from '+types'
+import { useShapeEvents } from '~hooks'
+import type { IShapeTreeNode, TLShape } from '~types'
 import { RenderedShape } from './rendered-shape'
-import { Container } from '+components/container'
-import { useTLContext } from '+hooks'
-import { useForceUpdate } from '+hooks/useForceUpdate'
-import type { TLShapeUtil } from '+shape-utils'
+import { Container } from '~components/container'
+import { useTLContext } from '~hooks'
+import { useForceUpdate } from '~hooks/useForceUpdate'
+import type { TLShapeUtil } from '~shape-utils'
 
 interface ShapeProps<T extends TLShape, M> extends IShapeTreeNode<T, M> {
   utils: TLShapeUtil<T>

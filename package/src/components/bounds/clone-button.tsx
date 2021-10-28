@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { useTLContext } from '+hooks'
-import type { TLBounds } from '+types'
+import { useTLContext } from '~hooks'
+import type { TLBounds } from '~types'
 
 const ROTATIONS = {
   right: 0,

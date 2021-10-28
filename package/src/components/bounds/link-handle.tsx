@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { useBoundsHandleEvents, useTLContext } from '+hooks'
-import type { TLBounds } from '+types'
+import { useBoundsHandleEvents, useTLContext } from '~hooks'
+import type { TLBounds } from '~types'
 
 interface LinkHandleProps {
   size: number

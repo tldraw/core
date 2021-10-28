@@ -12,8 +12,8 @@ import type {
 import { Canvas } from '../canvas'
 import { Inputs } from '../../inputs'
 import { useTLTheme, TLContext, TLContextType } from '../../hooks'
-import type { TLSnapLine, TLUsers } from '+index'
-import type { TLShapeUtilsMap } from '+shape-utils'
+import type { TLSnapLine, TLUsers } from '~index'
+import type { TLShapeUtilsMap } from '~shape-utils'
 
 export interface RendererProps<T extends TLShape, M = any> extends Partial<TLCallbacks<T>> {
   /**

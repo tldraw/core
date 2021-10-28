@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Vec } from '@tldraw/vec'
-import type { TLHandle, TLShape } from '+types'
+import type { TLHandle, TLShape } from '~types'
 import { Handle } from './handle'
 
 interface HandlesProps {

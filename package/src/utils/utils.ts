@@ -13,7 +13,7 @@ import {
 } from '../types'
 import { Vec } from '@tldraw/vec'
 import './polyfills'
-import type { Patch, TLBoundsWithCenter } from '+index'
+import type { Patch, TLBoundsWithCenter } from '~index'
 
 const TAU = Math.PI * 2
 

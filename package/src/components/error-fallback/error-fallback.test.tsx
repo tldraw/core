@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { renderWithContext } from '+test'
+import { renderWithContext } from '~test'
 import { ErrorFallback } from './error-fallback'
 
 describe('error fallback', () => {

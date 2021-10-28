@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { useHandleEvents } from '+hooks'
-import { Container } from '+components/container'
-import Utils from '+utils'
-import { SVGContainer } from '+components/svg-container'
+import { useHandleEvents } from '~hooks'
+import { Container } from '~components/container'
+import Utils from '~utils'
+import { SVGContainer } from '~components/svg-container'
 
 interface HandleProps {
   id: string

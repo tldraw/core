@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { User } from '+components/user/user'
-import type { TLShape, TLUsers } from '+types'
+import { User } from '~components/user/user'
+import type { TLShape, TLUsers } from '~types'
 
 export interface UserProps {
   userId?: string

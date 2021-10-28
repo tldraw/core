@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useTLContext } from '+hooks'
+import { useTLContext } from '~hooks'
 
 interface ErrorFallbackProps {
   error: Error

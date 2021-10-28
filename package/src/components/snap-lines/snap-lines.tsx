@@ -1,6 +1,6 @@
 import * as React from 'react'
-import type { TLSnapLine } from '+types'
-import Utils from '+utils'
+import type { TLSnapLine } from '~types'
+import Utils from '~utils'
 
 export function SnapLines({ snapLines }: { snapLines: TLSnapLine[] }) {
   return (

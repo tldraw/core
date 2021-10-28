@@ -1,4 +1,4 @@
-import { renderWithContext } from '+test'
+import { renderWithContext } from '~test'
 import * as React from 'react'
 import { Bounds } from './bounds'
 

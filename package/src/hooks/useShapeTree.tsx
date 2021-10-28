@@ -9,10 +9,10 @@ import type {
   TLCallbacks,
   TLBinding,
   TLBounds,
-} from '+types'
-import { Utils } from '+utils'
+} from '~types'
+import { Utils } from '~utils'
 import { Vec } from '@tldraw/vec'
-import type { TLShapeUtilsMap } from '+shape-utils'
+import type { TLShapeUtilsMap } from '~shape-utils'
 
 function addToShapeTree<T extends TLShape, M extends Record<string, unknown>>(
   shape: T,

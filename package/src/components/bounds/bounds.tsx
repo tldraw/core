@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as React from 'react'
-import { TLBoundsEdge, TLBoundsCorner, TLBounds } from '+types'
+import { TLBoundsEdge, TLBoundsCorner, TLBounds } from '~types'
 import { CenterHandle } from './center-handle'
 import { RotateHandle } from './rotate-handle'
 import { CornerHandle } from './corner-handle'
 import { EdgeHandle } from './edge-handle'
 import { CloneButtons } from './clone-buttons'
-import { Container } from '+components/container'
-import { SVGContainer } from '+components/svg-container'
+import { Container } from '~components/container'
+import { SVGContainer } from '~components/svg-container'
 import { LinkHandle } from './link-handle'
 
 interface BoundsProps {

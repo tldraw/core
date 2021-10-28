@@ -8,7 +8,7 @@
     "baseUrl": ".",
     "paths": {
       "@tldraw/core": ["./package/src"],
-      "+*": ["./package/src/*"]
+      "~*": ["./package/src/*"]
     }
   }
 }

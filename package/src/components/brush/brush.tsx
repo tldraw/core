@@ -1,6 +1,6 @@
-import { SVGContainer } from '+components'
-import { Container } from '+components/container'
-import type { TLBounds } from '+types'
+import { SVGContainer } from '~components'
+import { Container } from '~components/container'
+import type { TLBounds } from '~types'
 import * as React from 'react'
 
 export const Brush = React.memo(({ brush }: { brush: TLBounds }): JSX.Element | null => {

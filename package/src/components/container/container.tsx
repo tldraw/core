@@ -1,6 +1,6 @@
 import * as React from 'react'
-import type { TLBounds } from '+types'
-import { usePosition } from '+hooks'
+import type { TLBounds } from '~types'
+import { usePosition } from '~hooks'
 
 interface ContainerProps {
   id?: string
