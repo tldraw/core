@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as React from 'react'
-import { HTMLContainer, TLComponentProps } from '@tldraw/core'
+import { HTMLContainer, TLShapeUtil } from '@tldraw/core'
 import type { LabelShape } from './LabelShape'
 
-export const LabelComponent = React.forwardRef<HTMLDivElement, TLComponentProps<LabelShape>>(
-  function Label({ shape, events, meta, onShapeChange, isSelected }, ref) {
+export const LabelComponent = TLShapeUtil.Component<LabelShape, HTMLDivElement>(
+  ({ shape, events, meta, onShapeChange, isSelected }, ref) => {
     const { id, size, text } = shape
 
     const color = meta.isDarkMode ? 'white' : 'black'

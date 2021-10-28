@@ -2,12 +2,11 @@ import * as React from 'react'
 import { Utils } from '~utils'
 import { TLContext } from '~hooks'
 
-export function useShapeEvents(id: string, disable = false) {
+export function useShapeEvents(id: string) {
   const { rPageState, rSelectionBounds, callbacks, inputs } = React.useContext(TLContext)
 
   const onPointerDown = React.useCallback(
     (e: React.PointerEvent) => {
-      if (disable) return
       if (!inputs.pointerIsValid(e)) return
 
       if (e.button === 2) {
@@ -38,14 +37,13 @@ export function useShapeEvents(id: string, disable = false) {
       callbacks.onPointShape?.(info, e)
       callbacks.onPointerDown?.(info, e)
     },
-    [inputs, callbacks, id, disable]
+    [inputs, callbacks, id]
   )
 
   const onPointerUp = React.useCallback(
     (e: React.PointerEvent) => {
       if (e.button !== 0) return
       if (!inputs.pointerIsValid(e)) return
-      if (disable) return
       e.stopPropagation()
       const isDoubleClick = inputs.isDoubleClick()
       const info = inputs.pointerUp(e, id)
@@ -61,13 +59,12 @@ export function useShapeEvents(id: string, disable = false) {
       callbacks.onReleaseShape?.(info, e)
       callbacks.onPointerUp?.(info, e)
     },
-    [inputs, callbacks, id, disable]
+    [inputs, callbacks, id]
   )
 
   const onPointerMove = React.useCallback(
     (e: React.PointerEvent) => {
       if (!inputs.pointerIsValid(e)) return
-      if (disable) return
 
       e.stopPropagation()
 
@@ -81,27 +78,25 @@ export function useShapeEvents(id: string, disable = false) {
 
       callbacks.onPointerMove?.(info, e)
     },
-    [inputs, callbacks, id, disable]
+    [inputs, callbacks, id]
   )
 
   const onPointerEnter = React.useCallback(
     (e: React.PointerEvent) => {
       if (!inputs.pointerIsValid(e)) return
-      if (disable) return
       const info = inputs.pointerEnter(e, id)
       callbacks.onHoverShape?.(info, e)
     },
-    [inputs, callbacks, id, disable]
+    [inputs, callbacks, id]
   )
 
   const onPointerLeave = React.useCallback(
     (e: React.PointerEvent) => {
-      if (disable) return
       if (!inputs.pointerIsValid(e)) return
       const info = inputs.pointerEnter(e, id)
       callbacks.onUnhoverShape?.(info, e)
     },
-    [inputs, callbacks, id, disable]
+    [inputs, callbacks, id]
   )
 
   return {

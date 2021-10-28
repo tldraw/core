@@ -7,8 +7,6 @@ type T = BoxShape
 type E = SVGSVGElement
 
 export class BoxUtil extends TLShapeUtil<T, E> {
-  type = 'box' as const
-
   Component = BoxComponent
 
   Indicator = BoxIndicator

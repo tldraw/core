@@ -51,7 +51,7 @@ export function UsersIndicators<T extends TLShape>({
                 <ShapeIndicator
                   key={`${user.id}_${shape.id}_indicator`}
                   shape={shape}
-                  color={user.color}
+                  user={user}
                   meta={meta}
                   isHovered
                 />

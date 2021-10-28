@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react'
-import type { TLShape } from '~types'
+import type { TLShape, TLUser } from '~types'
 import { usePosition, useTLContext } from '~hooks'
 
 interface IndicatorProps<T extends TLShape, M = any> {
@@ -8,7 +8,7 @@ interface IndicatorProps<T extends TLShape, M = any> {
   meta: M extends any ? M : undefined
   isSelected?: boolean
   isHovered?: boolean
-  color?: string
+  user?: TLUser<T>
 }
 
 export const ShapeIndicator = React.memo(
@@ -16,7 +16,7 @@ export const ShapeIndicator = React.memo(
     isHovered = false,
     isSelected = false,
     shape,
-    color,
+    user,
     meta,
   }: IndicatorProps<T, M>) => {
     const { shapeUtils } = useTLContext()
@@ -28,14 +28,15 @@ export const ShapeIndicator = React.memo(
       <div
         ref={rPositioned}
         className={
-          'tl-indicator tl-absolute ' + (color ? '' : isSelected ? 'tl-selected' : 'tl-hovered')
+          'tl-indicator tl-absolute ' + (user ? '' : isSelected ? 'tl-selected' : 'tl-hovered')
         }
       >
         <svg width="100%" height="100%">
-          <g className="tl-centered-g" stroke={color}>
+          <g className="tl-centered-g" stroke={user?.color}>
             <utils.Indicator
               shape={shape}
               meta={meta}
+              user={user}
               isSelected={isSelected}
               isHovered={isHovered}
             />

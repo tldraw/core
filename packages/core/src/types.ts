@@ -31,7 +31,6 @@ export interface TLPageState {
   hoveredId?: string | null
   editingId?: string | null
   bindingId?: string | null
-  currentParentId?: string | null
 }
 
 export interface TLUser<T extends TLShape> {
@@ -50,8 +49,6 @@ export interface TLHandle {
   id: string
   index: number
   point: number[]
-  canBind?: boolean
-  bindingId?: string
 }
 
 export interface TLShape {
@@ -77,7 +74,6 @@ export interface TLComponentProps<T extends TLShape, E = any, M = any> {
   isBinding: boolean
   isHovered: boolean
   isSelected: boolean
-  isCurrentParent: boolean
   meta: M extends any ? M : never
   onShapeChange?: TLCallbacks<T>['onShapeChange']
   onShapeBlur?: TLCallbacks<T>['onShapeBlur']
@@ -97,17 +93,11 @@ export interface TLShapeProps<T extends TLShape, E = any, M = any>
   shape: T
 }
 
-export interface TLTool {
-  id: string
-  name: string
-}
-
-export interface TLBinding<M = any> {
+export interface TLBinding {
   id: string
   type: string
   toId: string
   fromId: string
-  meta: M
 }
 
 export interface TLTheme {
@@ -249,12 +239,6 @@ export interface TLBoundsWithCenter extends TLBounds {
   midY: number
 }
 
-export type TLIntersection = {
-  didIntersect: boolean
-  message: string
-  points: number[][]
-}
-
 export enum TLBoundsEdge {
   Top = 'top_edge',
   Right = 'right_edge',
@@ -304,6 +288,7 @@ export interface TLTransformInfo<T extends TLShape> {
   transformOrigin: number[]
 }
 
+// TODO: Remove me and the rest of the bezier curve content
 export interface TLBezierCurveSegment {
   start: number[]
   tangentStart: number[]
@@ -315,6 +300,7 @@ export interface TLBezierCurveSegment {
   pressureEnd: number
 }
 
+// TODO: Move snaps into its own repo
 export enum SnapPoints {
   minX = 'minX',
   midX = 'midX',
@@ -343,7 +329,6 @@ export interface IShapeTreeNode<T extends TLShape, M = any> {
   isBinding: boolean
   isHovered: boolean
   isSelected: boolean
-  isCurrentParent: boolean
   meta?: M extends any ? M : never
 }
 

@@ -35,7 +35,9 @@ export function useSelection<T extends TLShape>(
 
     isLocked = shape.isLocked || false
 
-    bounds = getShapeUtils(shapeUtils, shape).getBounds(shape)
+    const utils = getShapeUtils(shapeUtils, shape)
+
+    bounds = utils.hideBounds ? undefined : utils.getBounds(shape)
   } else if (selectedIds.length > 1) {
     const selectedShapes = selectedIds.map((id) => page.shapes[id])
 

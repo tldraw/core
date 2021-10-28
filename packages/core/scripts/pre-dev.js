@@ -18,9 +18,9 @@ async function main() {
     bundle: true,
     format: 'esm',
     target: 'es6',
+    tsconfig: './tsconfig.build.json',
     jsxFactory: 'React.createElement',
     jsxFragment: 'React.Fragment',
-    tsconfig: './tsconfig.json',
     external: ['react', 'react-dom'],
   })
 }

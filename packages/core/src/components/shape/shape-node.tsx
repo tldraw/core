@@ -16,7 +16,6 @@ export const ShapeNode = React.memo(
     isBinding,
     isHovered,
     isSelected,
-    isCurrentParent,
     meta,
   }: ShapeNodeProps<T>) => {
     return (
@@ -27,7 +26,6 @@ export const ShapeNode = React.memo(
           isBinding={isBinding}
           isHovered={isHovered}
           isSelected={isSelected}
-          isCurrentParent={isCurrentParent}
           utils={utils[shape.type as T['type']]}
           meta={meta}
         />

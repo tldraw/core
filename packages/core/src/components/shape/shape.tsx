@@ -21,12 +21,11 @@ export const Shape = React.memo(
     isBinding,
     isHovered,
     isSelected,
-    isCurrentParent,
     meta,
   }: ShapeProps<T, M>) => {
     const { callbacks } = useTLContext()
     const bounds = utils.getBounds(shape)
-    const events = useShapeEvents(shape.id, isCurrentParent)
+    const events = useShapeEvents(shape.id)
 
     useForceUpdate()
 
@@ -35,7 +34,6 @@ export const Shape = React.memo(
         <RenderedShape
           shape={shape}
           isBinding={isBinding}
-          isCurrentParent={isCurrentParent}
           isEditing={isEditing}
           isHovered={isHovered}
           isSelected={isSelected}

@@ -66,7 +66,7 @@ export const Page = React.memo(function Page<T extends TLShape, M extends Record
 
     const utils = shapeUtils[shape.type] as TLShapeUtil<any, any>
 
-    _hideCloneHandles = hideCloneHandles || !utils.canClone
+    _hideCloneHandles = hideCloneHandles || !utils.showCloneHandles
 
     if (shape.handles !== undefined) {
       shapeWithHandles = shape

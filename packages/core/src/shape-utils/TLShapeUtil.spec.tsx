@@ -7,7 +7,6 @@ import { TLShapeUtil } from './TLShapeUtil'
 import { render } from '@testing-library/react'
 import { SVGContainer } from '~components'
 import Utils from '~utils'
-import type { TLIndicator } from '~shape-utils'
 
 export interface BoxShape extends TLShape {
   type: 'box'
@@ -32,28 +31,26 @@ export const boxShape: BoxShape = {
 export class BoxUtil extends TLShapeUtil<BoxShape, SVGSVGElement, Meta> {
   age = 100
 
-  Component = React.forwardRef<SVGSVGElement, TLComponentProps<BoxShape, SVGSVGElement>>(
-    ({ shape, events, meta }, ref) => {
-      type T = typeof meta.legs
-      type C = T['toFixed']
+  Component = TLShapeUtil.Component<BoxShape, SVGSVGElement>(({ shape, events, meta }, ref) => {
+    type T = typeof meta.legs
+    type C = T['toFixed']
 
-      return (
-        <SVGContainer ref={ref}>
-          <g {...events}>
-            <rect width={shape.size[0]} height={shape.size[1]} fill="none" stroke="black" />
-          </g>
-        </SVGContainer>
-      )
-    }
-  )
+    return (
+      <SVGContainer ref={ref}>
+        <g {...events}>
+          <rect width={shape.size[0]} height={shape.size[1]} fill="none" stroke="black" />
+        </g>
+      </SVGContainer>
+    )
+  })
 
-  Indicator: TLIndicator<BoxShape, SVGSVGElement, Meta> = ({ shape }) => {
+  Indicator = TLShapeUtil.Indicator<BoxShape, Meta>(({ shape }) => {
     return (
       <SVGContainer>
         <rect width={shape.size[0]} height={shape.size[1]} fill="none" stroke="black" />
       </SVGContainer>
     )
-  }
+  })
 
   getBounds = (shape: BoxShape) => {
     const bounds = Utils.getFromCache(this.boundsCache, shape, () => {
@@ -102,7 +99,6 @@ describe('When creating a minimal ShapeUtil', () => {
         isBinding={false}
         isHovered={false}
         isSelected={false}
-        isCurrentParent={false}
         meta={{} as any}
         events={{} as any}
       />
@@ -131,28 +127,26 @@ describe('When creating a realistic API around TLShapeUtil', () => {
 
     age = 100
 
-    Component = React.forwardRef<SVGSVGElement, TLComponentProps<BoxShape, SVGSVGElement>>(
-      ({ shape, events, meta }, ref) => {
-        type T = typeof meta.legs
-        type C = T['toFixed']
+    Component = TLShapeUtil.Component<BoxShape, SVGSVGElement>(({ shape, events, meta }, ref) => {
+      type T = typeof meta.legs
+      type C = T['toFixed']
 
-        return (
-          <SVGContainer ref={ref}>
-            <g {...events}>
-              <rect width={shape.size[0]} height={shape.size[1]} fill="none" stroke="black" />
-            </g>
-          </SVGContainer>
-        )
-      }
-    )
+      return (
+        <SVGContainer ref={ref}>
+          <g {...events}>
+            <rect width={shape.size[0]} height={shape.size[1]} fill="none" stroke="black" />
+          </g>
+        </SVGContainer>
+      )
+    })
 
-    Indicator: TLIndicator<BoxShape, SVGSVGElement, Meta> = ({ shape }) => {
+    Indicator = TLShapeUtil.Indicator<BoxShape, Meta>(({ shape }) => {
       return (
         <SVGContainer>
           <rect width={shape.size[0]} height={shape.size[1]} fill="none" stroke="black" />
         </SVGContainer>
       )
-    }
+    })
 
     getShape = (props: Partial<BoxShape>): BoxShape => ({
       id: 'example1',
@@ -225,7 +219,6 @@ describe('When creating a realistic API around TLShapeUtil', () => {
         isBinding={false}
         isHovered={false}
         isSelected={false}
-        isCurrentParent={false}
         meta={meta}
         events={{} as any}
       />

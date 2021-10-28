@@ -1587,14 +1587,14 @@
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^8.0.0"
 
-"@tldraw/intersect@^0.0.130":
+"@tldraw/intersect@^0.0.130", "@tldraw/intersect@latest":
   version "0.0.130"
   resolved "https://registry.yarnpkg.com/@tldraw/intersect/-/intersect-0.0.130.tgz#632fb8b0a1f9f2a3254fe410cbc4f563fe344134"
   integrity sha512-AzkzhKRQdWaVgEePUtZYjKwFdBlUGB8mciANu93Gnw3J2lHgOzQNv/WP92BlJ78GhozB3ntqN4ub9KTOqx4MHQ==
   dependencies:
     "@tldraw/vec" "^0.0.130"
 
-"@tldraw/vec@^0.0.130":
+"@tldraw/vec@^0.0.130", "@tldraw/vec@latest":
   version "0.0.130"
   resolved "https://registry.yarnpkg.com/@tldraw/vec/-/vec-0.0.130.tgz#49be3dfabf9281c8361d0c3648e94c11f3a5ae83"
   integrity sha512-0vUa2asaUrxqDiu+1sseC1NSVN+IdSEK/gfrdyG7ZlrQPWECu8nhbanbKfbLkYafJuFsZnc6TZXnLs12T/+22g==

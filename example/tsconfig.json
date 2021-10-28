@@ -11,6 +11,7 @@
       "@tldraw/core": ["../packages/core"]
     }
   },
+  "references": [{ "path": "../packages/core" }],
   "typedocOptions": {
     "entryPoints": ["src/index.ts"],
     "out": "docs"

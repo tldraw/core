@@ -18,14 +18,8 @@ function addToShapeTree<T extends TLShape, M extends Record<string, unknown>>(
   shape: T,
   branch: IShapeTreeNode<T, M>[],
   shapes: TLPage<T, TLBinding>['shapes'],
-  pageState: {
+  pageState: TLPageState & {
     bindingTargetId?: string | null
-    bindingId?: string | null
-    hoveredId?: string | null
-    selectedIds: string[]
-    currentParentId?: string | null
-    editingId?: string | null
-    editingBindingId?: string | null
   },
   meta?: M
 ) {
@@ -33,7 +27,6 @@ function addToShapeTree<T extends TLShape, M extends Record<string, unknown>>(
   const node: IShapeTreeNode<T, M> = {
     shape,
     meta: meta as any,
-    isCurrentParent: pageState.currentParentId === shape.id,
     isEditing: pageState.editingId === shape.id,
     isBinding: pageState.bindingTargetId === shape.id,
     isSelected: pageState.selectedIds.includes(shape.id),

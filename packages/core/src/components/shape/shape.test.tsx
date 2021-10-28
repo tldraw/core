@@ -15,7 +15,6 @@ describe('shape', () => {
         isBinding={false}
         isHovered={false}
         isSelected={false}
-        isCurrentParent={false}
       />
     )
   })

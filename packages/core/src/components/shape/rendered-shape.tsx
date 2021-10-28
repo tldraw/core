@@ -17,7 +17,6 @@ export const RenderedShape = React.memo(
     isBinding,
     isHovered,
     isSelected,
-    isCurrentParent,
     onShapeChange,
     onShapeBlur,
     events,
@@ -35,7 +34,6 @@ export const RenderedShape = React.memo(
         isBinding={isBinding}
         isHovered={isHovered}
         isSelected={isSelected}
-        isCurrentParent={isCurrentParent}
         meta={meta}
         events={events}
         onShapeChange={onShapeChange}
@@ -50,8 +48,7 @@ export const RenderedShape = React.memo(
       prev.isSelected !== next.isSelected ||
       prev.isEditing !== next.isEditing ||
       prev.isBinding !== next.isBinding ||
-      prev.meta !== next.meta ||
-      prev.isCurrentParent !== next.isCurrentParent
+      prev.meta !== next.meta
     ) {
       return false
     }

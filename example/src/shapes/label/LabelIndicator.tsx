@@ -1,8 +1,8 @@
 import * as React from 'react'
-import type { TLIndicator } from '@tldraw/core'
+import { TLShapeUtil } from '@tldraw/core'
 import type { LabelShape } from 'shapes'
 
-export const LabelIndicator: TLIndicator<LabelShape> = ({ shape }) => {
+export const LabelIndicator = TLShapeUtil.Indicator<LabelShape>(({ shape }) => {
   return (
     <rect
       fill="none"
@@ -13,4 +13,4 @@ export const LabelIndicator: TLIndicator<LabelShape> = ({ shape }) => {
       pointerEvents="none"
     />
   )
-}
+})

@@ -8,6 +8,7 @@ export function useBoundsEvents() {
     (e: React.PointerEvent) => {
       if (e.button !== 0) return
       if (!inputs.pointerIsValid(e)) return
+
       e.stopPropagation()
       e.currentTarget?.setPointerCapture(e.pointerId)
       const info = inputs.pointerDown(e, 'bounds')

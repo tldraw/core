@@ -10,7 +10,6 @@ export const mockDocument: { page: TLPage<BoxShape, TLBinding>; pageState: TLPag
   pageState: {
     id: 'page1',
     selectedIds: [],
-    currentParentId: 'page1',
     camera: {
       point: [0, 0],
       zoom: 1,

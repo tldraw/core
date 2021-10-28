@@ -2,9 +2,9 @@
 /* refresh-reset */
 
 import { Utils, TLBounds, TLShapeUtil } from '@tldraw/core'
-import { LabelShape } from './LabelShape'
 import { LabelComponent } from './LabelComponent'
 import { LabelIndicator } from './LabelIndicator'
+import type { LabelShape } from './LabelShape'
 
 // Define a custom shape
 
@@ -12,13 +12,11 @@ type T = LabelShape
 type E = HTMLDivElement
 
 export class LabelUtil extends TLShapeUtil<T, E> {
-  type = 'label' as const
-
   Component = LabelComponent
 
   Indicator = LabelIndicator
 
-  getBounds = (shape: T) => {
+  getBounds = (shape: T): TLBounds => {
     const bounds = Utils.getFromCache(this.boundsCache, shape, () => {
       const [width, height] = shape.size
       return {
@@ -28,7 +26,7 @@ export class LabelUtil extends TLShapeUtil<T, E> {
         maxY: height,
         width,
         height,
-      } as TLBounds
+      }
     })
 
     return Utils.translateBounds(bounds, shape.point)
