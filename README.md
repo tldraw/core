@@ -61,20 +61,20 @@ function App() {
 
 ### `Renderer`
 
-| Prop                 | Type                              | Description                                                            |
-| -------------------- | --------------------------------- | ---------------------------------------------------------------------- |
-| `page`               | [`TLPage`](#tlpage)               | The current page object.                                               |
-| `pageState`          | [`TLPageState`](#tlpagestate)     | The current page's state.                                              |
-| `shapeUtils`         | [`TLShapeUtils`](#tlshapeutils){} | The shape utilities used to render the shapes.                         |
-| `containerRef`       | `React.MutableRefObject`          | A React ref for the container, where CSS variables will be added.      |
-| `theme`              | `object`                          | (optional) an object with overrides for the Renderer's default colors. |
-| `hideBounds`         | `boolean`                         | (optional) an object with overrides for the Renderer's default colors. |
-| `hideHandles`        | `boolean`                         | (optional) an object with overrides for the Renderer's default colors. |
-| `hideBindingHandles` | `boolean`                         | (optional) an object with overrides for the Renderer's default colors. |
-| `hideRotateHandles`  | `boolean`                         | (optional) an object with overrides for the Renderer's default colors. |
-| `snapLines`          | `TLSnapLine[]`                    | (optional) an object with overrides for the Renderer's default colors. |
-| `users`              | `TLUser`                          | (optional) an object with overrides for the Renderer's default colors. |
-| `userId`             | `object`                          | (optional) an object with overrides for the Renderer's default colors. |
+| Prop                 | Type                            | Description                                                            |
+| -------------------- | ------------------------------- | ---------------------------------------------------------------------- |
+| `page`               | [`TLPage`](#tlpage)             | The current page object.                                               |
+| `pageState`          | [`TLPageState`](#tlpagestate)   | The current page's state.                                              |
+| `shapeUtils`         | [`TLShapeUtils`](#tlshapeutils) | The shape utilities used to render the shapes.                         |
+| `containerRef`       | `React.MutableRefObject`        | A React ref for the container, where CSS variables will be added.      |
+| `theme`              | `object`                        | (optional) an object with overrides for the Renderer's default colors. |
+| `hideBounds`         | `boolean`                       | (optional) an object with overrides for the Renderer's default colors. |
+| `hideHandles`        | `boolean`                       | (optional) an object with overrides for the Renderer's default colors. |
+| `hideBindingHandles` | `boolean`                       | (optional) an object with overrides for the Renderer's default colors. |
+| `hideRotateHandles`  | `boolean`                       | (optional) an object with overrides for the Renderer's default colors. |
+| `snapLines`          | [`TLSnapLine`](#tlsnapline)[]   | (optional) an object with overrides for the Renderer's default colors. |
+| `users`              | `TLUser`                        | (optional) an object with overrides for the Renderer's default colors. |
+| `userId`             | `object`                        | (optional) an object with overrides for the Renderer's default colors. |
 
 The theme object accepts valid CSS colors for the following properties:
 
@@ -229,15 +229,19 @@ An object that describes a relationship between two shapes on the page.
 | `toId`   | `string` | The id of the shape where the binding begins. |
 | `meta`   | `{}`     | Any additional data attached to the binding.  |
 
+### `TLSnapLine`
+
+A snapline is an array of points (formatted as `[x, y]`) that represent a "snapping" line.
+
 ### `TLShapeUtil`
 
-The `TLShapeUtil` is an abstract class that you can extend to create utilities for your custom shapes. See [Creating Shapes](#creating-shapes).
+The `TLShapeUtil` is an abstract class that you can extend to create utilities for your custom shapes. See the [Creating Shapes](#creating-shapes) guide to learn more.
 
 ### `Utils`
 
-A general purpose utility class.
+A general purpose utility class. See source for more.
 
-## Creating Shapes
+## Guide: Creating Shapes
 
 The `Renderer` component has no built-in shapes. It's up to you to define every shape that you want to see on the canvas. While these shapes are highly reusable between projects, you'll need to define them using the API described below.
 
