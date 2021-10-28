@@ -22,7 +22,7 @@ npm i @tldraw/core
 
 ## Usage
 
-Import the `Renderer` React component and pass it the required props. See the example project.
+Import the `Renderer` React component and pass it the required props. See the [CodeSandbox](https://codesandbox.io/s/laughing-elion-gp0kx) example.
 
 ```tsx
 import * as React from "react"
@@ -435,6 +435,10 @@ export function App() {
 - Run `yarn test` to execute unit tests via [Jest](https://jestjs.io).
 
 - Run `yarn docs` to build the docs via [ts-doc](https://typedoc.org/).
+
+## Example
+
+See the `example` folder or this [CodeSandbox](https://codesandbox.io/s/laughing-elion-gp0kx) example.
 
 ## Community
 
