@@ -4,7 +4,9 @@
 
 # @tldraw/core
 
-This package contains the `Renderer` and core utilities used by [tldraw](https://tldraw.com). You can use this package to render React components in a canvas user interface. See the example project for a reference.
+This package contains the `Renderer` and core utilities used by [tldraw](https://tldraw.com).
+
+You can use this package to render React components in a canvas user interface.
 
 💕 Love this library? Consider [becoming a sponsor](https://github.com/sponsors/steveruizok?frequency=recurring&sponsor=steveruizok).
 
@@ -12,11 +14,13 @@ This package contains the `Renderer` and core utilities used by [tldraw](https:/
 
 ```bash
 yarn add @tldraw/core
+# or
+npm i @tldraw/core
 ```
 
 ## Usage
 
-Import the `Renderer` React component and pass it the required props.
+Import the `Renderer` React component and pass it the required props. See the example project.
 
 ```tsx
 import * as React from "react"
@@ -63,33 +67,38 @@ function App() {
 
 ### `Renderer`
 
-| Prop                 | Type                            | Description                                                            |
-| -------------------- | ------------------------------- | ---------------------------------------------------------------------- |
-| `page`               | [`TLPage`](#tlpage)             | The current page object.                                               |
-| `pageState`          | [`TLPageState`](#tlpagestate)   | The current page's state.                                              |
-| `shapeUtils`         | [`TLShapeUtils`](#tlshapeutils) | The shape utilities used to render the shapes.                         |
-| `containerRef`       | `React.MutableRefObject`        | A React ref for the container, where CSS variables will be added.      |
-| `theme`              | `object`                        | (optional) an object with overrides for the Renderer's default colors. |
-| `hideBounds`         | `boolean`                       | (optional) an object with overrides for the Renderer's default colors. |
-| `hideHandles`        | `boolean`                       | (optional) an object with overrides for the Renderer's default colors. |
-| `hideBindingHandles` | `boolean`                       | (optional) an object with overrides for the Renderer's default colors. |
-| `hideRotateHandles`  | `boolean`                       | (optional) an object with overrides for the Renderer's default colors. |
-| `snapLines`          | [`TLSnapLine`](#tlsnapline)[]   | (optional) an object with overrides for the Renderer's default colors. |
-| `users`              | `TLUser`                        | (optional) an object with overrides for the Renderer's default colors. |
-| `userId`             | `object`                        | (optional) an object with overrides for the Renderer's default colors. |
+To avoid unnecessary renders, be sure to pass "stable" values as props to the `Renderer`. Either define these values outside of the parent component, or place them in React state, or memoize them with `React.useMemo`.
+
+| Prop         | Type                            | Description                                    |
+| ------------ | ------------------------------- | ---------------------------------------------- |
+| `page`       | [`TLPage`](#tlpage)             | The current page object.                       |
+| `pageState`  | [`TLPageState`](#tlpagestate)   | The current page's state.                      |
+| `shapeUtils` | [`TLShapeUtils`](#tlshapeutils) | The shape utilities used to render the shapes. |
+
+In addition to these required props, the Renderer accents many optional props.
+
+| Property             | Type                          | Description                                                            |
+| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
+| `containerRef`       | `React.MutableRefObject`      | A React ref for the container, where CSS variables will be added.      |
+| `theme`              | `object`                      | (optional) an object with overrides for the Renderer's default colors. |
+| `hideBounds`         | `boolean`                     | (optional) an object with overrides for the Renderer's default colors. |
+| `hideHandles`        | `boolean`                     | (optional) an object with overrides for the Renderer's default colors. |
+| `hideBindingHandles` | `boolean`                     | (optional) an object with overrides for the Renderer's default colors. |
+| `hideRotateHandles`  | `boolean`                     | (optional) an object with overrides for the Renderer's default colors. |
+| `snapLines`          | [`TLSnapLine`](#tlsnapline)[] | (optional) an object with overrides for the Renderer's default colors. |
+| `users`              | `TLUser`                      | (optional) an object with overrides for the Renderer's default colors. |
+| `userId`             | `object`                      | (optional) an object with overrides for the Renderer's default colors. |
 
 The theme object accepts valid CSS colors for the following properties:
 
-| Property       | Description                                                     |
-| -------------- | --------------------------------------------------------------- |
-| `foreground`   | (optional) The primary (usually "text") color                   |
-| `background`   | (optional) The default page's background color                  |
-| `brushFill`    | (optional) The fill color of the brush selection box            |
-| `brushStroke`  | (optional) The stroke color of the brush selection box          |
-| `selectFill`   | (optional) The fill color of the selection bounds               |
-| `selectStroke` | (optional) The stroke color of the selection bounds and handles |
-
-> Tip: If providing an object for the `theme` prop, either define the object outside of the parent component or memoize it with `React.useMemo`.
+| Property       | Description                                          |
+| -------------- | ---------------------------------------------------- |
+| `foreground`   | The primary (usually "text") color                   |
+| `background`   | The default page's background color                  |
+| `brushFill`    | The fill color of the brush selection box            |
+| `brushStroke`  | The stroke color of the brush selection box          |
+| `selectFill`   | The fill color of the selection bounds               |
+| `selectStroke` | The stroke color of the selection bounds and handles |
 
 The Renderer also accepts many (optional) event callbacks.
 
@@ -142,8 +151,6 @@ The Renderer also accepts many (optional) event callbacks.
 | `onRenderCountChange`       | The number of rendered shapes changed.                       |
 | `onBoundsChange`            | The Renderer's screen bounding box of the component changed. |
 | `onError`                   | The Renderer encountered an error.                           |
-
-> Tip: If providing callbacks, either define the functions outside of the parent component or memoize them first with `React.useMemo`.
 
 The `@tldraw/core` library provides types for most of the event handlers:
 
