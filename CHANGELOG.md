@@ -1,3 +1,12 @@
+# 0.1.10
+
+- Improve example.
+- Improve types for `TLPage`.
+
+# 0.1.9
+
+- Bug fixes.
+
 # 0.1.8
 
 - Expands README.
