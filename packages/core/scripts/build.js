@@ -18,7 +18,7 @@ async function main() {
     esbuild.buildSync({
       entryPoints: ['./src/index.ts'],
       outdir: 'dist/cjs',
-      minify: true,
+      minify: false,
       bundle: true,
       format: 'cjs',
       target: 'es6',
@@ -32,7 +32,7 @@ async function main() {
     const esmResult = esbuild.buildSync({
       entryPoints: ['./src/index.ts'],
       outdir: 'dist/esm',
-      minify: true,
+      minify: false,
       bundle: true,
       format: 'esm',
       target: 'es6',
