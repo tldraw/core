@@ -1,13 +1,5 @@
 import * as React from 'react'
-import {
-  Renderer,
-  TLBinding,
-  TLPage,
-  TLPageState,
-  TLPointerEventHandler,
-  TLShape,
-  TLShapeUtilsMap,
-} from '@tldraw/core'
+import { Renderer, TLBinding, TLPage, TLPageState, TLShape, TLShapeUtilsMap } from '@tldraw/core'
 import { BoxShape, LabelShape, BoxUtil, LabelUtil } from '../shapes'
 
 type Shape = BoxShape | LabelShape
@@ -48,29 +40,6 @@ export default function Editor(): JSX.Element {
     isDarkMode: false,
   })
 
-  const handleShapeHover: TLPointerEventHandler = (e) => {
-    console.log(e.target)
-  }
-
-  const handleShapePoint: TLPointerEventHandler = (e) => {
-    console.log(e.target)
-  }
-
-  const handleShapeDrag: TLPointerEventHandler = (e) => {
-    console.log('hi')
-
-    setPage((page) => ({
-      ...page,
-      shapes: {
-        ...page.shapes,
-        [e.target]: {
-          ...page.shapes[e.target],
-          point: e.point,
-        },
-      },
-    }))
-  }
-
   return (
     <div className="tldraw">
       <Renderer
@@ -78,11 +47,9 @@ export default function Editor(): JSX.Element {
         page={page}
         pageState={pageState}
         meta={meta}
-        onDragShape={handleShapeDrag}
-        onPointShape={handleShapePoint}
-        onHoverShape={handleShapeHover}
         // onDoubleClickBounds={appState.onDoubleClickBounds}
         // onDoubleClickShape={appState.onDoubleClickShape}
+        // onPointShape={appState.onPointShape}
         // onPointCanvas={appState.onPointCanvas}
         // onPointerDown={appState.onPointerDown}
         // onPointerMove={appState.onPointerMove}

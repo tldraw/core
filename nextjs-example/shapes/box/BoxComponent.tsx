@@ -17,6 +17,7 @@ export const BoxComponent = forwardRef<SVGSVGElement, TLComponentProps<BoxShape>
         strokeWidth={2}
         strokeLinejoin="round"
         fill="none"
+        pointerEvents="all"
       />
     </SVGContainer>
   )

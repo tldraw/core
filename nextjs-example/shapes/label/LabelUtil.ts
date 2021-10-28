@@ -1,16 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* refresh-reset */
 
-import * as React from 'react'
-import {
-  TLShape,
-  Utils,
-  TLBounds,
-  TLShapeUtil,
-  HTMLContainer,
-  TLComponentProps,
-  TLIndicator,
-} from '@tldraw/core'
+import { Utils, TLBounds, TLShapeUtil } from '@tldraw/core'
 import { LabelShape } from './LabelShape'
 import { LabelComponent } from './LabelComponent'
 import { LabelIndicator } from './LabelIndicator'
