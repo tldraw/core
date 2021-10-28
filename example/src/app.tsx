@@ -1,59 +1,39 @@
 import * as React from 'react'
-import { Renderer } from '@tldraw/core'
-import { BoxShape, LabelShape, BoxUtil, LabelUtil } from './shape-utils'
-import './styles.css'
+import { Renderer, TLShapeUtilsMap } from '@tldraw/core'
+import { BoxShape, LabelShape, BoxUtil, LabelUtil } from './shapes'
+import { useExampleA } from 'hooks/useExampleA'
 
-export const shapeUtils = {
+type Shape = BoxShape | LabelShape
+
+export const shapeUtils: TLShapeUtilsMap<Shape> = {
   box: new BoxUtil(),
   label: new LabelUtil(),
-} as const
+}
 
 export default function App(): JSX.Element {
-  const [page, setPage] = React.useState({
-    id: 'page1',
-    shapes: {
-      box1: {
-        id: 'box1',
-        type: 'box',
-        parentId: 'page1',
-        name: 'Box',
-        childIndex: 1,
-        point: [0, 0],
-        rotation: 0,
-        size: [100, 100],
-      },
-    },
-    bindings: {},
-  })
-
-  const [pageState, setPageState] = React.useState({
-    id: 'page1',
-    selectedIds: [],
-    camera: {
-      point: [0, 0],
-      zoom: 1,
-    },
-  })
-
-  const [meta, setMeta] = React.useState({
-    isDarkMode: false,
-  })
+  const { page, pageState, meta, theme, events } = useExampleA()
 
   return (
     <div className="tldraw">
       <Renderer
-        shapeUtils={shapeUtils}
-        page={page}
-        pageState={pageState}
+        shapeUtils={shapeUtils} // Required
+        page={page} // Required
+        pageState={pageState} // Required
+        {...events}
         meta={meta}
-        // onDoubleClickBounds={appState.onDoubleClickBounds}
-        // onDoubleClickShape={appState.onDoubleClickShape}
-        // onPointShape={appState.onPointShape}
-        // onPointCanvas={appState.onPointCanvas}
-        // onPointerDown={appState.onPointerDown}
-        // onPointerMove={appState.onPointerMove}
-        // onPointerUp={appState.onPointerUp}
-        // onShapeChange={appState.onShapeChange}
+        theme={theme}
+        id={undefined}
+        containerRef={undefined}
+        hideBounds={false}
+        hideIndicators={false}
+        hideHandles={false}
+        hideCloneHandles={false}
+        hideBindingHandles={false}
+        hideRotateHandles={false}
+        userId={undefined}
+        users={undefined}
+        snapLines={undefined}
+        onBoundsChange={undefined}
       />
     </div>
   )

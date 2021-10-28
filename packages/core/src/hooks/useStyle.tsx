@@ -382,6 +382,7 @@ const tlcss = css`
   }
 
   .tl-centered-g {
+    pointer-events: all;
     transform: translate(var(--tl-padding), var(--tl-padding));
   }
 

@@ -1,6 +1,7 @@
+import * as React from 'react'
 import { SVGContainer, TLComponentProps } from '@tldraw/core'
 import { forwardRef } from 'react'
-import { BoxShape } from './BoxShape'
+import type { BoxShape } from './BoxShape'
 
 export const BoxComponent = forwardRef<SVGSVGElement, TLComponentProps<BoxShape>>(function Box(
   { shape, events, meta },
@@ -17,7 +18,6 @@ export const BoxComponent = forwardRef<SVGSVGElement, TLComponentProps<BoxShape>
         strokeWidth={2}
         strokeLinejoin="round"
         fill="none"
-        pointerEvents="all"
       />
     </SVGContainer>
   )

@@ -1,5 +1,6 @@
-import { TLIndicator } from '@tldraw/core'
-import { BoxShape } from './BoxShape'
+import * as React from 'react'
+import type { TLIndicator } from '@tldraw/core'
+import type { BoxShape } from './BoxShape'
 
 export const BoxIndicator: TLIndicator<BoxShape> = ({ shape }) => {
   return (

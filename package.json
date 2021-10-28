@@ -1,28 +1,25 @@
 {
-  "name": "@tldraw/core-repo",
   "version": "0.1.4",
-  "private": true,
+  "name": "@tldraw/core-repo",
   "description": "The TLDraw core renderer and utilities.",
   "author": "@steveruizok",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tldraw/tldraw.git",
-    "directory": "packages/core"
+    "url": "git+https://github.com/tldraw/core.git"
   },
   "license": "MIT",
-  "keywords": [],
+  "private": true,
+  "keywords": [
+    "react",
+    "canvas",
+    "zoom",
+    "drawing",
+    "whiteboard"
+  ],
   "workspaces": [
     "example",
-    "packages/core",
-    "ex"
+    "packages/core"
   ],
-  "files": [
-    "dist/**/*"
-  ],
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
-  "typings": "./dist/types/index.d.ts",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",

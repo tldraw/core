@@ -1,7 +1,6 @@
 {
-  "name": "@tldraw/core",
   "version": "0.1.4",
-  "private": false,
+  "name": "@tldraw/core",
   "description": "The TLDraw core renderer and utilities.",
   "author": "@steveruizok",
   "repository": {
@@ -9,7 +8,14 @@
     "url": "git+https://github.com/tldraw/core.git"
   },
   "license": "MIT",
-  "keywords": [],
+  "private": false,
+  "keywords": [
+    "react",
+    "canvas",
+    "zoom",
+    "drawing",
+    "whiteboard"
+  ],
   "files": [
     "dist/**/*"
   ],
@@ -28,13 +34,12 @@
     "clean": "rm -rf dist",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "ts-node": "ts-node",
     "docs": "typedoc",
     "docs:watch": "typedoc --watch"
   },
   "dependencies": {
-    "@tldraw/intersect": "^0.0.130",
-    "@tldraw/vec": "^0.0.130",
+    "@tldraw/intersect": "latest",
+    "@tldraw/vec": "latest",
     "@use-gesture/react": "^10.0.2"
   },
   "peerDependencies": {

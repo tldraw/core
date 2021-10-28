@@ -1,7 +1,7 @@
 import { Utils, TLBounds, TLShapeUtil } from '@tldraw/core'
 import { BoxComponent } from './BoxComponent'
 import { BoxIndicator } from './BoxIndicator'
-import { BoxShape } from './BoxShape'
+import type { BoxShape } from './BoxShape'
 
 type T = BoxShape
 type E = SVGSVGElement

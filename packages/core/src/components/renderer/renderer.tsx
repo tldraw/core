@@ -17,14 +17,6 @@ import type { TLShapeUtilsMap } from '~shape-utils'
 
 export interface RendererProps<T extends TLShape, M = any> extends Partial<TLCallbacks<T>> {
   /**
-   * (optional) A unique id to be applied to the renderer element, used to scope styles.
-   */
-  id?: string
-  /**
-   * (optional) A ref for the renderer's container element, used for scoping event handlers.
-   */
-  containerRef?: React.RefObject<HTMLElement>
-  /**
    * An object containing instances of your shape classes.
    */
   shapeUtils: TLShapeUtilsMap<T>
@@ -36,6 +28,18 @@ export interface RendererProps<T extends TLShape, M = any> extends Partial<TLCal
    * The current page state.
    */
   pageState: TLPageState
+  /**
+   * (optional) A unique id to be applied to the renderer element, used to scope styles.
+   */
+  id?: string
+  /**
+   * (optional) A ref for the renderer's container element, used for scoping event handlers.
+   */
+  containerRef?: React.RefObject<HTMLElement>
+  /**
+   * (optional) An object of custom options that should be passed to rendered shapes.
+   */
+  meta?: M
   /**
    * (optional) The current users to render.
    */
@@ -78,15 +82,6 @@ export interface RendererProps<T extends TLShape, M = any> extends Partial<TLCal
    */
   hideIndicators?: boolean
   /**
-   * (optional) hen true, the renderer will ignore all inputs that were not made
-   * by a stylus or pen-type device.
-   */
-  isPenMode?: boolean
-  /**
-   * (optional) An object of custom options that should be passed to rendered shapes.
-   */
-  meta?: M
-  /**
    * (optional) A callback that receives the renderer's inputs manager.
    */
   onMount?: (inputs: Inputs) => void
@@ -121,7 +116,6 @@ export function Renderer<T extends TLShape, M extends Record<string, unknown>>({
   hideBindingHandles = false,
   hideRotateHandles = false,
   hideBounds = false,
-  onMount,
   ...rest
 }: RendererProps<T, M>): JSX.Element {
   useTLTheme(theme, '#' + id)
@@ -141,10 +135,6 @@ export function Renderer<T extends TLShape, M extends Record<string, unknown>>({
     rPageState,
     inputs: new Inputs(),
   }))
-
-  React.useEffect(() => {
-    onMount?.(context.inputs)
-  }, [context])
 
   return (
     <TLContext.Provider value={context as unknown as TLContextType<TLShape>}>

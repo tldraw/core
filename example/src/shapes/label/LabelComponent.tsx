@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as React from 'react'
 import { HTMLContainer, TLComponentProps } from '@tldraw/core'
-import { LabelShape } from './LabelShape'
+import type { LabelShape } from './LabelShape'
 
 export const LabelComponent = React.forwardRef<HTMLDivElement, TLComponentProps<LabelShape>>(
   function Label({ shape, events, meta, onShapeChange, isSelected }, ref) {

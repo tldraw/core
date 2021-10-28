@@ -1,5 +1,6 @@
-import { TLIndicator } from '@tldraw/core'
-import { LabelShape } from 'shapes'
+import * as React from 'react'
+import type { TLIndicator } from '@tldraw/core'
+import type { LabelShape } from 'shapes'
 
 export const LabelIndicator: TLIndicator<LabelShape> = ({ shape }) => {
   return (
