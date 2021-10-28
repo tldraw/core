@@ -12,8 +12,10 @@ You can use this package to render React components in a canvas user interface.
 
 ## Installation
 
+Use your package manager of choice to install `@tldraw/core` and its peer dependencies.
+
 ```bash
-yarn add @tldraw/core
+yarn add @tldraw/core --peer
 # or
 npm i @tldraw/core
 ```
