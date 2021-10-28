@@ -38,11 +38,11 @@
     "docs:watch": "typedoc --watch"
   },
   "dependencies": {
-    "@tldraw/intersect": "latest",
-    "@tldraw/vec": "latest",
     "@use-gesture/react": "^10.0.2"
   },
   "peerDependencies": {
+    "@tldraw/intersect": "latest",
+    "@tldraw/vec": "latest",
     "react": ">=16.8",
     "react-dom": "^16.8 || ^17.0"
   },
