@@ -8,7 +8,7 @@
     "baseUrl": "src",
     "emitDeclarationOnly": false,
     "paths": {
-      "@tldraw/core": ["../package"]
+      "@tldraw/core": ["../packages/core"]
     }
   },
   "typedocOptions": {

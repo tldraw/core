@@ -1,5 +1,5 @@
 {
-  "name": "@tldraw/core",
+  "name": "@tldraw/core-repo",
   "version": "0.1.4",
   "private": true,
   "description": "The TLDraw core renderer and utilities.",
@@ -13,7 +13,8 @@
   "keywords": [],
   "workspaces": [
     "example",
-    "package"
+    "packages/core",
+    "ex"
   ],
   "files": [
     "dist/**/*"
@@ -88,12 +89,13 @@
       "node"
     ],
     "modulePathIgnorePatterns": [
-      "<rootDir>/package/dist",
+      "<rootDir>/ex/core/dist",
+      "<rootDir>/packages/core/dist",
       "<rootDir>/example/dist"
     ],
     "moduleNameMapper": {
-      "@tldraw/core": "<rootDir>/package/src",
-      "\\~(.*)": "<rootDir>/package/src/$1"
+      "@tldraw/core": "<rootDir>/packages/core/src",
+      "\\~(.*)": "<rootDir>/packages/core/src/$1"
     }
   }
 }

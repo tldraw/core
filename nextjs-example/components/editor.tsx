@@ -1,15 +1,16 @@
 import * as React from 'react'
-import { Renderer } from '@tldraw/core'
-import { BoxShape, LabelShape, BoxUtil, LabelUtil } from './shape-utils'
-import './styles.css'
+import { Renderer, TLBinding, TLPage, TLPageState, TLShape, TLShapeUtilsMap } from '@tldraw/core'
+import { BoxShape, LabelShape, BoxUtil, LabelUtil } from '../shapes'
 
-export const shapeUtils = {
+type Shape = BoxShape | LabelShape
+
+export const shapeUtils: TLShapeUtilsMap<Shape> = {
   box: new BoxUtil(),
   label: new LabelUtil(),
-} as const
+}
 
-export default function App(): JSX.Element {
-  const [page, setPage] = React.useState({
+export default function Editor(): JSX.Element {
+  const [page, setPage] = React.useState<TLPage<Shape, TLBinding>>({
     id: 'page1',
     shapes: {
       box1: {
@@ -18,15 +19,15 @@ export default function App(): JSX.Element {
         parentId: 'page1',
         name: 'Box',
         childIndex: 1,
-        point: [0, 0],
         rotation: 0,
+        point: [0, 0],
         size: [100, 100],
       },
     },
     bindings: {},
   })
 
-  const [pageState, setPageState] = React.useState({
+  const [pageState, setPageState] = React.useState<TLPageState>({
     id: 'page1',
     selectedIds: [],
     camera: {

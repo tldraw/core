@@ -3,12 +3,12 @@
   "extends": "./tsconfig.base.json",
   "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"],
   "files": [],
-  "references": [{ "path": "./package" }],
+  "references": [{ "path": "./packages/core" }],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@tldraw/core": ["./package/src"],
-      "~*": ["./package/src/*"]
+      "@tldraw/core": ["./packages/core"],
+      "~*": ["./packages/core/src/*"]
     }
   }
 }
