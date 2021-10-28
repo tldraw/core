@@ -11,7 +11,7 @@ export type TLForwardedRef<T> =
   | React.MutableRefObject<T | null>
   | null
 
-export interface TLPage<T extends TLShape, B extends TLBinding> {
+export interface TLPage<T extends TLShape = TLShape, B extends TLBinding = TLBinding> {
   id: string
   name?: string
   childIndex?: number

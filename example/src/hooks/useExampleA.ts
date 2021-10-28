@@ -1,12 +1,12 @@
-import type { TLBinding, TLPage, TLPageState, TLPointerEventHandler } from '@tldraw/core'
+import type { TLPage, TLPageState, TLPointerEventHandler, TLShapeChangeHandler } from '@tldraw/core'
 import Vec from '@tldraw/vec'
 import * as React from 'react'
-import type { BoxShape } from 'shapes'
+import type { Shape } from '../shapes'
 
 export function useExampleA() {
   /* -------------------- Document -------------------- */
 
-  const [page, setPage] = React.useState<TLPage<BoxShape, TLBinding>>({
+  const [page, setPage] = React.useState<TLPage<Shape>>({
     id: 'page1',
     shapes: {
       box1: {
@@ -18,6 +18,17 @@ export function useExampleA() {
         rotation: 0,
         point: [0, 0],
         size: [100, 100],
+      },
+      label1: {
+        id: 'label1',
+        type: 'label',
+        parentId: 'page1',
+        name: 'Label',
+        childIndex: 1,
+        rotation: 0,
+        point: [220, 200],
+        size: [100, 100],
+        text: 'Hello world!',
       },
     },
     bindings: {},
@@ -123,6 +134,23 @@ export function useExampleA() {
     [setPage]
   )
 
+  const onShapeChange = React.useCallback<TLShapeChangeHandler<Shape>>((changes) => {
+    setPage((page) => {
+      const shape = page.shapes[changes.id]
+
+      return {
+        ...page,
+        shapes: {
+          ...page.shapes,
+          [shape.id]: {
+            ...shape,
+            ...changes,
+          } as Shape,
+        },
+      }
+    })
+  }, [])
+
   return {
     page,
     pageState,
@@ -134,6 +162,7 @@ export function useExampleA() {
       onPointShape,
       onDragShape,
       onPointCanvas,
+      onShapeChange,
     },
   }
 }

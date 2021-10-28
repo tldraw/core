@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Renderer } from '@tldraw/core'
-import { BoxUtil, LabelUtil } from './shapes'
+import { Renderer, TLShapeUtilsMap } from '@tldraw/core'
+import { BoxUtil, LabelUtil, Shape } from './shapes'
 import { useExampleA } from 'hooks/useExampleA'
 
-export const shapeUtils = {
+export const shapeUtils: TLShapeUtilsMap<Shape> = {
   box: new BoxUtil(),
   label: new LabelUtil(),
 }
@@ -22,7 +22,7 @@ export default function App(): JSX.Element {
         theme={theme}
         id={undefined}
         containerRef={undefined}
-        hideBounds={true}
+        hideBounds={false}
         hideIndicators={false}
         hideHandles={false}
         hideCloneHandles={false}
