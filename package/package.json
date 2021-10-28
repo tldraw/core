@@ -1,0 +1,51 @@
+{
+  "name": "@tldraw/core",
+  "version": "0.1.4",
+  "private": false,
+  "description": "The TLDraw core renderer and utilities.",
+  "author": "@steveruizok",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tldraw/tldraw.git",
+    "directory": "packages/core"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "files": [
+    "dist/**/*"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "typings": "./dist/types/index.d.ts",
+  "scripts": {
+    "start:pre": "node scripts/pre-dev && yarn types:pre",
+    "start": "node scripts/dev & yarn types:dev",
+    "build": "node scripts/build && yarn types:build",
+    "types:pre": "tsc",
+    "types:dev": "tsc -w",
+    "types:build": "tsc -p tsconfig.build.json && tsconfig-replace-paths -p tsconfig.build.json",
+    "lint": "eslint src/ --ext .ts,.tsx",
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "ts-node": "ts-node",
+    "docs": "typedoc",
+    "docs:watch": "typedoc --watch"
+  },
+  "dependencies": {
+    "@tldraw/intersect": "^0.0.130",
+    "@tldraw/vec": "^0.0.130",
+    "@use-gesture/react": "^10.0.2"
+  },
+  "peerDependencies": {
+    "react": ">=16.8",
+    "react-dom": "^16.8 || ^17.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.6",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10"
+  }
+}
