@@ -44,6 +44,7 @@ export const state = createState({
               onEnter: 'clearJustShiftSelectedId',
               on: {
                 CANCELLED: 'clearSelection',
+                DELETED: 'deleteSelection',
                 POINTED_CANVAS: [
                   {
                     unless: 'isPressingShiftKey',
@@ -368,7 +369,12 @@ export const state = createState({
     },
     /* ----------------- Shape Deleting ----------------- */
     deleteSelection(data) {
-      data.pageState.selectedIds.forEach((id) => delete data.page.shapes[id])
+      const { page, pageState } = data
+      if (pageState.hoveredId && pageState.selectedIds.includes(pageState.hoveredId)) {
+        pageState.hoveredId = undefined
+      }
+      pageState.selectedIds.forEach((id) => delete page.shapes[id])
+      pageState.selectedIds = []
     },
     /* ------------------- Translating ------------------ */
     translateSelection(data, payload: TLPointerInfo) {
