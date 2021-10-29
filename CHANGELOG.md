@@ -1,3 +1,7 @@
+# 0.1.11
+
+- Fix bug with initial camera state.
+
 # 0.1.10
 
 - Improve example.

@@ -17,6 +17,7 @@
   ],
   "workspaces": [
     "example",
+    "example-advanced",
     "packages/core"
   ],
   "scripts": {
@@ -24,7 +25,9 @@
     "test:watch": "jest --watchAll",
     "lerna": "lerna",
     "build": "lerna run build && lerna run docs",
-    "start": "lerna run start:pre && lerna run start --stream --parallel",
+    "start": "lerna run start:pre & cd packages/core && yarn start & cd example-advanced && yarn start",
+    "start:simple": "lerna run start:pre & cd packages/core && yarn start & cd example && yarn start",
+    "start:all": "lerna run start:pre && lerna run start --stream --parallel",
     "publish:patch": "yarn build && lerna publish patch",
     "docs": "lerna run docs",
     "docs:watch": "lerna run docs:watch"
