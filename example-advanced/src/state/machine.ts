@@ -51,7 +51,7 @@ export const state = createState({
           initial: 'idle',
           states: {
             idle: {
-              onEnter: ['clearJustShiftSelectedId', 'clearSnapInfo', 'clearSnapLines'],
+              onEnter: ['clearJustShiftSelectedId'],
               on: {
                 CANCELLED: 'clearSelection',
                 DELETED: 'deleteSelection',
@@ -132,6 +132,7 @@ export const state = createState({
             },
             translatingSelection: {
               onEnter: ['resetIsCloning', 'setSnapInfo'],
+              onExit: ['clearSnapInfo', 'clearSnapLines'],
               on: {
                 TOGGLED_MODIFIER: 'translateSelection',
                 MOVED_POINTER: 'translateSelection',
@@ -146,6 +147,8 @@ export const state = createState({
               },
             },
             transformingSelection: {
+              onEnter: 'setSnapInfo',
+              onExit: ['clearSnapInfo', 'clearSnapLines'],
               on: {
                 TOGGLED_MODIFIER: 'transformSelection',
                 MOVED_POINTER: 'transformSelection',
@@ -444,14 +447,20 @@ export const state = createState({
 
       let snapLines: TLSnapLine[] = []
 
-      if (snapInfo) {
+      if (snapInfo && !payload.metaKey) {
+        const snappingBounds = Utils.getBoundsWithCenter(
+          Utils.translateBounds(snapInfo.initialBounds, delta)
+        )
+
+        const snappableBounds = (isCloning ? snapInfo.all : snapInfo.others).filter(
+          (bounds) =>
+            Utils.boundsContain(rendererBounds, bounds) ||
+            Utils.boundsCollide(rendererBounds, bounds)
+        )
+
         const snapResult = Utils.getSnapPoints(
-          Utils.getBoundsWithCenter(Utils.translateBounds(snapInfo.initialBounds, delta)),
-          (isCloning ? snapInfo.all : snapInfo.others).filter(
-            (bounds) =>
-              Utils.boundsContain(rendererBounds, bounds) ||
-              Utils.boundsCollide(rendererBounds, bounds)
-          ),
+          snappingBounds,
+          snappableBounds,
           SNAP_DISTANCE / data.pageState.camera.zoom
         )
 
@@ -475,7 +484,7 @@ export const state = createState({
 
       const point = getPagePoint(payload.point, data.pageState)
 
-      const delta = Vec.sub(point, initialPoint)
+      let delta = Vec.sub(point, initialPoint)
 
       const initialCommonBounds = Utils.getCommonBounds(
         selectedIds
@@ -522,7 +531,7 @@ export const state = createState({
           rotation = snapshot.page.shapes[selectedIds[0]].rotation || 0
         }
 
-        const nextCommonBounds = Utils.getTransformedBoundingBox(
+        let nextCommonBounds = Utils.getTransformedBoundingBox(
           initialCommonBounds,
           initialBoundsHandle as TLBoundsCorner | TLBoundsEdge,
           delta,
