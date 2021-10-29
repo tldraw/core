@@ -25,20 +25,6 @@ describe('CenterHandle', () => {
     const centerHandle = screen.getByLabelText('center handle')
     expect(centerHandle?.getAttribute('height')).toBe('102')
     expect(centerHandle?.getAttribute('width')).toBe('102')
-    expect(centerHandle?.getAttribute('x')).toBe('-1')
-    expect(centerHandle?.getAttribute('y')).toBe('-1')
-  })
-  test('validate attributes for a center handle', () => {
-    render(
-      <CenterHandle
-        bounds={{ minX: 0, minY: 0, maxX: 100, maxY: 100, width: 100, height: 100 }}
-        isLocked={false}
-        isHidden={false}
-      />
-    )
-    const centerHandle = screen.getByLabelText('center handle')
-    expect(centerHandle?.getAttribute('height')).toBe('102')
-    expect(centerHandle?.getAttribute('width')).toBe('102')
     expect(centerHandle?.getAttribute('opacity')).toBe('1')
     expect(centerHandle?.getAttribute('x')).toBe('-1')
     expect(centerHandle?.getAttribute('y')).toBe('-1')
