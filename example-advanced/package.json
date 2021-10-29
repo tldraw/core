@@ -19,15 +19,12 @@
     "@stitches/react": "^1.2.5",
     "@tldraw/core": "^0.1.9",
     "@tldraw/vec": "^0.0.130",
-    "@xstate/immer": "^0.2.0",
-    "@xstate/inspect": "^0.5.1",
-    "@xstate/react": "^1.6.1",
     "immer": "^9.0.6",
+    "lodash": "^4.17.21",
     "nanoid": "^3.1.30",
     "react": ">=16.8",
     "react-dom": "^16.8 || ^17.0",
-    "react-feather": "^2.0.9",
-    "xstate": "^4.25.0"
+    "react-feather": "^2.0.9"
   },
   "devDependencies": {
     "@types/node": "^14.14.35",
@@ -40,5 +37,8 @@
     "rimraf": "3.0.2",
     "typescript": "4.2.3"
   },
-  "gitHead": "a7dac0f83ad998e205c2aab58182cb4ba4e099a6"
+  "gitHead": "a7dac0f83ad998e205c2aab58182cb4ba4e099a6",
+  "peerDependencies": {
+    "@state-designer/react": "^2.0.3"
+  }
 }
