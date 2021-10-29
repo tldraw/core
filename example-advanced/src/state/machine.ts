@@ -223,7 +223,6 @@ export const state = createState({
     panCamera(data, payload: TLPointerInfo) {
       const { point, zoom } = data.pageState.camera
       data.pageState.camera.point = Vec.sub(point, Vec.div(payload.delta, zoom))
-      console.log(data.pageState.camera.point)
     },
     pinchCamera(data, payload: TLPointerInfo) {
       const { camera } = data.pageState
