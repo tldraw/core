@@ -9,10 +9,11 @@ import {
   Utils,
 } from '@tldraw/core'
 import { BoxShape, getShapeUtils, shapeUtils } from '../shapes'
-import { FIT_TO_SCREEN_PADDING, INITIAL_DATA } from './constants'
+import { INITIAL_DATA } from './constants'
 import { nanoid } from 'nanoid'
 import { current } from 'immer'
 import Vec from '@tldraw/vec'
+import { getPagePoint, getZoomFitCamera } from './helpers'
 
 let rendererBounds: TLBounds
 let snapshot = INITIAL_DATA
@@ -235,6 +236,7 @@ export const state = createState({
     },
     zoomToSelection(data) {
       const { camera, selectedIds } = data.pageState
+
       if (selectedIds.length === 0) return
 
       const commonBounds = Utils.getCommonBounds(
@@ -243,20 +245,10 @@ export const state = createState({
           .map((shape) => getShapeUtils(shape).getBounds(shape))
       )
 
-      let zoom = Math.min(
-        (rendererBounds.width - FIT_TO_SCREEN_PADDING) / commonBounds.width,
-        (rendererBounds.height - FIT_TO_SCREEN_PADDING) / commonBounds.height
-      )
-
-      zoom = camera.zoom === zoom || camera.zoom < 1 ? Math.min(1, zoom) : zoom
-
-      const delta = [
-        (rendererBounds.width - commonBounds.width * zoom) / 2 / zoom,
-        (rendererBounds.height - commonBounds.height * zoom) / 2 / zoom,
-      ]
+      const { zoom, point } = getZoomFitCamera(rendererBounds, commonBounds, data.pageState)
 
       camera.zoom = zoom
-      camera.point = Vec.add([-commonBounds.minX, -commonBounds.minY], delta)
+      camera.point = point
     },
     zoomToFit(data) {
       const { camera } = data.pageState
@@ -269,20 +261,10 @@ export const state = createState({
         shapes.map((shape) => getShapeUtils(shape).getBounds(shape))
       )
 
-      let zoom = Math.min(
-        (rendererBounds.width - FIT_TO_SCREEN_PADDING) / commonBounds.width,
-        (rendererBounds.height - FIT_TO_SCREEN_PADDING) / commonBounds.height
-      )
-
-      zoom = camera.zoom === zoom || camera.zoom < 1 ? Math.min(1, zoom) : zoom
-
-      const delta = [
-        (rendererBounds.width - commonBounds.width * zoom) / 2 / zoom,
-        (rendererBounds.height - commonBounds.height * zoom) / 2 / zoom,
-      ]
+      const { zoom, point } = getZoomFitCamera(rendererBounds, commonBounds, data.pageState)
 
       camera.zoom = zoom
-      camera.point = Vec.add([-commonBounds.minX, -commonBounds.minY], delta)
+      camera.point = point
     },
     /* -------------------- Selection ------------------- */
     clearSelection(data) {
@@ -507,11 +489,3 @@ export const state = createState({
 })
 
 export const useAppState = createSelectorHook(state)
-
-function getPagePoint(point: number[], pageState: TLPageState) {
-  return Vec.sub(Vec.div(point, pageState.camera.zoom), pageState.camera.point)
-}
-
-function getScreenPoint(point: number[], pageState: TLPageState) {
-  return Vec.mul(Vec.add(point, pageState.camera.point), pageState.camera.zoom)
-}
