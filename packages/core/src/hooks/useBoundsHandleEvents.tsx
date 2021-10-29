@@ -46,6 +46,8 @@ export function useBoundsHandleEvents(
   const onPointerMove = React.useCallback(
     (e: React.PointerEvent) => {
       if (!inputs.pointerIsValid(e)) return
+      e.stopPropagation()
+
       if (e.currentTarget.hasPointerCapture(e.pointerId)) {
         callbacks.onDragBoundsHandle?.(inputs.pointerMove(e, id), e)
       }
