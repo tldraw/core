@@ -447,7 +447,9 @@ export const state = createState({
 
       let snapLines: TLSnapLine[] = []
 
-      if (snapInfo && !payload.metaKey) {
+      const speed = Vec.len2(payload.delta) / data.pageState.camera.zoom
+
+      if (snapInfo && !payload.metaKey && speed < 5) {
         const snappingBounds = Utils.getBoundsWithCenter(
           Utils.translateBounds(snapInfo.initialBounds, delta)
         )

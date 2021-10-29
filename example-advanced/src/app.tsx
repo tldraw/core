@@ -94,6 +94,16 @@ const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
       state.send('ZOOMED_OUT', info)
       break
     }
+    case 's':
+    case 'v': {
+      state.send('SELECTED_TOOL', { name: 'select' })
+      break
+    }
+    case 'r':
+    case 'b': {
+      state.send('SELECTED_TOOL', { name: 'box' })
+      break
+    }
   }
 }
 
