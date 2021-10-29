@@ -412,7 +412,7 @@ export const state = createState({
           const relativeCenter = Vec.sub(initialShapeCenter, initialShape.point)
           const rotatedCenter = Vec.rotWith(initialShapeCenter, initialCommonCenter, angleDelta)
 
-          const shape = data.page.shapes[id]s
+          const shape = data.page.shapes[id]
           shape.point = Vec.sub(rotatedCenter, relativeCenter)
           shape.rotation = (initialShape.rotation || 0) + angleDelta + initialAngle
         })
