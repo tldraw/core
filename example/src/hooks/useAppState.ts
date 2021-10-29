@@ -3,7 +3,7 @@ import Vec from '@tldraw/vec'
 import * as React from 'react'
 import type { Shape } from '../shapes'
 
-export function useExampleA() {
+export function useAppState() {
   /* -------------------- Document -------------------- */
 
   const [page, setPage] = React.useState<TLPage<Shape>>({

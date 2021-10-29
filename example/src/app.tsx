@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Renderer, TLShapeUtilsMap } from '@tldraw/core'
 import { BoxUtil, LabelUtil, Shape } from './shapes'
-import { useExampleA } from 'hooks/useExampleA'
+import { useAppState } from 'hooks/useAppState'
 
 export const shapeUtils: TLShapeUtilsMap<Shape> = {
   box: new BoxUtil(),
@@ -9,7 +9,7 @@ export const shapeUtils: TLShapeUtilsMap<Shape> = {
 }
 
 export default function App(): JSX.Element {
-  const { page, pageState, meta, theme, events } = useExampleA()
+  const { page, pageState, meta, theme, events } = useAppState()
 
   return (
     <div className="tldraw">
