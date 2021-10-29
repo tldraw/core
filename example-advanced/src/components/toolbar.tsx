@@ -116,4 +116,6 @@ const StatusBar = styled('div', {
   fontSize: '$1',
   fontWeight: '$1',
   backgroundColor: '$background',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
 })
