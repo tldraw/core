@@ -49,7 +49,7 @@ export const INITIAL_DATA = {
   },
 }
 
-export type Data = typeof INITIAL_DATA
+export type AppData = typeof INITIAL_DATA
 
 export const FIT_TO_SCREEN_PADDING = 100
 

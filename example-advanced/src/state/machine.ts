@@ -16,6 +16,7 @@ import { nanoid } from 'nanoid'
 import { current } from 'immer'
 import Vec from '@tldraw/vec'
 import { getPagePoint, getZoomedCameraPoint, getZoomFitCamera } from './helpers'
+import { makeHistory } from './history'
 
 let rendererBounds: TLBounds
 let snapshot = INITIAL_DATA
@@ -30,11 +31,13 @@ let snapInfo:
     }
   | undefined
 let initialBoundsHandle: TLBoundsHandle | undefined
+const history = makeHistory()
 
 export const setBounds = (newBounds: TLBounds) => (rendererBounds = newBounds)
 
 export const state = createState({
   data: INITIAL_DATA,
+  onEnter: 'restore',
   states: {
     tool: {
       on: {
@@ -57,6 +60,10 @@ export const state = createState({
               on: {
                 CANCELLED: 'clearSelection',
                 DELETED: 'deleteSelection',
+                UNDO: 'undo',
+                REDO: 'redo',
+                HOVERED_SHAPE: 'setHoveredShape',
+                UNHOVERED_SHAPE: 'clearHoveredShape',
                 POINTED_CANVAS: [
                   {
                     unless: 'isPressingShiftKey',
@@ -144,6 +151,7 @@ export const state = createState({
                   to: 'select.idle',
                 },
                 STOPPED_POINTING: {
+                  do: 'addToHistory',
                   to: 'select.idle',
                 },
               },
@@ -160,6 +168,7 @@ export const state = createState({
                   to: 'select.idle',
                 },
                 STOPPED_POINTING: {
+                  do: 'addToHistory',
                   to: 'select.idle',
                 },
               },
@@ -195,6 +204,7 @@ export const state = createState({
                 MOVED_POINTER: 'updateCreatingShape',
                 PANNED: 'updateCreatingShape',
                 STOPPED_POINTING: {
+                  do: 'addToHistory',
                   to: 'select',
                 },
               },
@@ -337,6 +347,12 @@ export const state = createState({
       data.pageState.camera.point = point
     },
     /* -------------------- Selection ------------------- */
+    setHoveredShape(data, payload: TLPointerInfo) {
+      data.pageState.hoveredId = payload.target
+    },
+    clearHoveredShape(data, payload: TLPointerInfo) {
+      data.pageState.hoveredId = undefined
+    },
     clearSelection(data) {
       data.pageState.selectedIds = []
     },
@@ -579,6 +595,22 @@ export const state = createState({
           shape.size = [relativeBoundingBox.width, relativeBoundingBox.height]
         })
       }
+    },
+    /* --------------------- History -------------------- */
+    restore(data) {
+      const snapshot = history.restore()
+      Object.assign(data, snapshot)
+    },
+    addToHistory(data) {
+      history.push(data)
+    },
+    undo(data) {
+      const snapshot = history.undo()
+      Object.assign(data, snapshot)
+    },
+    redo(data) {
+      const snapshot = history.redo()
+      Object.assign(data, snapshot)
     },
   },
 })

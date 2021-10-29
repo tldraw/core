@@ -9,7 +9,7 @@ export const BoxIndicator = TLShapeUtil.Indicator<BoxShape>(({ shape }) => {
       width={shape.size[0]}
       height={shape.size[1]}
       fill="none"
-      stroke="blue"
+      stroke="tl-selectedStroke"
       strokeWidth={1}
     />
   )

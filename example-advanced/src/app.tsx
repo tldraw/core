@@ -13,6 +13,14 @@ import { Toolbar } from './components/toolbar'
 import './styles.css'
 import styled from 'stitches.config'
 
+const onHoverShape: TLPointerEventHandler = (info, e) => {
+  state.send('HOVERED_SHAPE', info)
+}
+
+const onUnhoverShape: TLPointerEventHandler = (info, e) => {
+  state.send('UNHOVERED_SHAPE', info)
+}
+
 const onPointShape: TLPointerEventHandler = (info, e) => {
   state.send('POINTED_SHAPE', info)
 }
@@ -110,6 +118,16 @@ const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
       state.send('SELECTED_TOOL', { name: 'box' })
       break
     }
+    case 'z': {
+      if (info.metaKey || info.ctrlKey) {
+        if (info.shiftKey) {
+          state.send('REDO')
+        } else {
+          state.send('UNDO')
+        }
+      }
+      break
+    }
   }
 }
 
@@ -141,6 +159,8 @@ export default function App(): JSX.Element {
         onPointCanvas={onPointCanvas}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
+        onHoverShape={onHoverShape}
+        onUnhoverShape={onUnhoverShape}
         onPointBoundsHandle={onPointBoundsHandle}
         onPan={onPan}
         onPinchStart={onPinchStart}
