@@ -8,8 +8,8 @@ export function useCameraCss(
   pageState: TLPageState
 ) {
   // Update the tl-zoom CSS variable when the zoom changes
-  const rZoom = React.useRef(pageState.camera.zoom)
-  const rPoint = React.useRef(pageState.camera.point)
+  const rZoom = React.useRef<number>()
+  const rPoint = React.useRef<number[]>()
 
   React.useLayoutEffect(() => {
     const { zoom, point } = pageState.camera
