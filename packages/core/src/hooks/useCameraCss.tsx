@@ -17,6 +17,8 @@ export function useCameraCss(
     const didZoom = zoom !== rZoom.current
     const didPan = point !== rPoint.current
 
+    console.log(didZoom, didPan)
+
     rZoom.current = zoom
     rPoint.current = point
 
