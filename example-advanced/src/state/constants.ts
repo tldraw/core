@@ -1,4 +1,4 @@
-import type { TLBinding, TLPage, TLPageState } from '@tldraw/core'
+import type { TLBinding, TLPage, TLPageState, TLSnapLine } from '@tldraw/core'
 import type { Shape } from '../shapes'
 
 export const INITIAL_PAGE: TLPage<Shape, TLBinding> = {
@@ -41,6 +41,9 @@ export const INITIAL_PAGE_STATE: TLPageState = {
 export const INITIAL_DATA = {
   page: INITIAL_PAGE,
   pageState: INITIAL_PAGE_STATE,
+  overlays: {
+    snapLines: [] as TLSnapLine[],
+  },
   meta: {
     isDarkMode: false,
   },
@@ -49,3 +52,5 @@ export const INITIAL_DATA = {
 export type Data = typeof INITIAL_DATA
 
 export const FIT_TO_SCREEN_PADDING = 100
+
+export const SNAP_DISTANCE = 5

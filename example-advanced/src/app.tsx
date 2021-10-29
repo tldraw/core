@@ -119,6 +119,7 @@ export default function App(): JSX.Element {
         page={appState.data.page} // Required
         pageState={appState.data.pageState} // Required
         meta={appState.data.meta}
+        snapLines={appState.data.overlays.snapLines}
         onPointShape={onPointShape}
         onPointBounds={onPointBounds}
         onPointCanvas={onPointCanvas}

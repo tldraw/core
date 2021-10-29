@@ -4,12 +4,14 @@ import {
   TLBoundsCorner,
   TLBoundsEdge,
   TLBoundsHandle,
+  TLBoundsWithCenter,
   TLPageState,
   TLPointerInfo,
+  TLSnapLine,
   Utils,
 } from '@tldraw/core'
 import { BoxShape, getShapeUtils, shapeUtils } from '../shapes'
-import { INITIAL_DATA } from './constants'
+import { INITIAL_DATA, SNAP_DISTANCE } from './constants'
 import { nanoid } from 'nanoid'
 import { current } from 'immer'
 import Vec from '@tldraw/vec'
@@ -20,6 +22,13 @@ let snapshot = INITIAL_DATA
 let initialPoint = [0, 0]
 let justShiftSelectedId: string | undefined
 let isCloning = false
+let snapInfo:
+  | {
+      initialBounds: TLBoundsWithCenter
+      all: TLBoundsWithCenter[]
+      others: TLBoundsWithCenter[]
+    }
+  | undefined
 let initialBoundsHandle: TLBoundsHandle | undefined
 
 export const setBounds = (newBounds: TLBounds) => (rendererBounds = newBounds)
@@ -42,7 +51,7 @@ export const state = createState({
           initial: 'idle',
           states: {
             idle: {
-              onEnter: 'clearJustShiftSelectedId',
+              onEnter: ['clearJustShiftSelectedId', 'clearSnapInfo', 'clearSnapLines'],
               on: {
                 CANCELLED: 'clearSelection',
                 DELETED: 'deleteSelection',
@@ -122,7 +131,7 @@ export const state = createState({
               },
             },
             translatingSelection: {
-              onEnter: ['resetIsCloning'],
+              onEnter: ['resetIsCloning', 'setSnapInfo'],
               on: {
                 TOGGLED_MODIFIER: 'translateSelection',
                 MOVED_POINTER: 'translateSelection',
@@ -219,6 +228,38 @@ export const state = createState({
     },
     resetIsCloning() {
       isCloning = false
+    },
+    setSnapInfo(data) {
+      const all: TLBoundsWithCenter[] = []
+      const others: TLBoundsWithCenter[] = []
+
+      Object.values(data.page.shapes).forEach((shape) => {
+        const bounds = Utils.getBoundsWithCenter(getShapeUtils(shape).getRotatedBounds(shape))
+        all.push(bounds)
+        if (!data.pageState.selectedIds.includes(shape.id)) {
+          others.push(bounds)
+        }
+      })
+
+      const initialBounds = Utils.getBoundsWithCenter(
+        Utils.getCommonBounds(
+          data.pageState.selectedIds
+            .map((id) => data.page.shapes[id])
+            .map((shape) => getShapeUtils(shape).getBounds(shape))
+        )
+      )
+
+      snapInfo = {
+        initialBounds,
+        all,
+        others,
+      }
+    },
+    clearSnapInfo(data) {
+      snapInfo = undefined
+    },
+    clearSnapLines(data) {
+      data.overlays.snapLines = []
     },
     /* --------------------- Camera --------------------- */
     panCamera(data, payload: TLPointerInfo) {
@@ -359,7 +400,7 @@ export const state = createState({
     },
     /* ------------------- Translating ------------------ */
     translateSelection(data, payload: TLPointerInfo) {
-      const delta = Vec.sub(getPagePoint(payload.point, data.pageState), initialPoint)
+      let delta = Vec.sub(getPagePoint(payload.point, data.pageState), initialPoint)
 
       if (payload.shiftKey) {
         if (Math.abs(delta[0]) > Math.abs(delta[1])) {
@@ -400,6 +441,27 @@ export const state = createState({
 
         data.pageState.selectedIds = [...snapshot.pageState.selectedIds]
       }
+
+      let snapLines: TLSnapLine[] = []
+
+      if (snapInfo) {
+        const snapResult = Utils.getSnapPoints(
+          Utils.getBoundsWithCenter(Utils.translateBounds(snapInfo.initialBounds, delta)),
+          (isCloning ? snapInfo.all : snapInfo.others).filter(
+            (bounds) =>
+              Utils.boundsContain(rendererBounds, bounds) ||
+              Utils.boundsCollide(rendererBounds, bounds)
+          ),
+          SNAP_DISTANCE / data.pageState.camera.zoom
+        )
+
+        if (snapResult) {
+          snapLines = snapResult.snapLines
+          delta = Vec.sub(delta, snapResult.offset)
+        }
+      }
+
+      data.overlays.snapLines = snapLines
 
       data.pageState.selectedIds.forEach((id) => {
         const initialShape = snapshot.page.shapes[id]
