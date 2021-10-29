@@ -11,7 +11,17 @@ export const INITIAL_PAGE: TLPage<Shape, TLBinding> = {
       name: 'Box',
       childIndex: 1,
       rotation: 0,
-      point: [0, 0],
+      point: [100, 100],
+      size: [100, 100],
+    },
+    box2: {
+      id: 'box2',
+      type: 'box',
+      parentId: 'page1',
+      name: 'Box',
+      childIndex: 1,
+      rotation: 0,
+      point: [250, 200],
       size: [100, 100],
     },
   },
@@ -23,7 +33,7 @@ export const INITIAL_PAGE_STATE: TLPageState = {
   selectedIds: [],
   hoveredId: undefined,
   camera: {
-    point: [100, 0],
+    point: [0, 0],
     zoom: 1,
   },
 }

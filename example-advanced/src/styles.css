@@ -28,8 +28,36 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 12px;
-  height: 40px;
   z-index: 100;
+  background-color: white;
   border-top: 1px solid black;
+  user-select: none;
+}
+
+.toolBar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  background-color: white;
+  border-bottom: 1px solid black;
+  user-select: none;
+}
+
+.button {
+  height: 100%;
+  padding: 12px 12px;
+  background-color: none;
+  border: none;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #ccc;
 }

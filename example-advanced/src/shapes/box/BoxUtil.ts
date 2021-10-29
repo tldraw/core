@@ -12,19 +12,22 @@ export class BoxUtil extends TLShapeUtil<T, E> {
   Indicator = BoxIndicator
 
   getBounds = (shape: T) => {
-    const bounds = Utils.getFromCache(this.boundsCache, shape, () => {
-      const [width, height] = shape.size
+    const [x, y] = shape.point
+    const [width, height] = shape.size
 
-      return {
-        minX: 0,
-        maxX: width,
-        minY: 0,
-        maxY: height,
-        width,
-        height,
-      } as TLBounds
-    })
+    const bounds: TLBounds = {
+      minX: x,
+      maxX: x + width,
+      minY: y,
+      maxY: y + height,
+      width,
+      height,
+    } as TLBounds
 
-    return Utils.translateBounds(bounds, shape.point)
+    return bounds
+  }
+
+  getCenter = (shape: T) => {
+    return Utils.getBoundsCenter(this.getBounds(shape))
   }
 }
