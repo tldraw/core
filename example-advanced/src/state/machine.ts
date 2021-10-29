@@ -15,7 +15,7 @@ import { INITIAL_DATA, SNAP_DISTANCE } from './constants'
 import { nanoid } from 'nanoid'
 import { current } from 'immer'
 import Vec from '@tldraw/vec'
-import { getPagePoint, getZoomFitCamera } from './helpers'
+import { getPagePoint, getZoomedCameraPoint, getZoomFitCamera } from './helpers'
 
 let rendererBounds: TLBounds
 let snapshot = INITIAL_DATA
@@ -44,6 +44,8 @@ export const state = createState({
         PINCHED: 'pinchCamera',
         ZOOMED_TO_SELECTION: 'zoomToSelection',
         ZOOMED_TO_FIT: 'zoomToFit',
+        ZOOMED_IN: 'zoomIn',
+        ZOOMED_OUT: 'zoomOut',
       },
       initial: 'select',
       states: {
@@ -310,6 +312,30 @@ export const state = createState({
       camera.zoom = zoom
       camera.point = point
     },
+    zoomIn(data) {
+      const { camera } = data.pageState
+      const i = Math.round((data.pageState.camera.zoom * 100) / 25)
+      const zoom = (i + 1) * 0.25
+      const center = Utils.getBoundsCenter(rendererBounds)
+      const p0 = Vec.sub(Vec.div(center, camera.zoom), camera.point)
+      const p1 = Vec.sub(Vec.div(center, zoom), camera.point)
+      const point = Vec.round(Vec.add(camera.point, Vec.sub(p1, p0)))
+
+      data.pageState.camera.zoom = zoom
+      data.pageState.camera.point = point
+    },
+    zoomOut(data) {
+      const { camera } = data.pageState
+      const i = Math.round((data.pageState.camera.zoom * 100) / 25)
+      const zoom = (i - 1) * 0.25
+      const center = Utils.getBoundsCenter(rendererBounds)
+      const p0 = Vec.sub(Vec.div(center, camera.zoom), camera.point)
+      const p1 = Vec.sub(Vec.div(center, zoom), camera.point)
+      const point = Vec.round(Vec.add(camera.point, Vec.sub(p1, p0)))
+
+      data.pageState.camera.zoom = zoom
+      data.pageState.camera.point = point
+    },
     /* -------------------- Selection ------------------- */
     clearSelection(data) {
       data.pageState.selectedIds = []
@@ -417,31 +443,27 @@ export const state = createState({
         // create clones
         isCloning = true
 
-        const clones = data.pageState.selectedIds
-          .map((id) => snapshot.page.shapes[id])
-          .map((initialShape) => {
-            // move the dragging shape back to its initial point
-            const shape = data.page.shapes[initialShape.id]
-            shape.point = initialShape.point
+        const cloneIds = data.pageState.selectedIds.map((id) => {
+          // move the dragging shape back to its initial point
+          const initialShape = snapshot.page.shapes[id]
+          const shape = data.page.shapes[initialShape.id]
+          shape.point = initialShape.point
 
-            // create the clone and add it to the page AND snapshot
-            const clone = { ...initialShape, id: nanoid() }
-            data.page.shapes[clone.id] = clone
-            snapshot.page.shapes[clone.id] = { ...clone }
+          // create the clone and add it to the page AND snapshot
+          const clone = { ...initialShape, id: nanoid() }
+          data.page.shapes[clone.id] = clone
+          snapshot.page.shapes[clone.id] = { ...clone }
 
-            return clone
-          })
+          return clone.id
+        })
 
         // select all of the clones
-        data.pageState.selectedIds = clones.map((shape) => shape.id)
+        data.pageState.selectedIds = cloneIds
       } else if (!payload.altKey && isCloning) {
         // cleanup clones
         isCloning = false
 
-        data.pageState.selectedIds.forEach((id) => {
-          delete data.page.shapes[id]
-        })
-
+        data.pageState.selectedIds.forEach((id) => delete data.page.shapes[id])
         data.pageState.selectedIds = [...snapshot.pageState.selectedIds]
       }
 

@@ -86,12 +86,18 @@ const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
       state.send('ZOOMED_TO_SELECTION', info)
       break
     }
-    case '+': {
-      state.send('ZOOMED_IN', info)
+    case '=': {
+      if (info.metaKey || info.ctrlKey) {
+        e.preventDefault()
+        state.send('ZOOMED_IN', info)
+      }
       break
     }
     case '-': {
-      state.send('ZOOMED_OUT', info)
+      if (info.metaKey || info.ctrlKey) {
+        e.preventDefault()
+        state.send('ZOOMED_OUT', info)
+      }
       break
     }
     case 's':
