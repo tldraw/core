@@ -18,6 +18,7 @@ export const CenterHandle = React.memo(
         height={bounds.height + 2}
         opacity={isHidden ? 0 : 1}
         pointerEvents="none"
+        aria-label="center handle"
       />
     )
   }
