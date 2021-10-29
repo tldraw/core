@@ -9,7 +9,9 @@ import {
 import { useStateDesigner } from '@state-designer/react'
 import { shapeUtils } from './shapes'
 import { state, setBounds } from './state/machine'
+import { Toolbar } from './components/toolbar'
 import './styles.css'
+import styled from 'stitches.config'
 
 const onPointShape: TLPointerEventHandler = (info, e) => {
   state.send('POINTED_SHAPE', info)
@@ -56,26 +58,62 @@ const onPointBoundsHandle: TLPinchEventHandler = (info, e) => {
 }
 
 const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
-  state.send('PRESSED_KEY', info)
+  switch (key) {
+    case 'altKey':
+    case 'metaKey':
+    case 'ctrlKey':
+    case 'shiftKey': {
+      state.send('TOGGLED_MODIFIER', info)
+      break
+    }
+    case 'Backspace': {
+      state.send('DELETED', info)
+      break
+    }
+    case 'Escape': {
+      state.send('CANCELLED', info)
+      break
+    }
+    case '0': {
+      state.send('ZOOMED_TO_ACTUAL', info)
+      break
+    }
+    case '1': {
+      state.send('ZOOMED_TO_FIT', info)
+      break
+    }
+    case '2': {
+      state.send('ZOOMED_TO_SELECTION', info)
+      break
+    }
+    case '+': {
+      state.send('ZOOMED_IN', info)
+      break
+    }
+    case '-': {
+      state.send('ZOOMED_OUT', info)
+      break
+    }
+  }
 }
 
 const onKeyUp: TLKeyboardEventHandler = (key, info, e) => {
-  state.send('RELEASED_KEY', info)
-}
-
-const onToolSelect = (e: React.MouseEvent) => {
-  state.send('SELECTED_TOOL', { name: e.currentTarget.id })
-}
-
-const onZoomToSelection = () => {
-  state.send('ZOOMED_TO_SELECTION')
+  switch (key) {
+    case 'altKey':
+    case 'metaKey':
+    case 'ctrlKey':
+    case 'shiftKey': {
+      state.send('TOGGLED_MODIFIER', info)
+      break
+    }
+  }
 }
 
 export default function App(): JSX.Element {
   const appState = useStateDesigner(state)
 
   return (
-    <div className="tldraw">
+    <AppContainer>
       <Renderer
         shapeUtils={shapeUtils} // Required
         page={appState.data.page} // Required
@@ -96,38 +134,17 @@ export default function App(): JSX.Element {
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
       />
-      <div className="toolBar">
-        <div>
-          <button
-            id="select"
-            className={state.isIn('select') ? 'button active' : 'button'}
-            onClick={onToolSelect}
-          >
-            Select
-          </button>
-          <button
-            id="box"
-            className={state.isIn('box') ? 'button active' : 'button'}
-            onClick={onToolSelect}
-          >
-            Box
-          </button>
-        </div>
-        <div>
-          <button id="box" className={'button'} onClick={onZoomToSelection}>
-            Zoom to Selection
-          </button>
-        </div>
-      </div>
-      <div className="statusBar">
-        <div>
-          {state.active
-            .slice(1)
-            .map((state) => state.split('#state_1.root')[1])
-            .join(' - ')}
-        </div>
-        <div>{state.log[0]}</div>
-      </div>
-    </div>
+      <Toolbar activeStates={state.active} lastEvent={state.log[0]} />
+    </AppContainer>
   )
 }
+
+const AppContainer = styled('div', {
+  position: 'fixed',
+  top: '0px',
+  left: '0px',
+  right: '0px',
+  bottom: '0px',
+  width: '100%',
+  height: '100%',
+})

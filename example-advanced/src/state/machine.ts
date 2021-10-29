@@ -8,8 +8,8 @@ import {
   TLPointerInfo,
   Utils,
 } from '@tldraw/core'
-import { BoxShape, shapeUtils } from '../shapes'
-import { INITIAL_DATA } from './constants'
+import { BoxShape, getShapeUtils, shapeUtils } from '../shapes'
+import { FIT_TO_SCREEN_PADDING, INITIAL_DATA } from './constants'
 import { nanoid } from 'nanoid'
 import { current } from 'immer'
 import Vec from '@tldraw/vec'
@@ -33,6 +33,7 @@ export const state = createState({
         PANNED: 'panCamera',
         PINCHED: 'pinchCamera',
         ZOOMED_TO_SELECTION: 'zoomToSelection',
+        ZOOMED_TO_FIT: 'zoomToFit',
       },
       initial: 'select',
       states: {
@@ -42,6 +43,7 @@ export const state = createState({
             idle: {
               onEnter: 'clearJustShiftSelectedId',
               on: {
+                CANCELLED: 'clearSelection',
                 POINTED_CANVAS: [
                   {
                     unless: 'isPressingShiftKey',
@@ -120,10 +122,13 @@ export const state = createState({
             translatingSelection: {
               onEnter: ['resetIsCloning'],
               on: {
-                PRESSED_KEY: 'translateSelection',
-                RELEASED_KEY: 'translateSelection',
+                TOGGLED_MODIFIER: 'translateSelection',
                 MOVED_POINTER: 'translateSelection',
                 PANNED: 'translateSelection',
+                CANCELLED: {
+                  do: 'restoreSnapshot',
+                  to: 'select.idle',
+                },
                 STOPPED_POINTING: {
                   to: 'select.idle',
                 },
@@ -131,21 +136,27 @@ export const state = createState({
             },
             transformingSelection: {
               on: {
-                PRESSED_KEY: 'transformSelection',
-                RELEASED_KEY: 'transformSelection',
+                TOGGLED_MODIFIER: 'transformSelection',
                 MOVED_POINTER: 'transformSelection',
                 PANNED: 'transformSelection',
+                CANCELLED: {
+                  do: 'restoreSnapshot',
+                  to: 'select.idle',
+                },
                 STOPPED_POINTING: {
                   to: 'select.idle',
                 },
               },
             },
             brushSelecting: {
+              onExit: 'clearBrush',
               on: {
                 MOVED_POINTER: 'updateBrush',
                 PANNED: 'updateBrush',
+                CANCELLED: {
+                  to: 'select.idle',
+                },
                 STOPPED_POINTING: {
-                  do: 'clearBrush',
                   to: 'select.idle',
                 },
               },
@@ -195,6 +206,9 @@ export const state = createState({
     updateSnapshot(data) {
       snapshot = current(data)
     },
+    restoreSnapshot(data) {
+      Object.assign(data, snapshot)
+    },
     setInitialPoint(data, payload: TLPointerInfo) {
       initialPoint = getPagePoint(payload.origin, data.pageState)
     },
@@ -208,6 +222,7 @@ export const state = createState({
     panCamera(data, payload: TLPointerInfo) {
       const { point, zoom } = data.pageState.camera
       data.pageState.camera.point = Vec.sub(point, Vec.div(payload.delta, zoom))
+      console.log(data.pageState.camera.point)
     },
     pinchCamera(data, payload: TLPointerInfo) {
       const { camera } = data.pageState
@@ -225,19 +240,49 @@ export const state = createState({
       const commonBounds = Utils.getCommonBounds(
         selectedIds
           .map((id) => data.page.shapes[id])
-          .map((shape) => shapeUtils[shape.type].getBounds(shape))
+          .map((shape) => getShapeUtils(shape).getBounds(shape))
       )
 
-      const center = getPagePoint(Utils.getBoundsCenter(rendererBounds), data.pageState)
-
-      const centeredBounds = Utils.centerBounds(commonBounds, center)
-
-      const delta = Vec.sub(
-        [centeredBounds.minX, centeredBounds.minY],
-        [commonBounds.minX, commonBounds.minY]
+      let zoom = Math.min(
+        (rendererBounds.width - FIT_TO_SCREEN_PADDING) / commonBounds.width,
+        (rendererBounds.height - FIT_TO_SCREEN_PADDING) / commonBounds.height
       )
 
-      camera.point = Vec.add(camera.point, delta)
+      zoom = camera.zoom === zoom || camera.zoom < 1 ? Math.min(1, zoom) : zoom
+
+      const delta = [
+        (rendererBounds.width - commonBounds.width * zoom) / 2 / zoom,
+        (rendererBounds.height - commonBounds.height * zoom) / 2 / zoom,
+      ]
+
+      camera.zoom = zoom
+      camera.point = Vec.add([-commonBounds.minX, -commonBounds.minY], delta)
+    },
+    zoomToFit(data) {
+      const { camera } = data.pageState
+
+      const shapes = Object.values(data.page.shapes)
+
+      if (shapes.length === 0) return
+
+      const commonBounds = Utils.getCommonBounds(
+        shapes.map((shape) => getShapeUtils(shape).getBounds(shape))
+      )
+
+      let zoom = Math.min(
+        (rendererBounds.width - FIT_TO_SCREEN_PADDING) / commonBounds.width,
+        (rendererBounds.height - FIT_TO_SCREEN_PADDING) / commonBounds.height
+      )
+
+      zoom = camera.zoom === zoom || camera.zoom < 1 ? Math.min(1, zoom) : zoom
+
+      const delta = [
+        (rendererBounds.width - commonBounds.width * zoom) / 2 / zoom,
+        (rendererBounds.height - commonBounds.height * zoom) / 2 / zoom,
+      ]
+
+      camera.zoom = zoom
+      camera.point = Vec.add([-commonBounds.minX, -commonBounds.minY], delta)
     },
     /* -------------------- Selection ------------------- */
     clearSelection(data) {
@@ -272,7 +317,7 @@ export const state = createState({
 
       const hits = Object.values(data.page.shapes)
         .filter((shape) => {
-          const shapeBounds = shapeUtils[shape.type].getBounds(shape)
+          const shapeBounds = getShapeUtils(shape).getBounds(shape)
           return (
             Utils.boundsContain(brushBounds, shapeBounds) ||
             (!payload.metaKey && Utils.boundsCollide(brushBounds, shapeBounds))
@@ -320,6 +365,10 @@ export const state = createState({
 
       shape.point = [next.minX, next.minY]
       shape.size = [next.width, next.height]
+    },
+    /* ----------------- Shape Deleting ----------------- */
+    deleteSelection(data) {
+      data.pageState.selectedIds.forEach((id) => delete data.page.shapes[id])
     },
     /* ------------------- Translating ------------------ */
     translateSelection(data, payload: TLPointerInfo) {
@@ -382,7 +431,7 @@ export const state = createState({
       const initialCommonBounds = Utils.getCommonBounds(
         selectedIds
           .map((id) => snapshot.page.shapes[id])
-          .map((shape) => shapeUtils[shape.type].getBounds(shape))
+          .map((shape) => getShapeUtils(shape).getBounds(shape))
       )
 
       if (initialBoundsHandle === 'rotate') {
@@ -456,4 +505,8 @@ export const useAppState = createSelectorHook(state)
 
 function getPagePoint(point: number[], pageState: TLPageState) {
   return Vec.sub(Vec.div(point, pageState.camera.zoom), pageState.camera.point)
+}
+
+function getScreenPoint(point: number[], pageState: TLPageState) {
+  return Vec.mul(Vec.add(point, pageState.camera.point), pageState.camera.zoom)
 }
