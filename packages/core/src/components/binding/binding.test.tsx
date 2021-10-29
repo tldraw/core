@@ -22,7 +22,7 @@ describe('binding', () => {
     expect(circle?.getAttribute('cy')).toBe('20')
     expect(circle?.getAttribute('r')).toBe('8')
   })
-  test('validate no children rendered properly for pin binding type', () => {
+  test('validate no children should be rendered for pin binding type', () => {
     const { container } = render(<Binding point={[10, 20]} type={'pin'} />)
     const group = container.querySelector('g')
     expect(group?.hasChildNodes()).toBe(false)
