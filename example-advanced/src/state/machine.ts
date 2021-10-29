@@ -614,5 +614,3 @@ export const state = createState({
     },
   },
 })
-
-export const useAppState = createSelectorHook(state)

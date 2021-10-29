@@ -20,9 +20,19 @@ yarn add @tldraw/core --peer
 npm i @tldraw/core
 ```
 
+## Examples
+
+There are two examples in this repository.
+
+The **simple** example in the `example` folder shows a minimal use of the library. It does not do much but this should be a good reference for the API without too much else built on top.
+
+The **advanced** example in the `example-advanced` folder shows a more realistic use of the library. While the fundamental patterns are the same, this example contains features such as: panning, pinching, and zooming the camera; creating, cloning, resizing, and deleting shapes; keyboard shortcuts, brush-selection; shape-snapping; undo, redo; and more. Much of the code in the advanced example comes from the [@tldraw/tldraw](https://tldraw.com) codebase.
+
+If you're working on an app that uses this library, I recommend referring back to the advanced example for tips on how you might implement these features for your own project.
+
 ## Usage
 
-Import the `Renderer` React component and pass it the required props. See the [CodeSandbox](https://codesandbox.io/s/laughing-elion-gp0kx) example.
+Import the `Renderer` React component and pass it the required props.
 
 ```tsx
 import * as React from "react"
