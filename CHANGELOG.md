@@ -1,3 +1,7 @@
+# 0.1.12
+
+- Fix bug with bounds handle events.
+
 # 0.1.11
 
 - Fix bug with initial camera state.
