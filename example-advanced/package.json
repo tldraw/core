@@ -10,7 +10,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node ./esbuild.config.mjs --dev tsc --watch"
+    "start": "node ./scripts/esbuild.dev.config.mjs --dev tsc --watch",
+    "build": "node ./scripts/esbuild.build.config.mjs"
   },
   "files": [],
   "sideEffects": false,
