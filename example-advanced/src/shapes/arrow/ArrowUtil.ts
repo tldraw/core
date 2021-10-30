@@ -26,6 +26,8 @@ export class ArrowUtil extends CustomShapeUtil<T, E> {
 
   hideBounds = true
 
+  canBind = false
+
   getCenter = (shape: T) => {
     return Utils.getBoundsCenter(this.getBounds(shape))
   }
@@ -51,20 +53,5 @@ export class ArrowUtil extends CustomShapeUtil<T, E> {
     shape.point = [bounds.minX, bounds.minY]
     shape.handles.start.point = Vec.mulV([bounds.width, bounds.height], nStart)
     shape.handles.end.point = Vec.mulV([bounds.width, bounds.height], nEnd)
-  }
-
-  translateHandle = (shape: T, initialShape: T, handleId: keyof T['handles'], delta: number[]) => {
-    const handlePoints = {
-      start: [...initialShape.handles.start.point],
-      end: [...initialShape.handles.end.point],
-    }
-
-    handlePoints[handleId] = Vec.add(handlePoints[handleId], delta)
-
-    const offset = Utils.getCommonTopLeft([handlePoints.start, handlePoints.end])
-
-    shape.handles.start.point = Vec.sub(handlePoints.start, offset)
-    shape.handles.end.point = Vec.sub(handlePoints.end, offset)
-    shape.point = Vec.add(initialShape.point, offset)
   }
 }

@@ -1,5 +1,6 @@
 import { createState, createSelectorHook } from '@state-designer/react'
 import {
+  TLBinding,
   TLBounds,
   TLBoundsCorner,
   TLBoundsEdge,
@@ -10,7 +11,7 @@ import {
   TLSnapLine,
   Utils,
 } from '@tldraw/core'
-import { BoxShape, getShapeUtils, shapeUtils } from '../shapes'
+import { BoxShape, getShapeUtils, Shape, shapeUtils } from '../shapes'
 import { INITIAL_DATA, SNAP_DISTANCE } from './constants'
 import { nanoid } from 'nanoid'
 import { current } from 'immer'
@@ -18,6 +19,7 @@ import Vec from '@tldraw/vec'
 import { getPagePoint, getZoomedCameraPoint, getZoomFitCamera } from './helpers'
 import { makeHistory } from './history'
 import type { ArrowShape } from 'shapes/arrow'
+import { intersectBoundsLineSegment, intersectLineSegmentBounds } from '@tldraw/intersect'
 
 let rendererBounds: TLBounds
 let snapshot = INITIAL_DATA
@@ -178,16 +180,16 @@ export const state = createState({
               states: {
                 selection: {
                   on: {
-                    TOGGLED_MODIFIER: 'translateSelection',
-                    MOVED_POINTER: 'translateSelection',
-                    PANNED: 'translateSelection',
+                    TOGGLED_MODIFIER: ['translateSelection', 'updateBoundShapes'],
+                    MOVED_POINTER: ['translateSelection', 'updateBoundShapes'],
+                    PANNED: ['translateSelection', 'updateBoundShapes'],
                   },
                 },
                 handle: {
                   on: {
-                    TOGGLED_MODIFIER: 'translateHandle',
-                    MOVED_POINTER: 'translateHandle',
-                    PANNED: 'translateHandle',
+                    TOGGLED_MODIFIER: ['translateHandle', 'updateBoundShapes'],
+                    MOVED_POINTER: ['translateHandle', 'updateBoundShapes'],
+                    PANNED: ['translateHandle', 'updateBoundShapes'],
                   },
                 },
               },
@@ -196,9 +198,9 @@ export const state = createState({
               onEnter: 'setSnapInfo',
               onExit: ['clearSnapInfo', 'clearSnapLines'],
               on: {
-                TOGGLED_MODIFIER: 'transformSelection',
-                MOVED_POINTER: 'transformSelection',
-                PANNED: 'transformSelection',
+                TOGGLED_MODIFIER: ['transformSelection', 'updateBoundShapes'],
+                MOVED_POINTER: ['transformSelection', 'updateBoundShapes'],
+                PANNED: ['transformSelection', 'updateBoundShapes'],
                 CANCELLED: {
                   do: 'restoreSnapshot',
                   to: 'select.idle',
@@ -537,6 +539,8 @@ export const state = createState({
         // create clones
         isCloning = true
 
+        // TODO: Clone bindings, too.
+
         const cloneIds = data.pageState.selectedIds.map((id) => {
           // move the dragging shape back to its initial point
           const initialShape = snapshot.page.shapes[id]
@@ -590,11 +594,15 @@ export const state = createState({
 
       data.overlays.snapLines = snapLines
 
-      data.pageState.selectedIds.forEach((id) => {
-        const initialShape = snapshot.page.shapes[id]
-        const shape = data.page.shapes[id]
-        shape.point = Vec.add(initialShape.point, delta)
-      })
+      const bindings = Object.values(data.page.bindings)
+
+      data.pageState.selectedIds
+        .filter((id) => bindings.find((binding) => binding.fromId === id) === undefined)
+        .forEach((id) => {
+          const initialShape = snapshot.page.shapes[id]
+          const shape = data.page.shapes[id]
+          shape.point = Vec.add(initialShape.point, delta)
+        })
     },
     translateHandle(data, payload: TLPointerInfo<keyof ArrowShape['handles']>) {
       const point = getPagePoint(payload.point, data.pageState)
@@ -615,7 +623,95 @@ export const state = createState({
           delta = Vec.add(delta, Vec.sub(adjusted, C))
         }
 
-        shapeUtils.arrow.translateHandle(shape, initialShape, pointedHandleId, delta)
+        const handlePoints = {
+          start: [...initialShape.handles.start.point],
+          end: [...initialShape.handles.end.point],
+        }
+
+        handlePoints[pointedHandleId] = Vec.add(handlePoints[pointedHandleId], delta)
+
+        // Create binding
+
+        const handle = shape.handles[pointedHandleId]
+        const handlePoint = Vec.add(handlePoints[pointedHandleId], initialShape.point)
+
+        let minDistance = Infinity
+        let toShape: Shape | undefined
+
+        if (!payload.metaKey) {
+          // Find colliding shape with center nearest to point
+          Object.values(data.page.shapes)
+            .filter((shape) => !data.pageState.selectedIds.includes(shape.id))
+            .forEach((potentialTarget) => {
+              const utils = getShapeUtils(potentialTarget)
+
+              if (!utils.canBind) return
+
+              const bounds = utils.getBounds(potentialTarget)
+
+              if (Utils.pointInBounds(handlePoint, bounds)) {
+                const dist = Vec.dist(handlePoint, utils.getCenter(potentialTarget))
+                if (dist < minDistance) {
+                  minDistance = dist
+                  toShape = potentialTarget
+                }
+              }
+            })
+        }
+
+        // If we have a binding target
+        if (toShape) {
+          if (handle.bindingId) {
+            const binding = data.page.bindings[handle.bindingId]
+
+            if (binding.toId === toShape.id) {
+              // Noop, we'll reuse this binding
+            } else {
+              // Clear this binding; we'll create a new one
+              delete data.page.bindings[binding.id]
+            }
+          }
+
+          if (!handle.bindingId) {
+            // Create a new binding between shape and toShape
+            const binding: TLBinding = {
+              id: nanoid(),
+              type: 'center',
+              fromId: shape.id,
+              toId: toShape.id,
+            }
+
+            data.page.bindings[binding.id] = binding
+            handle.bindingId = binding.id
+          }
+
+          const toShapeCenter = getShapeUtils(toShape).getCenter(toShape)
+          const toShapeBounds = getShapeUtils(toShape).getBounds(toShape)
+          const oppositeHandle = shape.handles[pointedHandleId === 'start' ? 'end' : 'start']
+          const oppositePoint = Vec.add(shape.point, oppositeHandle.point)
+
+          // Position the handle at an intersection with the toShape's
+          // bounds (padded by 12) or to the center of the toShape.
+          const intersection =
+            intersectLineSegmentBounds(
+              oppositePoint,
+              toShapeCenter,
+              Utils.expandBounds(toShapeBounds, 12)
+            )[0]?.points[0] ?? toShapeCenter
+
+          handlePoints[pointedHandleId] = Vec.sub(intersection, initialShape.point)
+        } else if (handle.bindingId) {
+          // If we didn't find a target but we do have a binding handle,
+          // delete the binding reference. We'll clean up the binding
+          // itself in the `updateBoundShapes` action.
+          handle.bindingId = undefined
+        }
+
+        const offset = Utils.getCommonTopLeft([handlePoints.start, handlePoints.end])
+
+        shape.handles.start.point = Vec.sub(handlePoints.start, offset)
+        shape.handles.end.point = Vec.sub(handlePoints.end, offset)
+        shape.point = Vec.add(initialShape.point, offset)
       })
     },
     /* ------------------ Transforming ------------------ */
@@ -719,6 +815,70 @@ export const state = createState({
           getShapeUtils(shape).transform(shape, relativeBoundingBox, initialShape, [scaleX, scaleY])
         })
       }
+    },
+    /* -------------------- Bindings -------------------- */
+    updateBoundShapes(data) {
+      const toDelete = new Set<string>()
+      Object.values(data.page.bindings).forEach((binding) => {
+        const toShape = data.page.shapes[binding.toId]
+        const fromShape = data.page.shapes[binding.fromId] as ArrowShape
+
+        if (!(toShape && fromShape)) {
+          toDelete.add(binding.id)
+          return
+        }
+
+        const boundHandle = Object.values(fromShape.handles).find(
+          (handle) => handle.bindingId === binding.id
+        )
+
+        if (!boundHandle) {
+          toDelete.add(binding.id)
+          return
+        }
+
+        const toShapeCenter = getShapeUtils(toShape).getCenter(toShape)
+        const toShapeBounds = getShapeUtils(toShape).getBounds(toShape)
+        const oppositeHandle = fromShape.handles[boundHandle.id === 'start' ? 'end' : 'start']
+
+        const handlePoint = Vec.add(fromShape.point, boundHandle.point)
+        const oppositePoint = Vec.add(fromShape.point, oppositeHandle.point)
+
+        const intersection =
+          intersectLineSegmentBounds(
+            oppositePoint,
+            toShapeCenter,
+            Utils.expandBounds(toShapeBounds, 12)
+          )[0]?.points[0] ?? toShapeCenter
+
+        if (!Vec.isEqual(handlePoint, intersection)) {
+          boundHandle.point = Vec.sub(intersection, fromShape.point)
+
+          const handles = Object.values(fromShape.handles)
+          const offset = Utils.getCommonTopLeft(handles.map((handle) => handle.point))
+          handles.forEach((handle) => (handle.point = Vec.sub(handle.point, offset)))
+          fromShape.point = Vec.add(fromShape.point, offset)
+        }
+      })
+
+      // Clean up deleted bindings
+      toDelete.forEach((id) => {
+        const binding = data.page.bindings[id]
+
+        const fromShape = data.page.shapes[binding.fromId] as ArrowShape
+
+        if (fromShape) {
+          const boundHandle = Object.values(fromShape.handles).find(
+            (handle) => handle.bindingId === binding.id
+          )
+
+          if (boundHandle) {
+            boundHandle.bindingId = undefined
+          }
+        }
+
+        delete data.page.bindings[id]
+      })
     },
     /* --------------------- History -------------------- */
     restore(data) {

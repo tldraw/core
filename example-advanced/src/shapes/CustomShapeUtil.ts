@@ -6,14 +6,9 @@ export abstract class CustomShapeUtil<
 > extends TLShapeUtil<T, E> {
   /* ----------------- Custom Methods ----------------- */
 
+  canBind = false
+
   abstract getCenter: (shape: T) => number[]
 
   abstract transform: (shape: T, bounds: TLBounds, initialShape: T, scale: number[]) => void
-
-  translateHandle?: (
-    shape: T,
-    initialShape: T,
-    handle: keyof T['handles'],
-    delta: number[]
-  ) => void = () => {}
 }

@@ -122,6 +122,10 @@ const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
       state.send('SELECTED_TOOL', { name: 'box' })
       break
     }
+    case 'a': {
+      state.send('SELECTED_TOOL', { name: 'arrow' })
+      break
+    }
     case 'z': {
       if (info.metaKey || info.ctrlKey) {
         if (info.shiftKey) {
@@ -150,7 +154,7 @@ const onKeyUp: TLKeyboardEventHandler = (key, info, e) => {
 export default function App(): JSX.Element {
   const appState = useStateDesigner(state)
 
-  const hideBounds = appState.isInAny('transformingSelection', 'translating')
+  const hideBounds = appState.isInAny('transformingSelection', 'translating', 'creating')
 
   return (
     <AppContainer>
@@ -179,6 +183,7 @@ export default function App(): JSX.Element {
         onKeyUp={onKeyUp}
         hideBounds={hideBounds}
         hideHandles={hideBounds}
+        hideBindingHandles={true}
       />
       <Toolbar activeStates={state.active} lastEvent={state.log[0]} />
     </AppContainer>

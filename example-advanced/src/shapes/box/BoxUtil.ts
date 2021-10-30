@@ -32,6 +32,8 @@ export class BoxUtil extends CustomShapeUtil<T, E> {
 
   /* ----------------- Custom Methods ----------------- */
 
+  canBind = true
+
   getCenter = (shape: T) => {
     return Utils.getBoundsCenter(this.getBounds(shape))
   }
