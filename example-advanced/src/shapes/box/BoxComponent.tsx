@@ -12,9 +12,10 @@ export const BoxComponent = TLShapeUtil.Component<BoxShape, SVGSVGElement>(
           width={shape.size[0]}
           height={shape.size[1]}
           stroke={color}
-          strokeWidth={2}
+          strokeWidth={3}
           strokeLinejoin="round"
           fill="none"
+          rx={4}
           pointerEvents="all"
         />
       </SVGContainer>

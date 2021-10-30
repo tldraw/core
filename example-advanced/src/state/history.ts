@@ -1,12 +1,20 @@
-import { AppData, INITIAL_DATA } from './constants'
+import { AppData, INITIAL_DATA, PERSIST_DATA } from './constants'
 import { current } from 'immer'
 
 export function makeHistory(ID = '@tldraw/core_advanced_example') {
   let initialData = INITIAL_DATA
 
   const saved = localStorage.getItem(ID)
-  if (saved !== null) {
-    initialData = JSON.parse(saved)
+
+  if (PERSIST_DATA && saved !== null) {
+    let restoredData = JSON.parse(saved)
+
+    if (restoredData.version < INITIAL_DATA.version) {
+      // Migrations would go here
+      restoredData = INITIAL_DATA
+    }
+
+    initialData = restoredData
   }
 
   let stack: AppData[] = [initialData]
@@ -20,7 +28,6 @@ export function makeHistory(ID = '@tldraw/core_advanced_example') {
 
   function push(data: AppData) {
     if (pointer < stack.length - 1) {
-      console.log('slicing')
       stack = stack.slice(0, pointer + 1)
     }
     const serialized = current(data)

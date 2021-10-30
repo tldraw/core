@@ -1,4 +1,6 @@
-import { Utils, TLBounds, TLShapeUtil } from '@tldraw/core'
+import { Utils, TLBounds } from '@tldraw/core'
+import Vec from '@tldraw/vec'
+import { CustomShapeUtil } from 'shapes/CustomShapeUtil'
 import { BoxComponent } from './BoxComponent'
 import { BoxIndicator } from './BoxIndicator'
 import type { BoxShape } from './BoxShape'
@@ -6,7 +8,7 @@ import type { BoxShape } from './BoxShape'
 type T = BoxShape
 type E = SVGSVGElement
 
-export class BoxUtil extends TLShapeUtil<T, E> {
+export class BoxUtil extends CustomShapeUtil<T, E> {
   Component = BoxComponent
 
   Indicator = BoxIndicator
@@ -28,7 +30,14 @@ export class BoxUtil extends TLShapeUtil<T, E> {
     return Utils.translateBounds(bounds, shape.point)
   }
 
+  /* ----------------- Custom Methods ----------------- */
+
   getCenter = (shape: T) => {
     return Utils.getBoundsCenter(this.getBounds(shape))
+  }
+
+  transform = (shape: T, bounds: TLBounds, initialShape: T, scale: number[]) => {
+    shape.point = [bounds.minX, bounds.minY]
+    shape.size = [bounds.width, bounds.height]
   }
 }

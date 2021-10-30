@@ -33,6 +33,10 @@ const onPointBounds: TLPointerEventHandler = (info, e) => {
   state.send('POINTED_BOUNDS', info)
 }
 
+const onPointHandle: TLPointerEventHandler = (info, e) => {
+  state.send('POINTED_HANDLE', info)
+}
+
 const onPointerDown: TLPointerEventHandler = (info, e) => {
   state.send('STARTED_POINTING', info)
 }
@@ -146,6 +150,8 @@ const onKeyUp: TLKeyboardEventHandler = (key, info, e) => {
 export default function App(): JSX.Element {
   const appState = useStateDesigner(state)
 
+  const hideBounds = appState.isInAny('transformingSelection', 'translating')
+
   return (
     <AppContainer>
       <Renderer
@@ -162,6 +168,7 @@ export default function App(): JSX.Element {
         onHoverShape={onHoverShape}
         onUnhoverShape={onUnhoverShape}
         onPointBoundsHandle={onPointBoundsHandle}
+        onPointHandle={onPointHandle}
         onPan={onPan}
         onPinchStart={onPinchStart}
         onPinchEnd={onPinchEnd}
@@ -170,6 +177,8 @@ export default function App(): JSX.Element {
         onBoundsChange={setBounds}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
+        hideBounds={hideBounds}
+        hideHandles={hideBounds}
       />
       <Toolbar activeStates={state.active} lastEvent={state.log[0]} />
     </AppContainer>

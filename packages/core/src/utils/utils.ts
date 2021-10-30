@@ -1555,6 +1555,21 @@ left past the initial left edge) then swap points on that axis.
     }
   }
 
+  /**
+   * Given a set of points, get their common [minX, minY].
+   * @param points
+   */
+  static getCommonTopLeft(points: number[][]) {
+    const min = [Infinity, Infinity]
+
+    points.forEach((point) => {
+      min[0] = Math.min(min[0], point[0])
+      min[1] = Math.min(min[1], point[1])
+    })
+
+    return min
+  }
+
   static getSnapPoints = (
     bounds: TLBoundsWithCenter,
     others: TLBoundsWithCenter[],

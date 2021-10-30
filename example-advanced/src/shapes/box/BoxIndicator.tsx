@@ -11,6 +11,7 @@ export const BoxIndicator = TLShapeUtil.Indicator<BoxShape>(({ shape }) => {
       fill="none"
       stroke="tl-selectedStroke"
       strokeWidth={1}
+      rx={4}
     />
   )
 })

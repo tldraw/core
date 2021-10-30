@@ -25,6 +25,8 @@ export abstract class TLShapeUtil<T extends TLShape, E extends Element = any, M 
     isSelected: boolean
   }) => React.ReactElement | null
 
+  abstract getBounds: (shape: T) => TLBounds
+
   shouldRender: (prev: T, next: T) => boolean = () => true
 
   getRef = (shape: T): React.RefObject<E> => {
@@ -33,13 +35,6 @@ export abstract class TLShapeUtil<T extends TLShape, E extends Element = any, M 
     }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.refMap.get(shape.id)!
-  }
-
-  hitTest = (shape: T, point: number[]): boolean => {
-    const bounds = this.getBounds(shape)
-    return shape.rotation
-      ? Utils.pointInPolygon(point, Utils.getRotatedCorners(bounds, shape.rotation))
-      : Utils.pointInBounds(point, bounds)
   }
 
   hitTestBounds = (shape: T, bounds: TLBounds) => {
@@ -61,11 +56,11 @@ export abstract class TLShapeUtil<T extends TLShape, E extends Element = any, M 
     )
   }
 
-  abstract getBounds: (shape: T) => TLBounds
-
   getRotatedBounds: (shape: T) => TLBounds = (shape) => {
     return Utils.getBoundsFromPoints(Utils.getRotatedCorners(this.getBounds(shape), shape.rotation))
   }
+
+  /* --------------------- Static --------------------- */
 
   static Component = <T extends TLShape, E extends Element = any, M = any>(
     component: (props: TLComponentProps<T, E, M>, ref: TLForwardedRef<E>) => JSX.Element
