@@ -6,7 +6,7 @@
 
 This package contains the `Renderer` and core utilities used by [tldraw](https://tldraw.com).
 
-You can use this package to render React components in a canvas user interface.
+You can use this package to build projects like [tldraw](https://tldraw.com), where React components are rendered on a canvas user interface. Check out the [advanced example](https://core-steveruiz.vercel.app/) from this repo.
 
 💕 Love this library? Consider [becoming a sponsor](https://github.com/sponsors/steveruizok?frequency=recurring&sponsor=steveruizok).
 
@@ -26,7 +26,7 @@ There are two examples in this repository.
 
 The **simple** example in the `example` folder shows a minimal use of the library. It does not do much but this should be a good reference for the API without too much else built on top.
 
-The **advanced** example in the `example-advanced` folder shows a more realistic use of the library. While the fundamental patterns are the same, this example contains features such as: panning, pinching, and zooming the camera; creating, cloning, resizing, and deleting shapes; keyboard shortcuts, brush-selection; shape-snapping; undo, redo; and more. Much of the code in the advanced example comes from the [@tldraw/tldraw](https://tldraw.com) codebase.
+The **advanced** example in the `example-advanced` folder shows a more realistic use of the library. (Try it [here](https://core-steveruiz.vercel.app/)). While the fundamental patterns are the same, this example contains features such as: panning, pinching, and zooming the camera; creating, cloning, resizing, and deleting shapes; keyboard shortcuts, brush-selection; shape-snapping; undo, redo; and more. Much of the code in the advanced example comes from the [@tldraw/tldraw](https://tldraw.com) codebase.
 
 If you're working on an app that uses this library, I recommend referring back to the advanced example for tips on how you might implement these features for your own project.
 
