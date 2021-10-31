@@ -1,9 +1,12 @@
 import type { TLBinding, TLPage, TLPageState, TLSnapLine } from '@tldraw/core'
 import type { Shape } from '../shapes'
+import type { S } from '@state-designer/react'
 
 export const VERSION = 1
-
 export const PERSIST_DATA = false
+export const FIT_TO_SCREEN_PADDING = 100
+export const BINDING_PADDING = 12
+export const SNAP_DISTANCE = 5
 
 export const INITIAL_PAGE: TLPage<Shape, TLBinding> = {
   id: 'page1',
@@ -26,28 +29,50 @@ export const INITIAL_PAGE: TLPage<Shape, TLBinding> = {
       point: [250, 200],
       size: [100, 100],
     },
+    box3: {
+      id: 'box3',
+      type: 'box',
+      parentId: 'page1',
+      name: 'Box',
+      childIndex: 3,
+      point: [150, 400],
+      size: [100, 100],
+    },
     arrow1: {
       id: 'arrow1',
       type: 'arrow',
       parentId: 'page1',
       name: 'Arrow',
       childIndex: 3,
-      point: [300, 100],
+      point: [231, 312],
       handles: {
         start: {
           id: 'start',
           index: 1,
-          point: [0, 0],
+          point: [38, 0],
+          bindingId: 'binding1',
         },
         end: {
           id: 'end',
           index: 2,
-          point: [100, 50],
+          point: [0, 76],
+          bindingId: 'binding2',
         },
       },
     },
   },
-  bindings: {},
+  bindings: {
+    binding1: {
+      id: 'binding1',
+      fromId: 'arrow1',
+      toId: 'box2',
+    },
+    binding2: {
+      id: 'binding2',
+      fromId: 'arrow1',
+      toId: 'box3',
+    },
+  },
 }
 
 export const INITIAL_PAGE_STATE: TLPageState = {
@@ -73,6 +98,5 @@ export const INITIAL_DATA = {
 }
 
 export type AppData = typeof INITIAL_DATA
-
-export const FIT_TO_SCREEN_PADDING = 100
-export const SNAP_DISTANCE = 5
+export type Action = S.Action<AppData>
+export type Condition = S.Condition<AppData>

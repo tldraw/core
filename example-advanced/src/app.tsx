@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {
   Renderer,
+  TLBounds,
   TLKeyboardEventHandler,
   TLPinchEventHandler,
   TLPointerEventHandler,
@@ -8,7 +9,7 @@ import {
 } from '@tldraw/core'
 import { useStateDesigner } from '@state-designer/react'
 import { shapeUtils } from './shapes'
-import { state, setBounds } from './state/machine'
+import { state } from './state/machine'
 import { Toolbar } from './components/toolbar'
 import './styles.css'
 import styled from 'stitches.config'
@@ -67,6 +68,10 @@ const onPinchEnd: TLPinchEventHandler = (info, e) => {
 
 const onPointBoundsHandle: TLPinchEventHandler = (info, e) => {
   state.send('POINTED_BOUNDS_HANDLE', info)
+}
+
+const onBoundsChange = (bounds: TLBounds) => {
+  state.send('RESIZED', { bounds })
 }
 
 const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
@@ -178,7 +183,7 @@ export default function App(): JSX.Element {
         onPinchEnd={onPinchEnd}
         onPinch={onPinch}
         onPointerUp={onPointerUp}
-        onBoundsChange={setBounds}
+        onBoundsChange={onBoundsChange}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
         hideBounds={hideBounds}
