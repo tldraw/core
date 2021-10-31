@@ -40,15 +40,22 @@ export const translateHandle: Action = (data, payload: TLPointerInfo) => {
     // Create binding
 
     const handle = shape.handles[pointedHandleId]
+    const oppositeHandle = shape.handles[pointedHandleId === 'start' ? 'end' : 'start']
     const handlePoint = Vec.add(handlePoints[pointedHandleId], initialShape.point)
 
     let minDistance = Infinity
     let toShape: Shape | undefined
 
+    const oppositeBindingTargetId =
+      oppositeHandle.bindingId && data.page.bindings[oppositeHandle.bindingId]?.toId
+
     if (!payload.metaKey) {
       // Find colliding shape with center nearest to point
       Object.values(data.page.shapes)
-        .filter((shape) => !data.pageState.selectedIds.includes(shape.id))
+        .filter(
+          (shape) =>
+            !data.pageState.selectedIds.includes(shape.id) && oppositeBindingTargetId !== shape.id
+        )
         .forEach((potentialTarget) => {
           const utils = getShapeUtils(potentialTarget)
 
@@ -93,7 +100,6 @@ export const translateHandle: Action = (data, payload: TLPointerInfo) => {
 
       const toShapeCenter = getShapeUtils(toShape).getCenter(toShape)
       const toShapeBounds = getShapeUtils(toShape).getBounds(toShape)
-      const oppositeHandle = shape.handles[pointedHandleId === 'start' ? 'end' : 'start']
       const oppositePoint = Vec.add(shape.point, oppositeHandle.point)
 
       // Position the handle at an intersection with the toShape's

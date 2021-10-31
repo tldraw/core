@@ -259,11 +259,11 @@ export const state = createState({
               },
             },
             creating: {
-              onEnter: ['createArrowShape', 'setSnapshot'],
+              onEnter: ['createArrowShape', 'updateBoundShapes', 'setSnapshot'],
               on: {
-                TOGGLED_MODIFIER: 'translateHandle',
-                MOVED_POINTER: 'translateHandle',
-                PANNED: 'translateHandle',
+                TOGGLED_MODIFIER: ['translateHandle', 'updateBoundShapes'],
+                MOVED_POINTER: ['translateHandle', 'updateBoundShapes'],
+                PANNED: ['translateHandle', 'updateBoundShapes'],
                 CANCELLED: {
                   do: 'deleteSelectedShapes',
                   to: 'select',
