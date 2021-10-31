@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import * as React from 'react'
 import { CenterHandle } from './center-handle'
 
@@ -23,11 +24,11 @@ describe('CenterHandle', () => {
       />
     )
     const centerHandle = screen.getByLabelText('center handle')
-    expect(centerHandle?.getAttribute('height')).toBe('102')
-    expect(centerHandle?.getAttribute('width')).toBe('102')
-    expect(centerHandle?.getAttribute('opacity')).toBe('1')
-    expect(centerHandle?.getAttribute('x')).toBe('-1')
-    expect(centerHandle?.getAttribute('y')).toBe('-1')
+    expect(centerHandle).toHaveAttribute('height', '102')
+    expect(centerHandle).toHaveAttribute('width', '102')
+    expect(centerHandle).toHaveAttribute('x', '-1')
+    expect(centerHandle).toHaveAttribute('y', '-1')
+    expect(centerHandle).toHaveAttribute('opacity', '1')
   })
   test('validate attributes for a hidden center handle', () => {
     render(
@@ -38,10 +39,10 @@ describe('CenterHandle', () => {
       />
     )
     const centerHandle = screen.getByLabelText('center handle')
-    expect(centerHandle?.getAttribute('height')).toBe('102')
-    expect(centerHandle?.getAttribute('width')).toBe('102')
-    expect(centerHandle?.getAttribute('opacity')).toBe('0')
-    expect(centerHandle?.getAttribute('x')).toBe('-1')
-    expect(centerHandle?.getAttribute('y')).toBe('-1')
+    expect(centerHandle).toHaveAttribute('height', '102')
+    expect(centerHandle).toHaveAttribute('width', '102')
+    expect(centerHandle).toHaveAttribute('x', '-1')
+    expect(centerHandle).toHaveAttribute('y', '-1')
+    expect(centerHandle).toHaveAttribute('opacity', '0')
   })
 })

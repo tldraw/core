@@ -9,8 +9,12 @@ interface BindingProps {
 export function Binding({ point: [x, y], type }: BindingProps): JSX.Element {
   return (
     <g pointerEvents="none">
-      {type === 'center' && <circle className="tl-binding" cx={x} cy={y} r={8} />}
-      {type !== 'pin' && <use className="tl-binding" href="#cross" x={x} y={y} />}
+      {type === 'center' && (
+        <circle className="tl-binding" aria-label="binding circle" cx={x} cy={y} r={8} />
+      )}
+      {type !== 'pin' && (
+        <use className="tl-binding" aria-label="binding cross" href="#cross" x={x} y={y} />
+      )}
     </g>
   )
 }

@@ -30,6 +30,7 @@ export const EdgeHandle = React.memo(
       <rect
         pointerEvents={isHidden ? 'none' : 'all'}
         className={'tl-transparent tl-edge-handle ' + (isHidden ? '' : edgeClassnames[edge])}
+        aria-label="edge handle"
         opacity={isHidden ? 0 : 1}
         x={isHorizontal ? size / 2 : (isFarEdge ? width + 1 : -1) - size / 2}
         y={isHorizontal ? (isFarEdge ? height + 1 : -1) - size / 2 : size / 2}
