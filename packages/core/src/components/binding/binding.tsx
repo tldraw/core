@@ -3,7 +3,7 @@ import type { TLBinding } from '~types'
 
 interface BindingProps {
   point: number[]
-  type: TLBinding['type']
+  type: string
 }
 
 export function Binding({ point: [x, y], type }: BindingProps): JSX.Element {
