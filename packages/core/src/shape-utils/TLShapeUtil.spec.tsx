@@ -116,7 +116,6 @@ abstract class TLRealisticShapeUtil<
   abstract getShape: (props: Partial<T>) => T
 
   create = (props: { id: string } & Partial<T>) => {
-    this.refMap.set(props.id, React.createRef())
     return this.getShape(props)
   }
 }

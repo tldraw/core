@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { MousePointer, Square } from 'react-feather'
+import { ArrowUpRight, MousePointer, Square } from 'react-feather'
 import { state } from 'state/machine'
 import styled from 'stitches.config'
 
@@ -24,6 +24,11 @@ export function Toolbar({ activeStates, lastEvent }: ToolbarProps) {
         <PrimaryToolButton id="box" isActive={state.isIn('box')} onClick={onToolSelect}>
           <Highlight>
             <Square />
+          </Highlight>
+        </PrimaryToolButton>
+        <PrimaryToolButton id="arrow" isActive={state.isIn('arrow')} onClick={onToolSelect}>
+          <Highlight>
+            <ArrowUpRight />
           </Highlight>
         </PrimaryToolButton>
       </PrimaryTools>

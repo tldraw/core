@@ -1,5 +1,6 @@
 import { createState, createSelectorHook } from '@state-designer/react'
 import {
+  TLBinding,
   TLBounds,
   TLBoundsCorner,
   TLBoundsEdge,
@@ -10,18 +11,19 @@ import {
   TLSnapLine,
   Utils,
 } from '@tldraw/core'
-import { BoxShape, getShapeUtils, shapeUtils } from '../shapes'
+import { BoxShape, getShapeUtils, Shape, shapeUtils } from '../shapes'
 import { INITIAL_DATA, SNAP_DISTANCE } from './constants'
 import { nanoid } from 'nanoid'
 import { current } from 'immer'
 import Vec from '@tldraw/vec'
 import { getPagePoint, getZoomedCameraPoint, getZoomFitCamera } from './helpers'
 import { makeHistory } from './history'
+import type { ArrowShape } from 'shapes/arrow'
+import { intersectBoundsLineSegment, intersectLineSegmentBounds } from '@tldraw/intersect'
 
 let rendererBounds: TLBounds
 let snapshot = INITIAL_DATA
 let initialPoint = [0, 0]
-let justShiftSelectedId: string | undefined
 let isCloning = false
 let snapInfo:
   | {
@@ -30,7 +32,9 @@ let snapInfo:
       others: TLBoundsWithCenter[]
     }
   | undefined
-let initialBoundsHandle: TLBoundsHandle | undefined
+let pointedShapeId: string | undefined
+let pointedHandleId: keyof ArrowShape['handles']
+let pointedBoundsHandleId: TLBoundsHandle | undefined
 const history = makeHistory()
 
 export const setBounds = (newBounds: TLBounds) => (rendererBounds = newBounds)
@@ -42,7 +46,7 @@ export const state = createState({
     tool: {
       on: {
         SELECTED_TOOL: { to: (data, payload) => payload.name },
-        STARTED_POINTING: ['setInitialPoint', 'updateSnapshot'],
+        STARTED_POINTING: ['setInitialPoint', 'setSnapshot'],
         PANNED: 'panCamera',
         PINCHED: 'pinchCamera',
         ZOOMED_TO_SELECTION: 'zoomToSelection',
@@ -70,7 +74,7 @@ export const state = createState({
                     do: 'clearSelection',
                   },
                   {
-                    to: 'pointingCanvas',
+                    to: 'pointing.canvas',
                   },
                 ],
                 POINTED_SHAPE: [
@@ -78,74 +82,91 @@ export const state = createState({
                     unless: 'shapeIsSelected',
                     do: 'selectShape',
                   },
-                  { to: 'pointingShape' },
+                  { to: 'pointing.shape' },
                 ],
                 POINTED_BOUNDS: {
-                  to: 'pointingBounds',
+                  to: 'pointing.bounds',
+                },
+                POINTED_HANDLE: {
+                  do: 'setInitialHandle',
+                  to: 'pointing.handle',
                 },
                 POINTED_BOUNDS_HANDLE: {
                   do: 'setInitialBoundsHandle',
-                  to: 'pointingBoundsHandle',
+                  to: 'pointing.boundsHandle',
                 },
               },
             },
-            pointingCanvas: {
-              on: {
-                STOPPED_POINTING: {
-                  to: 'select.idle',
-                },
-                MOVED_POINTER: {
-                  to: 'brushSelecting',
-                },
-              },
-            },
-            pointingBoundsHandle: {
-              on: {
-                MOVED_POINTER: {
-                  if: 'hasLeftDeadZone',
-                  to: 'transformingSelection',
-                },
-                STOPPED_POINTING: {
-                  to: 'select.idle',
-                },
-              },
-            },
-            pointingBounds: {
-              on: {
-                MOVED_POINTER: {
-                  if: 'hasLeftDeadZone',
-                  to: 'translatingSelection',
-                },
-                STOPPED_POINTING: {
-                  do: 'clearSelection',
-                  to: 'select.idle',
-                },
-              },
-            },
-            pointingShape: {
-              on: {
-                MOVED_POINTER: {
-                  if: 'hasLeftDeadZone',
-                  to: 'translatingSelection',
-                },
-                STOPPED_POINTING: [
-                  {
-                    if: 'shapeIsSelected',
-                    do: 'selectShape',
+            pointing: {
+              initial: 'canvas',
+              states: {
+                canvas: {
+                  on: {
+                    STOPPED_POINTING: {
+                      to: 'select.idle',
+                    },
+                    MOVED_POINTER: {
+                      to: 'brushSelecting',
+                    },
                   },
-                  {
-                    to: 'select.idle',
+                },
+                boundsHandle: {
+                  on: {
+                    MOVED_POINTER: {
+                      if: 'hasLeftDeadZone',
+                      to: 'transformingSelection',
+                    },
+                    STOPPED_POINTING: {
+                      to: 'select.idle',
+                    },
                   },
-                ],
+                },
+                bounds: {
+                  on: {
+                    MOVED_POINTER: {
+                      if: 'hasLeftDeadZone',
+                      to: 'translating.selection',
+                    },
+                    STOPPED_POINTING: {
+                      do: 'clearSelection',
+                      to: 'select.idle',
+                    },
+                  },
+                },
+                shape: {
+                  on: {
+                    MOVED_POINTER: {
+                      if: 'hasLeftDeadZone',
+                      to: 'translating.selection',
+                    },
+                    STOPPED_POINTING: [
+                      {
+                        if: 'shapeIsSelected',
+                        do: 'selectShape',
+                      },
+                      {
+                        to: 'select.idle',
+                      },
+                    ],
+                  },
+                },
+                handle: {
+                  on: {
+                    MOVED_POINTER: {
+                      if: 'hasLeftDeadZone',
+                      to: 'translating.handle',
+                    },
+                    STOPPED_POINTING: {
+                      to: 'select.idle',
+                    },
+                  },
+                },
               },
             },
-            translatingSelection: {
+            translating: {
               onEnter: ['resetIsCloning', 'setSnapInfo'],
               onExit: ['clearSnapInfo', 'clearSnapLines'],
               on: {
-                TOGGLED_MODIFIER: 'translateSelection',
-                MOVED_POINTER: 'translateSelection',
-                PANNED: 'translateSelection',
                 CANCELLED: {
                   do: 'restoreSnapshot',
                   to: 'select.idle',
@@ -155,14 +176,31 @@ export const state = createState({
                   to: 'select.idle',
                 },
               },
+              initial: 'selection',
+              states: {
+                selection: {
+                  on: {
+                    TOGGLED_MODIFIER: ['translateSelection', 'updateBoundShapes'],
+                    MOVED_POINTER: ['translateSelection', 'updateBoundShapes'],
+                    PANNED: ['translateSelection', 'updateBoundShapes'],
+                  },
+                },
+                handle: {
+                  on: {
+                    TOGGLED_MODIFIER: ['translateHandle', 'updateBoundShapes'],
+                    MOVED_POINTER: ['translateHandle', 'updateBoundShapes'],
+                    PANNED: ['translateHandle', 'updateBoundShapes'],
+                  },
+                },
+              },
             },
             transformingSelection: {
               onEnter: 'setSnapInfo',
               onExit: ['clearSnapInfo', 'clearSnapLines'],
               on: {
-                TOGGLED_MODIFIER: 'transformSelection',
-                MOVED_POINTER: 'transformSelection',
-                PANNED: 'transformSelection',
+                TOGGLED_MODIFIER: ['transformSelection', 'updateBoundShapes'],
+                MOVED_POINTER: ['transformSelection', 'updateBoundShapes'],
+                PANNED: ['transformSelection', 'updateBoundShapes'],
                 CANCELLED: {
                   do: 'restoreSnapshot',
                   to: 'select.idle',
@@ -200,9 +238,36 @@ export const state = createState({
               },
             },
             creating: {
+              onEnter: 'setSnapshot',
               on: {
-                MOVED_POINTER: 'updateCreatingShape',
-                PANNED: 'updateCreatingShape',
+                TOGGLED_MODIFIER: 'transformSelection',
+                MOVED_POINTER: 'transformSelection',
+                PANNED: 'transformSelection',
+                STOPPED_POINTING: {
+                  do: 'addToHistory',
+                  to: 'select',
+                },
+              },
+            },
+          },
+        },
+        arrow: {
+          initial: 'idle',
+          states: {
+            idle: {
+              on: {
+                STARTED_POINTING: {
+                  do: 'createArrowShape',
+                  to: 'arrow.creating',
+                },
+              },
+            },
+            creating: {
+              onEnter: 'setSnapshot',
+              on: {
+                TOGGLED_MODIFIER: 'translateHandle',
+                MOVED_POINTER: 'translateHandle',
+                PANNED: 'translateHandle',
                 STOPPED_POINTING: {
                   do: 'addToHistory',
                   to: 'select',
@@ -222,14 +287,14 @@ export const state = createState({
       return data.pageState.selectedIds.includes(payload.target)
     },
     shapeIsPointed(data, payload: { target: string }) {
-      return justShiftSelectedId === payload.target
+      return pointedShapeId === payload.target
     },
     isPressingShiftKey(data, payload: { shiftKey: boolean }) {
       return payload.shiftKey
     },
   },
   actions: {
-    updateSnapshot(data) {
+    setSnapshot(data) {
       snapshot = current(data)
     },
     restoreSnapshot(data) {
@@ -238,8 +303,11 @@ export const state = createState({
     setInitialPoint(data, payload: TLPointerInfo) {
       initialPoint = getPagePoint(payload.origin, data.pageState)
     },
-    setInitialBoundsHandle(data, payload: TLPointerInfo) {
-      initialBoundsHandle = payload.target as TLBoundsHandle
+    setInitialBoundsHandle(data, payload: TLPointerInfo<TLBoundsHandle>) {
+      pointedBoundsHandleId = payload.target
+    },
+    setInitialHandle(data, payload: TLPointerInfo<typeof pointedHandleId>) {
+      pointedHandleId = payload.target
     },
     resetIsCloning() {
       isCloning = false
@@ -248,10 +316,15 @@ export const state = createState({
       const all: TLBoundsWithCenter[] = []
       const others: TLBoundsWithCenter[] = []
 
+      const bindings = Object.values(data.page.bindings)
+
       Object.values(data.page.shapes).forEach((shape) => {
         const bounds = Utils.getBoundsWithCenter(getShapeUtils(shape).getRotatedBounds(shape))
         all.push(bounds)
-        if (!data.pageState.selectedIds.includes(shape.id)) {
+        if (
+          !data.pageState.selectedIds.includes(shape.id) &&
+          !bindings.find((binding) => binding.fromId === shape.id)
+        ) {
           others.push(bounds)
         }
       })
@@ -357,15 +430,15 @@ export const state = createState({
       data.pageState.selectedIds = []
     },
     clearJustShiftSelectedId() {
-      justShiftSelectedId = undefined
+      pointedShapeId = undefined
     },
     selectShape(data, payload: TLPointerInfo) {
       const { selectedIds } = data.pageState
       if (payload.shiftKey) {
-        if (selectedIds.includes(payload.target) && justShiftSelectedId !== payload.target) {
+        if (selectedIds.includes(payload.target) && pointedShapeId !== payload.target) {
           selectedIds.splice(selectedIds.indexOf(payload.target), 1)
         } else {
-          justShiftSelectedId = payload.target
+          pointedShapeId = payload.target
           selectedIds.push(payload.target)
         }
       } else {
@@ -410,29 +483,41 @@ export const state = createState({
         name: 'Box',
         parentId: 'page1',
         point: getPagePoint(payload.point, data.pageState),
-        size: [0, 0],
+        size: [1, 1],
         childIndex: Object.values(data.page.shapes).length,
       }
 
       data.page.shapes[shape.id] = shape
       data.pageState.selectedIds = [shape.id]
+
+      pointedBoundsHandleId = TLBoundsCorner.BottomRight
     },
-    updateCreatingShape(data, payload: TLPointerInfo) {
-      const [shapeId] = data.pageState.selectedIds
-      const shape = data.page.shapes[shapeId]
+    createArrowShape(data, payload: TLPointerInfo) {
+      const shape: ArrowShape = {
+        id: nanoid(),
+        type: 'arrow',
+        name: 'arrow',
+        parentId: 'page1',
+        point: getPagePoint(payload.point, data.pageState),
+        handles: {
+          start: {
+            id: 'start',
+            index: 1,
+            point: [0, 0],
+          },
+          end: {
+            id: 'end',
+            index: 2,
+            point: [1, 1],
+          },
+        },
+        childIndex: Object.values(data.page.shapes).length,
+      }
 
-      const delta = Vec.sub(getPagePoint(payload.point, data.pageState), initialPoint)
+      data.page.shapes[shape.id] = shape
+      data.pageState.selectedIds = [shape.id]
 
-      const next = Utils.getTransformedBoundingBox(
-        Utils.getBoundsFromPoints([initialPoint, Vec.add(initialPoint, [1, 1])]),
-        TLBoundsCorner.BottomRight,
-        delta,
-        0,
-        payload.shiftKey
-      )
-
-      shape.point = [next.minX, next.minY]
-      shape.size = [next.width, next.height]
+      pointedHandleId = 'end'
     },
     /* ----------------- Shape Deleting ----------------- */
     deleteSelection(data) {
@@ -458,6 +543,8 @@ export const state = createState({
       if (payload.altKey && !isCloning) {
         // create clones
         isCloning = true
+
+        // TODO: Clone bindings, too.
 
         const cloneIds = data.pageState.selectedIds.map((id) => {
           // move the dragging shape back to its initial point
@@ -512,10 +599,124 @@ export const state = createState({
 
       data.overlays.snapLines = snapLines
 
+      const bindings = Object.values(data.page.bindings)
+
+      data.pageState.selectedIds
+        .filter((id) => bindings.find((binding) => binding.fromId === id) === undefined)
+        .forEach((id) => {
+          const initialShape = snapshot.page.shapes[id]
+          const shape = data.page.shapes[id]
+          shape.point = Vec.add(initialShape.point, delta)
+        })
+    },
+    translateHandle(data, payload: TLPointerInfo<keyof ArrowShape['handles']>) {
+      const point = getPagePoint(payload.point, data.pageState)
+
+      let delta = Vec.sub(point, initialPoint)
+
       data.pageState.selectedIds.forEach((id) => {
-        const initialShape = snapshot.page.shapes[id]
-        const shape = data.page.shapes[id]
-        shape.point = Vec.add(initialShape.point, delta)
+        const initialShape = snapshot.page.shapes[id] as ArrowShape
+
+        const shape = data.page.shapes[id] as ArrowShape
+
+        if (payload.shiftKey) {
+          const A = initialShape.handles[pointedHandleId === 'start' ? 'end' : 'start'].point
+          const B = initialShape.handles[pointedHandleId].point
+          const C = Vec.add(B, delta)
+          const angle = Vec.angle(A, C)
+          const adjusted = Vec.rotWith(C, A, Utils.snapAngleToSegments(angle, 24) - angle)
+          delta = Vec.add(delta, Vec.sub(adjusted, C))
+        }
+
+        const handlePoints = {
+          start: [...initialShape.handles.start.point],
+          end: [...initialShape.handles.end.point],
+        }
+
+        handlePoints[pointedHandleId] = Vec.add(handlePoints[pointedHandleId], delta)
+
+        // Create binding
+
+        const handle = shape.handles[pointedHandleId]
+        const handlePoint = Vec.add(handlePoints[pointedHandleId], initialShape.point)
+
+        let minDistance = Infinity
+        let toShape: Shape | undefined
+
+        if (!payload.metaKey) {
+          // Find colliding shape with center nearest to point
+          Object.values(data.page.shapes)
+            .filter((shape) => !data.pageState.selectedIds.includes(shape.id))
+            .forEach((potentialTarget) => {
+              const utils = getShapeUtils(potentialTarget)
+
+              if (!utils.canBind) return
+
+              const bounds = utils.getBounds(potentialTarget)
+
+              if (Utils.pointInBounds(handlePoint, bounds)) {
+                const dist = Vec.dist(handlePoint, utils.getCenter(potentialTarget))
+                if (dist < minDistance) {
+                  minDistance = dist
+                  toShape = potentialTarget
+                }
+              }
+            })
+        }
+
+        // If we have a binding target
+        if (toShape) {
+          if (handle.bindingId) {
+            const binding = data.page.bindings[handle.bindingId]
+
+            if (binding.toId === toShape.id) {
+              // Noop, we'll reuse this binding
+            } else {
+              // Clear this binding; we'll create a new one
+              delete data.page.bindings[binding.id]
+            }
+          }
+
+          if (!handle.bindingId) {
+            // Create a new binding between shape and toShape
+            const binding: TLBinding = {
+              id: nanoid(),
+              type: 'center',
+              fromId: shape.id,
+              toId: toShape.id,
+            }
+
+            data.page.bindings[binding.id] = binding
+            handle.bindingId = binding.id
+          }
+
+          const toShapeCenter = getShapeUtils(toShape).getCenter(toShape)
+          const toShapeBounds = getShapeUtils(toShape).getBounds(toShape)
+          const oppositeHandle = shape.handles[pointedHandleId === 'start' ? 'end' : 'start']
+          const oppositePoint = Vec.add(shape.point, oppositeHandle.point)
+
+          // Position the handle at an intersection with the toShape's
+          // bounds (padded by 12) or to the center of the toShape.
+          const intersection =
+            intersectLineSegmentBounds(
+              oppositePoint,
+              toShapeCenter,
+              Utils.expandBounds(toShapeBounds, 12)
+            )[0]?.points[0] ?? toShapeCenter
+
+          handlePoints[pointedHandleId] = Vec.sub(intersection, initialShape.point)
+        } else if (handle.bindingId) {
+          // If we didn't find a target but we do have a binding handle,
+          // delete the binding reference. We'll clean up the binding
+          // itself in the `updateBoundShapes` action.
+          handle.bindingId = undefined
+        }
+
+        const offset = Utils.getCommonTopLeft([handlePoints.start, handlePoints.end])
+
+        shape.handles.start.point = Vec.sub(handlePoints.start, offset)
+        shape.handles.end.point = Vec.sub(handlePoints.end, offset)
+        shape.point = Vec.add(initialShape.point, offset)
       })
     },
     /* ------------------ Transforming ------------------ */
@@ -532,7 +733,7 @@ export const state = createState({
           .map((shape) => getShapeUtils(shape).getBounds(shape))
       )
 
-      if (initialBoundsHandle === 'rotate') {
+      if (pointedBoundsHandleId === 'rotate') {
         // Rotate
         const initialCommonCenter = Utils.getBoundsCenter(initialCommonBounds)
 
@@ -546,7 +747,6 @@ export const state = createState({
 
         selectedIds.forEach((id) => {
           const initialShape = snapshot.page.shapes[id]
-          const utils = shapeUtils[initialShape.type]
 
           let initialAngle = 0
 
@@ -555,13 +755,37 @@ export const state = createState({
             initialAngle = Utils.snapAngleToSegments(rotation, 24) - rotation
           }
 
+          const shape = data.page.shapes[id]
+          const utils = getShapeUtils(initialShape)
+
           const initialShapeCenter = utils.getCenter(initialShape)
           const relativeCenter = Vec.sub(initialShapeCenter, initialShape.point)
           const rotatedCenter = Vec.rotWith(initialShapeCenter, initialCommonCenter, angleDelta)
 
-          const shape = data.page.shapes[id]
-          shape.point = Vec.sub(rotatedCenter, relativeCenter)
-          shape.rotation = (initialShape.rotation || 0) + angleDelta + initialAngle
+          if (shape.handles) {
+            // Don't rotate shapes with handles; instead, rotate the handles
+            Object.values(shape.handles).forEach((handle) => {
+              handle.point = Vec.rotWith(
+                initialShape.handles![handle.id as keyof ArrowShape['handles']].point,
+                relativeCenter,
+                angleDelta
+              )
+            })
+
+            const handlePoints = {
+              start: [...shape.handles.start.point],
+              end: [...shape.handles.end.point],
+            }
+
+            const offset = Utils.getCommonTopLeft([handlePoints.start, handlePoints.end])
+
+            shape.handles.start.point = Vec.sub(handlePoints.start, offset)
+            shape.handles.end.point = Vec.sub(handlePoints.end, offset)
+            shape.point = Vec.add(Vec.sub(rotatedCenter, relativeCenter), offset)
+          } else {
+            shape.point = Vec.sub(rotatedCenter, relativeCenter)
+            shape.rotation = (initialShape.rotation || 0) + angleDelta + initialAngle
+          }
         })
       } else {
         // Transform
@@ -573,11 +797,13 @@ export const state = createState({
 
         let nextCommonBounds = Utils.getTransformedBoundingBox(
           initialCommonBounds,
-          initialBoundsHandle as TLBoundsCorner | TLBoundsEdge,
+          pointedBoundsHandleId as TLBoundsCorner | TLBoundsEdge,
           delta,
           rotation,
           payload.shiftKey
         )
+
+        const { scaleX, scaleY } = nextCommonBounds
 
         selectedIds.forEach((id) => {
           const initialShape = snapshot.page.shapes[id]
@@ -586,15 +812,78 @@ export const state = createState({
           const relativeBoundingBox = Utils.getRelativeTransformedBoundingBox(
             nextCommonBounds,
             initialCommonBounds,
-            shapeUtils[initialShape.type].getBounds(initialShape),
-            nextCommonBounds.scaleX < 0,
-            nextCommonBounds.scaleY < 0
+            getShapeUtils(initialShape).getBounds(initialShape),
+            scaleX < 0,
+            scaleY < 0
           )
 
-          shape.point = [relativeBoundingBox.minX, relativeBoundingBox.minY]
-          shape.size = [relativeBoundingBox.width, relativeBoundingBox.height]
+          getShapeUtils(shape).transform(shape, relativeBoundingBox, initialShape, [scaleX, scaleY])
         })
       }
+    },
+    /* -------------------- Bindings -------------------- */
+    updateBoundShapes(data) {
+      const toDelete = new Set<string>()
+      Object.values(data.page.bindings).forEach((binding) => {
+        const toShape = data.page.shapes[binding.toId]
+        const fromShape = data.page.shapes[binding.fromId] as ArrowShape
+
+        if (!(toShape && fromShape)) {
+          toDelete.add(binding.id)
+          return
+        }
+
+        const boundHandle = Object.values(fromShape.handles).find(
+          (handle) => handle.bindingId === binding.id
+        )
+
+        if (!boundHandle) {
+          toDelete.add(binding.id)
+          return
+        }
+
+        const toShapeCenter = getShapeUtils(toShape).getCenter(toShape)
+        const toShapeBounds = getShapeUtils(toShape).getBounds(toShape)
+        const oppositeHandle = fromShape.handles[boundHandle.id === 'start' ? 'end' : 'start']
+
+        const handlePoint = Vec.add(fromShape.point, boundHandle.point)
+        const oppositePoint = Vec.add(fromShape.point, oppositeHandle.point)
+
+        const intersection =
+          intersectLineSegmentBounds(
+            oppositePoint,
+            toShapeCenter,
+            Utils.expandBounds(toShapeBounds, 12)
+          )[0]?.points[0] ?? toShapeCenter
+
+        if (!Vec.isEqual(handlePoint, intersection)) {
+          boundHandle.point = Vec.sub(intersection, fromShape.point)
+
+          const handles = Object.values(fromShape.handles)
+          const offset = Utils.getCommonTopLeft(handles.map((handle) => handle.point))
+          handles.forEach((handle) => (handle.point = Vec.sub(handle.point, offset)))
+          fromShape.point = Vec.add(fromShape.point, offset)
+        }
+      })
+
+      // Clean up deleted bindings
+      toDelete.forEach((id) => {
+        const binding = data.page.bindings[id]
+
+        const fromShape = data.page.shapes[binding.fromId] as ArrowShape
+
+        if (fromShape) {
+          const boundHandle = Object.values(fromShape.handles).find(
+            (handle) => handle.bindingId === binding.id
+          )
+
+          if (boundHandle) {
+            boundHandle.bindingId = undefined
+          }
+        }
+
+        delete data.page.bindings[id]
+      })
     },
     /* --------------------- History -------------------- */
     restore(data) {
