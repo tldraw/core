@@ -3,7 +3,7 @@ import type { Shape } from '../shapes'
 import type { S } from '@state-designer/react'
 
 export const VERSION = 1
-export const PERSIST_DATA = false
+export const PERSIST_DATA = true
 export const FIT_TO_SCREEN_PADDING = 100
 export const BINDING_PADDING = 12
 export const SNAP_DISTANCE = 5
