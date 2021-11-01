@@ -7,6 +7,8 @@ import { mutables } from 'state/mutables'
 
 export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) => {
   const { initialPoint, viewport, snapshot, snapInfo } = mutables
+  const { selectedIds } = data.pageState
+
   let delta = Vec.sub(getPagePoint(payload.point, data.pageState), initialPoint)
 
   if (payload.shiftKey) {
@@ -18,16 +20,16 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
   }
 
   if (payload.altKey && !mutables.isCloning) {
-    // create clones
+    // not cloning -> cloning
     mutables.isCloning = true
 
-    // TODO: Clone bindings, too.
+    // Restore any deleted bindings
+    data.page.bindings = snapshot.page.bindings
 
-    const cloneIds = data.pageState.selectedIds.map((id) => {
+    const cloneIds = selectedIds.map((id) => {
       // move the dragging shape back to its initial point
       const initialShape = snapshot.page.shapes[id]
-      const shape = data.page.shapes[initialShape.id]
-      shape.point = initialShape.point
+      data.page.shapes[initialShape.id] = initialShape
 
       // create the clone and add it to the page AND snapshot
       const clone = { ...initialShape, id: nanoid() }
@@ -37,15 +39,30 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
       return clone.id
     })
 
-    // select all of the clones
     data.pageState.selectedIds = cloneIds
   } else if (!payload.altKey && mutables.isCloning) {
-    // cleanup clones
+    // cloning -> not Cloning
     mutables.isCloning = false
-
-    data.pageState.selectedIds.forEach((id) => delete data.page.shapes[id])
+    selectedIds.forEach((id) => delete data.page.shapes[id])
     data.pageState.selectedIds = [...snapshot.pageState.selectedIds]
   }
+
+  // Remove bindings to shapes that aren't also selected
+
+  selectedIds.forEach((id) => {
+    const shape = data.page.shapes[id]
+    if (shape.type === 'arrow') {
+      Object.values(shape.handles).forEach((handle) => {
+        if (!handle.bindingId) return
+        const binding = data.page.bindings[handle.bindingId]
+        if (selectedIds.includes(binding.toId)) return
+        delete data.page.bindings[handle.bindingId]
+        delete handle.bindingId
+      })
+    }
+  })
+
+  // Snapping
 
   let snapLines: TLSnapLine[] = []
 
@@ -74,13 +91,9 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
 
   data.overlays.snapLines = snapLines
 
-  const bindings = Object.values(data.page.bindings)
-
-  data.pageState.selectedIds
-    .filter((id) => bindings.find((binding) => binding.fromId === id) === undefined)
-    .forEach((id) => {
-      const initialShape = snapshot.page.shapes[id]
-      const shape = data.page.shapes[id]
-      shape.point = Vec.add(initialShape.point, delta)
-    })
+  data.pageState.selectedIds.forEach((id) => {
+    const initialShape = snapshot.page.shapes[id]
+    const shape = data.page.shapes[id]
+    shape.point = Vec.add(initialShape.point, delta)
+  })
 }

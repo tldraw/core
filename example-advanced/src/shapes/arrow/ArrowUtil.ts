@@ -28,6 +28,10 @@ export class ArrowUtil extends CustomShapeUtil<T, E> {
 
   canBind = false
 
+  shouldRender = (prev: T, next: T) => {
+    return true
+  }
+
   getCenter = (shape: T) => {
     return Utils.getBoundsCenter(this.getBounds(shape))
   }

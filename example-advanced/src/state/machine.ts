@@ -8,7 +8,7 @@ import { mutables } from './mutables'
 
 export const state = createState({
   data: INITIAL_DATA,
-  onEnter: ['restore', 'updateBoundShapes'],
+  onEnter: ['restoreSavedDocument', 'updateBoundShapes'],
   states: {
     tool: {
       on: {
