@@ -1,5 +1,6 @@
 import { Utils, TLBounds } from '@tldraw/core'
 import Vec from '@tldraw/vec'
+import { nanoid } from 'nanoid'
 import { CustomShapeUtil } from 'shapes/CustomShapeUtil'
 import { BoxComponent } from './BoxComponent'
 import { BoxIndicator } from './BoxIndicator'
@@ -12,6 +13,19 @@ export class BoxUtil extends CustomShapeUtil<T, E> {
   Component = BoxComponent
 
   Indicator = BoxIndicator
+
+  getShape = (props: Partial<T>): T => {
+    return {
+      id: nanoid(),
+      type: 'box',
+      name: 'Box',
+      parentId: 'page1',
+      point: [0, 0],
+      size: [100, 100],
+      childIndex: 1,
+      ...props,
+    }
+  }
 
   getBounds = (shape: T) => {
     const bounds = Utils.getFromCache(this.boundsCache, shape, () => {

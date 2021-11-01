@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ArrowUpRight, MousePointer, Square } from 'react-feather'
-import { state } from 'state/machine'
+import { machine } from 'state/machine'
 import styled from 'stitches.config'
 
 interface ToolbarProps {
@@ -9,24 +9,24 @@ interface ToolbarProps {
 }
 
 const onToolSelect = (e: React.MouseEvent) => {
-  state.send('SELECTED_TOOL', { name: e.currentTarget.id })
+  machine.send('SELECTED_TOOL', { name: e.currentTarget.id })
 }
 
 export function Toolbar({ activeStates, lastEvent }: ToolbarProps) {
   return (
     <ToolbarContainer>
       <PrimaryTools>
-        <PrimaryToolButton id="select" isActive={state.isIn('select')} onClick={onToolSelect}>
+        <PrimaryToolButton id="select" isActive={machine.isIn('select')} onClick={onToolSelect}>
           <Highlight>
             <MousePointer />
           </Highlight>
         </PrimaryToolButton>
-        <PrimaryToolButton id="box" isActive={state.isIn('box')} onClick={onToolSelect}>
+        <PrimaryToolButton id="box" isActive={machine.isIn('box')} onClick={onToolSelect}>
           <Highlight>
             <Square />
           </Highlight>
         </PrimaryToolButton>
-        <PrimaryToolButton id="arrow" isActive={state.isIn('arrow')} onClick={onToolSelect}>
+        <PrimaryToolButton id="arrow" isActive={machine.isIn('arrow')} onClick={onToolSelect}>
           <Highlight>
             <ArrowUpRight />
           </Highlight>
@@ -36,7 +36,7 @@ export function Toolbar({ activeStates, lastEvent }: ToolbarProps) {
         <div>
           {activeStates
             .slice(1)
-            .map((state) => state.split('#state_1.root')[1])
+            .map((name) => name.split('#state_1.root')[1])
             .join(' - ')}
         </div>
         <div>{lastEvent}</div>
