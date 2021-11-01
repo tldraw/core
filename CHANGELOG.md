@@ -1,30 +1,36 @@
-# 0.1.12
+# Changelog
+
+## 0.1.12
+
+- Fix bug with initial bounds.
+
+## 0.1.12
 
 - Fix bug with bounds handle events.
 
-# 0.1.11
+## 0.1.11
 
 - Fix bug with initial camera state.
 
-# 0.1.10
+## 0.1.10
 
 - Improve example.
 - Improve types for `TLPage`.
 
-# 0.1.9
+## 0.1.9
 
 - Bug fixes.
 
-# 0.1.8
+## 0.1.8
 
 - Expands README.
 - Removes properties specific to the TLDraw app.
 
-# 0.1.7
+## 0.1.7
 
 - Fixes selection bug with SVGContainer.
 - Removes various properties specific to the TLDraw app.
 
-# 0.1.0
+## 0.1.0
 
 - Re-writes API for ShapeUtils.

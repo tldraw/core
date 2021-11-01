@@ -128,13 +128,28 @@ export function Renderer<T extends TLShape, M extends Record<string, unknown>>({
     rPageState.current = pageState
   }, [pageState])
 
-  const [context] = React.useState<TLContextType<T>>(() => ({
+  const [context, setContext] = React.useState<TLContextType<T>>(() => ({
     callbacks: rest,
     shapeUtils,
     rSelectionBounds,
     rPageState,
+    bounds: {
+      minX: 0,
+      minY: 0,
+      maxX: Infinity,
+      maxY: Infinity,
+      width: Infinity,
+      height: Infinity,
+    },
     inputs: new Inputs(),
   }))
+
+  const onBoundsChange = React.useCallback((bounds: TLBounds) => {
+    setContext((context) => ({
+      ...context,
+      bounds,
+    }))
+  }, [])
 
   return (
     <TLContext.Provider value={context as unknown as TLContextType<TLShape>}>
@@ -152,6 +167,7 @@ export function Renderer<T extends TLShape, M extends Record<string, unknown>>({
         hideCloneHandles={hideCloneHandles}
         hideBindingHandles={hideBindingHandles}
         hideRotateHandle={hideRotateHandles}
+        onBoundsChange={onBoundsChange}
         meta={meta}
       />
     </TLContext.Provider>
