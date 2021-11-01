@@ -139,6 +139,7 @@ export class Api {
       { id: startBindingId, fromId: arrowId, toId: startId, handleId: 'start' },
       { id: endBindingId, fromId: arrowId, toId: endId, handleId: 'end' }
     )
+    return this
   }
 
   send = this._machine.send
