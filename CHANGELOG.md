@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.13
+
+- Remove `type` from `TLBinding`.
+
+## 0.1.12
+
+- Fix bug with initial bounds.
+
 ## 0.1.12
 
 - Fix bug with initial bounds.
