@@ -460,7 +460,7 @@ Want to connect with other devs? Visit the [Discord channel](https://discord.gg/
 
 ### License
 
-This project is licensed under MIT. If you're using `perfect-freehand` in a commercial product, please consider [becoming a sponsor](https://github.com/sponsors/steveruizok?frequency=recurring&sponsor=steveruizok).
+This project is licensed under MIT. If you're using the library in a commercial product, please consider [becoming a sponsor](https://github.com/sponsors/steveruizok?frequency=recurring&sponsor=steveruizok).
 
 ## Author
 
