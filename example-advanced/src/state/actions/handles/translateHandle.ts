@@ -1,4 +1,4 @@
-import { Action, BINDING_PADDING } from 'state/constants'
+import type { Action, CustomBinding } from 'state/constants'
 import { getPagePoint } from 'state/helpers'
 import { getShapeUtils, Shape } from 'shapes'
 import { intersectLineSegmentBounds } from '@tldraw/intersect'
@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid'
 import { TLBinding, TLPointerInfo, Utils } from '@tldraw/core'
 import type { ArrowShape } from 'shapes/arrow'
 import Vec from '@tldraw/vec'
+import { getBoundHandlePoint } from '../bindings/getBoundHandlePoint'
 
 export const translateHandle: Action = (data, payload: TLPointerInfo) => {
   const { initialPoint, snapshot, pointedHandleId } = mutables
@@ -39,22 +40,22 @@ export const translateHandle: Action = (data, payload: TLPointerInfo) => {
 
     // Create binding
 
-    const handle = shape.handles[pointedHandleId]
-    const oppositeHandle = shape.handles[pointedHandleId === 'start' ? 'end' : 'start']
+    const oppositeHandleId = pointedHandleId === 'start' ? 'end' : 'start'
+    const oppositeHandle = shape.handles[oppositeHandleId]
     const handlePoint = Vec.add(handlePoints[pointedHandleId], initialShape.point)
 
     let minDistance = Infinity
     let toShape: Shape | undefined
-
-    const oppositeBindingTargetId =
-      oppositeHandle.bindingId && data.page.bindings[oppositeHandle.bindingId]?.toId
+    const oppositeBindingTargetId = Object.values(data.page.bindings).find(
+      (binding) => binding.fromId === shape.id && binding.handleId === oppositeHandleId
+    )?.toId
 
     if (!payload.metaKey) {
       // Find colliding shape with center nearest to point
       Object.values(data.page.shapes)
         .filter(
           (shape) =>
-            !data.pageState.selectedIds.includes(shape.id) && oppositeBindingTargetId !== shape.id
+            !data.pageState.selectedIds.includes(shape.id) && shape.id !== oppositeBindingTargetId
         )
         .forEach((potentialTarget) => {
           const utils = getShapeUtils(potentialTarget)
@@ -73,54 +74,38 @@ export const translateHandle: Action = (data, payload: TLPointerInfo) => {
         })
     }
 
+    const oldBinding = Object.values(data.page.bindings).find(
+      (binding) => binding.fromId === shape.id && binding.handleId === pointedHandleId
+    )
+
     // If we have a binding target
     if (toShape) {
-      if (handle.bindingId) {
-        const binding = data.page.bindings[handle.bindingId]
-
-        if (binding.toId === toShape.id) {
-          // Noop, we'll reuse this binding
-        } else {
-          // Clear this binding; we'll create a new one
-          delete data.page.bindings[binding.id]
+      if (!oldBinding || oldBinding.toId !== toShape.id) {
+        if (oldBinding) {
+          delete data.page.bindings[oldBinding.id]
         }
-      }
 
-      if (!handle.bindingId) {
         // Create a new binding between shape and toShape
-        const binding: TLBinding = {
+        const binding: CustomBinding = {
           id: nanoid(),
           fromId: shape.id,
           toId: toShape.id,
+          handleId: pointedHandleId,
         }
 
         data.page.bindings[binding.id] = binding
-        handle.bindingId = binding.id
       }
 
-      const toShapeCenter = getShapeUtils(toShape).getCenter(toShape)
-      const toShapeBounds = getShapeUtils(toShape).getBounds(toShape)
-      const oppositePoint = Vec.add(shape.point, oppositeHandle.point)
+      // The `updateBoundShapes` action will take it from here.
+      return
+    }
 
-      // Position the handle at an intersection with the toShape's
-      // bounds to the center of the toShape.
-      const intersection =
-        intersectLineSegmentBounds(
-          oppositePoint,
-          toShapeCenter,
-          Utils.expandBounds(toShapeBounds, BINDING_PADDING)
-        )[0]?.points[0] ?? toShapeCenter
-
-      handlePoints[pointedHandleId] = Vec.sub(intersection, initialShape.point)
-    } else if (handle.bindingId) {
-      // If we didn't find a target but we do have a binding handle,
-      // delete the binding reference. We'll clean up the binding
-      // itself in the `updateBoundShapes` action.
-      handle.bindingId = undefined
+    // If we didn't find a toShape, clear out the old binding (if present)
+    if (oldBinding) {
+      delete data.page.bindings[oldBinding.id]
     }
 
     const offset = Utils.getCommonTopLeft([handlePoints.start, handlePoints.end])
-
     shape.handles.start.point = Vec.sub(handlePoints.start, offset)
     shape.handles.end.point = Vec.sub(handlePoints.end, offset)
     shape.point = Vec.add(initialShape.point, offset)

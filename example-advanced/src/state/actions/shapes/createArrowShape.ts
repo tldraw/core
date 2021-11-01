@@ -4,7 +4,7 @@ import { TLBinding, TLPointerInfo, Utils } from '@tldraw/core'
 import { getShapeUtils, Shape, shapeUtils } from 'shapes'
 import { getPagePoint } from 'state/helpers'
 import { mutables } from 'state/mutables'
-import type { Action } from 'state/constants'
+import type { Action, CustomBinding } from 'state/constants'
 
 export const createArrowShape: Action = (data, payload: TLPointerInfo) => {
   const shape = shapeUtils.arrow.getShape({
@@ -57,14 +57,14 @@ export const createArrowShape: Action = (data, payload: TLPointerInfo) => {
   // If we have a binding target
   if (toShape) {
     // Create a new binding between shape and toShape
-    const binding: TLBinding = {
+    const binding: CustomBinding = {
       id: nanoid(),
       fromId: shape.id,
       toId: toShape.id,
+      handleId: 'start',
     }
 
     data.page.bindings[binding.id] = binding
-    handle.bindingId = binding.id
   }
 
   // Set pointed handle to end for upcoming translateHandle actions

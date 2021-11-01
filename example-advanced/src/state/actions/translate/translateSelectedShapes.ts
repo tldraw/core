@@ -1,7 +1,7 @@
 import { TLBinding, TLPointerInfo, TLSnapLine, Utils } from '@tldraw/core'
 import Vec from '@tldraw/vec'
 import { nanoid } from 'nanoid'
-import { Action, SNAP_DISTANCE } from 'state/constants'
+import { Action, CustomBinding, SNAP_DISTANCE } from 'state/constants'
 import { getPagePoint } from 'state/helpers'
 import { mutables } from 'state/mutables'
 
@@ -26,6 +26,8 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
     // Restore any deleted bindings
     data.page.bindings = snapshot.page.bindings
 
+    const bindings = Object.values(data.page.bindings)
+
     const cloneMap: Record<string, string> = {}
 
     // Create clones
@@ -40,33 +42,24 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
       cloneMap[initialShape.id] = clone.id
       data.page.shapes[clone.id] = clone
       snapshot.page.shapes[clone.id] = { ...clone }
-
       return clone.id
     })
 
-    // Create cloned bindings
-    cloneIds.forEach((id) => {
-      const clone = data.page.shapes[id]
-      if (clone.type === 'arrow') {
-        Object.values(clone.handles).forEach((handle) => {
-          if (handle.bindingId === undefined) return
-
-          const binding = data.page.bindings[handle.bindingId]
-
-          if (cloneMap[binding.toId]) {
-            const newBinding: TLBinding = {
+    selectedIds.forEach((id) => {
+      bindings
+        .filter((binding) => binding.fromId === id || binding.toId === id)
+        .forEach((binding) => {
+          if (cloneMap[binding.fromId] && cloneMap[binding.toId]) {
+            const newBinding: CustomBinding = {
               id: nanoid(),
-              fromId: clone.id,
+              fromId: cloneMap[binding.fromId],
               toId: cloneMap[binding.toId],
+              handleId: binding.handleId,
             }
 
-            console.log(newBinding)
-
             data.page.bindings[newBinding.id] = newBinding
-            handle.bindingId = newBinding.id
           }
         })
-      }
     })
 
     data.pageState.selectedIds = cloneIds

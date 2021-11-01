@@ -8,7 +8,11 @@ export const FIT_TO_SCREEN_PADDING = 100
 export const BINDING_PADDING = 12
 export const SNAP_DISTANCE = 5
 
-export const INITIAL_PAGE: TLPage<Shape> = {
+export interface CustomBinding extends TLBinding {
+  handleId: 'start' | 'end'
+}
+
+export const INITIAL_PAGE: TLPage<Shape, CustomBinding> = {
   id: 'page1',
   shapes: {
     box1: {
@@ -50,13 +54,11 @@ export const INITIAL_PAGE: TLPage<Shape> = {
           id: 'start',
           index: 1,
           point: [38, 0],
-          bindingId: 'binding1',
         },
         end: {
           id: 'end',
           index: 2,
           point: [0, 76],
-          bindingId: 'binding2',
         },
       },
     },
@@ -66,11 +68,13 @@ export const INITIAL_PAGE: TLPage<Shape> = {
       id: 'binding1',
       fromId: 'arrow1',
       toId: 'box2',
+      handleId: 'start',
     },
     binding2: {
       id: 'binding2',
       fromId: 'arrow1',
       toId: 'box3',
+      handleId: 'end',
     },
   },
 }

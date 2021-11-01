@@ -1,5 +1,8 @@
 import type { TLBinding } from '@tldraw/core'
+import { nanoid } from 'nanoid'
 import type { Shape } from 'shapes'
+import type { ArrowShape } from 'shapes/arrow'
+import type { CustomBinding } from './constants'
 import type { machine } from './machine'
 
 /*
@@ -102,12 +105,14 @@ export class Api {
     return this
   }
 
-  createBindings = (...bindings: Pick<TLBinding, 'toId' | 'fromId'>[]) => {
+  createBindings = (
+    ...bindings: (Partial<CustomBinding> & Pick<CustomBinding, 'toId' | 'fromId'>)[]
+  ) => {
     this.machine.send('CREATED_BINDINGS', { bindings })
     return this
   }
 
-  updateBindings = (...bindings: (Partial<TLBinding> & Pick<TLBinding, 'id'>)[]) => {
+  updateBindings = (...bindings: (Partial<CustomBinding> & Pick<CustomBinding, 'id'>)[]) => {
     this.machine.send('UPDATED_BINDINGS', { bindings })
     return this
   }
@@ -117,12 +122,23 @@ export class Api {
     return this
   }
 
-  getShape = (id: string) => {
-    return this.machine.data.page.shapes[id]
+  getShape = <T extends Shape>(id: string) => {
+    return this.machine.data.page.shapes[id] as T
   }
 
   getBinding = (id: string) => {
     return this.machine.data.page.bindings[id]
+  }
+
+  createArrowBetweenShapes = (startId: string, endId: string) => {
+    const arrowId = nanoid()
+    const startBindingId = nanoid()
+    const endBindingId = nanoid()
+    this.createShapes({ id: arrowId, type: 'arrow' })
+    this.createBindings(
+      { id: startBindingId, fromId: arrowId, toId: startId, handleId: 'start' },
+      { id: endBindingId, fromId: arrowId, toId: endId, handleId: 'end' }
+    )
   }
 
   send = this._machine.send

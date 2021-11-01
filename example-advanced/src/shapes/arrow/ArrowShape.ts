@@ -7,13 +7,11 @@ export interface ArrowShape extends TLShape {
       id: 'start'
       index: number
       point: number[]
-      bindingId?: string
     }
     end: {
       id: 'end'
       index: number
       point: number[]
-      bindingId?: string
     }
   }
 }
