@@ -8,7 +8,7 @@ export const FIT_TO_SCREEN_PADDING = 100
 export const BINDING_PADDING = 12
 export const SNAP_DISTANCE = 5
 
-export const INITIAL_PAGE: TLPage<Shape, TLBinding> = {
+export const INITIAL_PAGE: TLPage<Shape> = {
   id: 'page1',
   shapes: {
     box1: {
@@ -97,6 +97,14 @@ export const INITIAL_DATA = {
   },
 }
 
+export type AppDocument = {
+  id: string
+  version: number
+  page: TLPage<Shape>
+}
+
 export type AppData = typeof INITIAL_DATA
+
 export type Action = S.Action<AppData>
+
 export type Condition = S.Condition<AppData>

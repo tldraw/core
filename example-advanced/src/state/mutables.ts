@@ -30,10 +30,15 @@ interface Mutables {
 export const mutables: Mutables = {
   snapshot: INITIAL_DATA,
   initialPoint: [0, 0],
-  isCloning: false,
   history: makeHistory(),
   viewport: Utils.getBoundsFromPoints([
     [0, 0],
     [100, 100],
   ]),
+  isCloning: false,
+  pointedShapeId: undefined,
+  pointedHandleId: undefined,
+  pointedBoundsHandleId: undefined,
+  initialCommonBounds: undefined,
+  snapInfo: undefined,
 }

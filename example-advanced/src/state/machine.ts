@@ -6,7 +6,7 @@ import { getPagePoint } from './helpers'
 import * as actions from './actions'
 import { mutables } from './mutables'
 
-export const state = createState({
+export const machine = createState({
   data: INITIAL_DATA,
   onEnter: ['restoreSavedDocument', 'updateBoundShapes'],
   states: {
