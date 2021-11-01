@@ -30,11 +30,12 @@ export const state = createState({
             idle: {
               onEnter: ['clearPointedShape'],
               on: {
+                SELECTED_ALL: 'selectAllShapes',
                 CANCELLED: 'deselectAllShapes',
                 DELETED: 'deleteSelectedShapes',
                 UNDO: 'undo',
                 REDO: 'redo',
-                HOVERED_SHAPE: 'setHoveredShapeId',
+                HOVERED_SHAPE: 'setHoveredShape',
                 UNHOVERED_SHAPE: 'clearHoveredShape',
                 POINTED_CANVAS: [
                   {

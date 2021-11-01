@@ -128,7 +128,11 @@ const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
       break
     }
     case 'a': {
-      state.send('SELECTED_TOOL', { name: 'arrow' })
+      if (info.metaKey || info.ctrlKey) {
+        state.send('SELECTED_ALL')
+      } else {
+        state.send('SELECTED_TOOL', { name: 'arrow' })
+      }
       break
     }
     case 'z': {
