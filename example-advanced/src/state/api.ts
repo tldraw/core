@@ -1,3 +1,4 @@
+import type { TLBinding } from '@tldraw/core'
 import type { Shape } from 'shapes'
 import type { machine } from './machine'
 
@@ -88,6 +89,31 @@ export class Api {
 
   createShapes = (...shapes: (Partial<Shape> & Pick<Shape, 'type'>)[]) => {
     this.machine.send('CREATED_SHAPES', { shapes })
+    return this
+  }
+
+  updateShapes = (...shapes: (Partial<Shape> & Pick<Shape, 'id'>)[]) => {
+    this.machine.send('UPDATED_SHAPES', { shapes })
+    return this
+  }
+
+  deleteShapes = (...ids: string[]) => {
+    this.machine.send('DELETED_SHAPES', { ids })
+    return this
+  }
+
+  createBindings = (...bindings: Pick<TLBinding, 'toId' | 'fromId'>[]) => {
+    this.machine.send('CREATED_BINDINGS', { bindings })
+    return this
+  }
+
+  updateBindings = (...bindings: (Partial<TLBinding> & Pick<TLBinding, 'id'>)[]) => {
+    this.machine.send('UPDATED_BINDINGS', { bindings })
+    return this
+  }
+
+  deleteBindings = (...ids: string[]) => {
+    this.machine.send('DELETED_BINDINGS', { ids })
     return this
   }
 

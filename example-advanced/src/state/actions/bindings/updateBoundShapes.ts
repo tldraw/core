@@ -8,10 +8,18 @@ import type { Action } from 'state/constants'
 export const updateBoundShapes: Action = (data) => {
   const toDelete = new Set<string>()
 
-  Object.values(data.page.bindings).forEach((binding) => {
+  const bindingsToUpdate = Object.keys(data.page.bindings)
+
+  while (bindingsToUpdate.length > 0) {
+    const bindingId = bindingsToUpdate.pop()
+
+    if (!bindingId) break
+
+    const binding = data.page.bindings[bindingId]
     const toShape = data.page.shapes[binding.toId]
     const fromShape = data.page.shapes[binding.fromId] as ArrowShape
 
+    // Did we delete one of the bindings shapes? If so, delete the binding too.
     if (!(toShape && fromShape)) {
       toDelete.add(binding.id)
       return
@@ -21,17 +29,31 @@ export const updateBoundShapes: Action = (data) => {
       (handle) => handle.bindingId === binding.id
     )
 
+    // Did we delete the binding on the handle? If so, delete the bindng too.
     if (!boundHandle) {
       toDelete.add(binding.id)
       return
     }
 
-    const toShapeCenter = getShapeUtils(toShape).getCenter(toShape)
     const toShapeBounds = getShapeUtils(toShape).getBounds(toShape)
-    const oppositeHandle = fromShape.handles[boundHandle.id === 'start' ? 'end' : 'start']
+    const toShapeCenter = getShapeUtils(toShape).getCenter(toShape)
 
+    // Get the point of the shape's opposite handle
+
+    const oppositeHandle = fromShape.handles[boundHandle.id === 'start' ? 'end' : 'start']
     const handlePoint = Vec.add(fromShape.point, boundHandle.point)
-    const oppositePoint = Vec.add(fromShape.point, oppositeHandle.point)
+    let oppositePoint = Vec.add(fromShape.point, oppositeHandle.point)
+
+    if (oppositeHandle.bindingId && bindingsToUpdate.includes(oppositeHandle.bindingId)) {
+      // If we haven't updated the other handle yet, then we can't use it to calculate this
+      // handle's point. In order to make sure this handle ends up in the right place, use
+      // the center of its bound shape instead.
+      const otherBinding = data.page.bindings[oppositeHandle.bindingId]
+      const otherToShape = data.page.shapes[otherBinding.toId]
+      oppositePoint = getShapeUtils(otherToShape).getCenter(otherToShape)
+    }
+
+    // Find the intersection between the target shape's bounds and the arrow as a line segment.
 
     const intersection =
       intersectLineSegmentBounds(
@@ -39,6 +61,8 @@ export const updateBoundShapes: Action = (data) => {
         toShapeCenter,
         Utils.expandBounds(toShapeBounds, 12)
       )[0]?.points[0] ?? toShapeCenter
+
+    // Update the arrow's handle position, if necessary
 
     if (!Vec.isEqual(handlePoint, intersection)) {
       boundHandle.point = Vec.sub(intersection, fromShape.point)
@@ -48,7 +72,7 @@ export const updateBoundShapes: Action = (data) => {
       handles.forEach((handle) => (handle.point = Vec.sub(handle.point, offset)))
       fromShape.point = Vec.add(fromShape.point, offset)
     }
-  })
+  }
 
   // Clean up deleted bindings
   toDelete.forEach((id) => {

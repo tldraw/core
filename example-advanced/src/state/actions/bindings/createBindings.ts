@@ -6,17 +6,16 @@ export const createBindings: Action = (
   data,
   payload: { bindings: (Partial<TLBinding> & Pick<TLBinding, 'fromId' | 'toId'>)[] }
 ) => {
-  try {
-    payload.bindings.forEach((partial) => {
-      const binding = {
-        id: nanoid(),
-        ...partial,
-      }
+  console.log('creating bindings')
 
-      data.page.bindings[binding.id] = binding
-    })
-  } catch (e: any) {
-    e.message = 'Could not create shapes: ' + e.message
-    console.error(e)
-  }
+  payload.bindings.forEach((partial) => {
+    const binding = {
+      id: nanoid(),
+      ...partial,
+    }
+
+    data.page.bindings[binding.id] = binding
+  })
+
+  console.log({ ...data.page.bindings })
 }
