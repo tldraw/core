@@ -6,7 +6,7 @@
 
 This package contains the `Renderer` and core utilities used by [tldraw](https://tldraw.com).
 
-You can use this package to build projects like [tldraw](https://tldraw.com), where React components are rendered on a canvas user interface. Check out the [advanced example](https://core-steveruiz.vercel.app/) from this repo.
+You can use this package to build projects like [tldraw](https://tldraw.com), where React components are rendered on a canvas user interface. Check out the [advanced example](https://core-steveruiz.vercel.app/).
 
 💕 Love this library? Consider [becoming a sponsor](https://github.com/sponsors/steveruizok?frequency=recurring&sponsor=steveruizok).
 
@@ -114,55 +114,55 @@ The theme object accepts valid CSS colors for the following properties:
 
 The Renderer also accepts many (optional) event callbacks.
 
-| Prop                        | Description                                                  |
-| --------------------------- | ------------------------------------------------------------ |
-| `onPan`                     | Panned with the mouse wheel                                  |
-| `onZoom`                    | Zoomed with the mouse wheel                                  |
-| `onPinchStart`              | Began a two-pointer pinch                                    |
-| `onPinch`                   | Moved their pointers during a pinch                          |
-| `onPinchEnd`                | Stopped a two-pointer pinch                                  |
-| `onPointerDown`             | Started pointing                                             |
-| `onPointerMove`             | Moved their pointer                                          |
-| `onPointerUp`               | Ended a point                                                |
-| `onPointCanvas`             | Pointed the canvas                                           |
-| `onDoubleClickCanvas`       | Double-pointed the canvas                                    |
-| `onRightPointCanvas`        | Right-pointed the canvas                                     |
-| `onDragCanvas`              | Dragged the canvas                                           |
-| `onReleaseCanvas`           | Stopped pointing the canvas                                  |
-| `onHoverShape`              | Moved their pointer onto a shape                             |
-| `onUnhoverShape`            | Moved their pointer off of a shape                           |
-| `onPointShape`              | Pointed a shape                                              |
-| `onDoubleClickShape`        | Double-pointed a shape                                       |
-| `onRightPointShape`         | Right-pointed a shape                                        |
-| `onDragShape`               | Dragged a shape                                              |
-| `onReleaseShape`            | Stopped pointing a shape                                     |
-| `onHoverHandle`             | Moved their pointer onto a shape handle                      |
-| `onUnhoverHandle`           | Moved their pointer off of a shape handle                    |
-| `onPointHandle`             | Pointed a shape handle                                       |
-| `onDoubleClickHandle`       | Double-pointed a shape handle                                |
-| `onRightPointHandle`        | Right-pointed a shape handle                                 |
-| `onDragHandle`              | Dragged a shape handle                                       |
-| `onReleaseHandle`           | Stopped pointing shape handle                                |
-| `onHoverBounds`             | Moved their pointer onto the selection bounds                |
-| `onUnhoverBounds`           | Moved their pointer off of the selection bounds              |
-| `onPointBounds`             | Pointed the selection bounds                                 |
-| `onDoubleClickBounds`       | Double-pointed the selection bounds                          |
-| `onRightPointBounds`        | Right-pointed the selection bounds                           |
-| `onDragBounds`              | Dragged the selection bounds                                 |
-| `onReleaseBounds`           | Stopped the selection bounds                                 |
-| `onHoverBoundsHandle`       | Moved their pointer onto a selection bounds handle           |
-| `onUnhoverBoundsHandle`     | Moved their pointer off of a selection bounds handle         |
-| `onPointBoundsHandle`       | Pointed a selection bounds handle                            |
-| `onDoubleClickBoundsHandle` | Double-pointed a selection bounds handle                     |
-| `onRightPointBoundsHandle`  | Right-pointed a selection bounds handle                      |
-| `onDragBoundsHandle`        | Dragged a selection bounds handle                            |
-| `onReleaseBoundsHandle`     | Stopped a selection bounds handle                            |
-| `onShapeClone`              | Clicked on a shape's clone handle.                           |
-| `onShapeChange`             | A shape's component prompted a change.                       |
-| `onShapeBlur`               | A shape's component was prompted a blur.                     |
-| `onRenderCountChange`       | The number of rendered shapes changed.                       |
-| `onBoundsChange`            | The Renderer's screen bounding box of the component changed. |
-| `onError`                   | The Renderer encountered an error.                           |
+| Prop                        | Description                                                 |
+| --------------------------- | ----------------------------------------------------------- |
+| `onPan`                     | Panned with the mouse wheel                                 |
+| `onZoom`                    | Zoomed with the mouse wheel                                 |
+| `onPinchStart`              | Began a two-pointer pinch                                   |
+| `onPinch`                   | Moved their pointers during a pinch                         |
+| `onPinchEnd`                | Stopped a two-pointer pinch                                 |
+| `onPointerDown`             | Started pointing                                            |
+| `onPointerMove`             | Moved their pointer                                         |
+| `onPointerUp`               | Ended a point                                               |
+| `onPointCanvas`             | Pointed the canvas                                          |
+| `onDoubleClickCanvas`       | Double-pointed the canvas                                   |
+| `onRightPointCanvas`        | Right-pointed the canvas                                    |
+| `onDragCanvas`              | Dragged the canvas                                          |
+| `onReleaseCanvas`           | Stopped pointing the canvas                                 |
+| `onHoverShape`              | Moved their pointer onto a shape                            |
+| `onUnhoverShape`            | Moved their pointer off of a shape                          |
+| `onPointShape`              | Pointed a shape                                             |
+| `onDoubleClickShape`        | Double-pointed a shape                                      |
+| `onRightPointShape`         | Right-pointed a shape                                       |
+| `onDragShape`               | Dragged a shape                                             |
+| `onReleaseShape`            | Stopped pointing a shape                                    |
+| `onHoverHandle`             | Moved their pointer onto a shape handle                     |
+| `onUnhoverHandle`           | Moved their pointer off of a shape handle                   |
+| `onPointHandle`             | Pointed a shape handle                                      |
+| `onDoubleClickHandle`       | Double-pointed a shape handle                               |
+| `onRightPointHandle`        | Right-pointed a shape handle                                |
+| `onDragHandle`              | Dragged a shape handle                                      |
+| `onReleaseHandle`           | Stopped pointing shape handle                               |
+| `onHoverBounds`             | Moved their pointer onto the selection bounds               |
+| `onUnhoverBounds`           | Moved their pointer off of the selection bounds             |
+| `onPointBounds`             | Pointed the selection bounds                                |
+| `onDoubleClickBounds`       | Double-pointed the selection bounds                         |
+| `onRightPointBounds`        | Right-pointed the selection bounds                          |
+| `onDragBounds`              | Dragged the selection bounds                                |
+| `onReleaseBounds`           | Stopped the selection bounds                                |
+| `onHoverBoundsHandle`       | Moved their pointer onto a selection bounds handle          |
+| `onUnhoverBoundsHandle`     | Moved their pointer off of a selection bounds handle        |
+| `onPointBoundsHandle`       | Pointed a selection bounds handle                           |
+| `onDoubleClickBoundsHandle` | Double-pointed a selection bounds handle                    |
+| `onRightPointBoundsHandle`  | Right-pointed a selection bounds handle                     |
+| `onDragBoundsHandle`        | Dragged a selection bounds handle                           |
+| `onReleaseBoundsHandle`     | Stopped a selection bounds handle                           |
+| `onShapeClone`              | Clicked on a shape's clone handle                           |
+| `onShapeChange`             | A shape's component prompted a change                       |
+| `onShapeBlur`               | A shape's component was prompted a blur                     |
+| `onRenderCountChange`       | The number of rendered shapes changed                       |
+| `onBoundsChange`            | The Renderer's screen bounding box of the component changed |
+| `onError`                   | The Renderer encountered an error                           |
 
 The `@tldraw/core` library provides types for most of the event handlers:
 
@@ -209,32 +209,32 @@ An object describing the current page. It contains:
 
 An object that describes a shape on the page. The shapes in your document should extend this interface with other properties. See [Shape Type](#shape-type).
 
-| Property              | Type                      | Description                                                                            |
-| --------------------- | ------------------------- | -------------------------------------------------------------------------------------- |
-| `id`                  | `string`                  | The shape's id.                                                                        |
-| `type`                | `string`                  | The type of the shape, corresponding to the `type` of a [`TLShapeUtil`](#tlshapeutil). |
-| `parentId`            | `string`                  | The id of the shape's parent (either the current page or another shape).               |
-| `childIndex`          | `number`                  | the order of the shape among its parent's children                                     |
-| `name`                | `string`                  | the name of the shape                                                                  |
-| `point`               | `number[]`                | the shape's current `[x, y]` coordinates on the page                                   |
-| `rotation`            | `number`                  | (optiona) The shape's current rotation in radians                                      |
-| `children`            | `string[]`                | (optional) An array containing the ids of this shape's children                        |
-| `handles`             | [`TLHandle{}`](#tlhandle) | (optional) A table of `TLHandle` objects                                               |
-| `isLocked`            | `boolean`                 | (optional) True if the shape is locked                                                 |
-| `isHidden`            | `boolean`                 | (optional) True if the shape is hidden                                                 |
-| `isEditing`           | `boolean`                 | (optional) True if the shape is currently editing                                      |
-| `isGenerated`         | `boolean`                 | optional) True if the shape is generated programatically                               |
-| `isAspectRatioLocked` | `boolean`                 | (optional) True if the shape's aspect ratio is locked                                  |
+| Property              | Type       | Description                                                                           |
+| --------------------- | ---------- | ------------------------------------------------------------------------------------- |
+| `id`                  | `string`   | The shape's id.                                                                       |
+| `type`                | `string`   | The type of the shape, corresponding to the `type` of a [`TLShapeUtil`](#tlshapeutil) |
+| `parentId`            | `string`   | The id of the shape's parent (either the current page or another shape)               |
+| `childIndex`          | `number`   | the order of the shape among its parent's children                                    |
+| `name`                | `string`   | the name of the shape                                                                 |
+| `point`               | `number[]` | the shape's current `[x, y]` coordinates on the page                                  |
+| `rotation`            | `number`   | (optiona) The shape's current rotation in radians                                     |
+| `children`            | `string[]` | (optional) An array containing the ids of this shape's children                       |
+| `handles`             | `{}`       | (optional) A table of [`TLHandle`](#tlhandle) objects                                 |
+| `isLocked`            | `boolean`  | (optional) True if the shape is locked                                                |
+| `isHidden`            | `boolean`  | (optional) True if the shape is hidden                                                |
+| `isEditing`           | `boolean`  | (optional) True if the shape is currently editing                                     |
+| `isGenerated`         | `boolean`  | optional) True if the shape is generated programatically                              |
+| `isAspectRatioLocked` | `boolean`  | (optional) True if the shape's aspect ratio is locked                                 |
 
 ### `TLHandle`
 
 An object that describes a relationship between two shapes on the page.
 
-| Property | Type       | Description                                    |
-| -------- | ---------- | ---------------------------------------------- |
-| `id`     | `string`   | An id for the handle.                          |
-| `index`  | `number`   | The handle's order within the shape's handles. |
-| `point`  | `number[]` | The handle's `[x, y]` coordinates.             |
+| Property | Type       | Description                                   |
+| -------- | ---------- | --------------------------------------------- |
+| `id`     | `string`   | An id for the handle                          |
+| `index`  | `number`   | The handle's order within the shape's handles |
+| `point`  | `number[]` | The handle's `[x, y]` coordinates             |
 
 When a shape with handles is the only selected shape, the `Renderer` will display its handles. You can respond to interactions with these handles using the `on
 
@@ -242,13 +242,11 @@ When a shape with handles is the only selected shape, the `Renderer` will displa
 
 An object that describes a relationship between two shapes on the page.
 
-| Property | Type     | Description                                   |
-| -------- | -------- | --------------------------------------------- |
-| `id`     | `string` | A unique id for the binding.                  |
-| `type`   | `string` | The binding's type.                           |
-| `fromId` | `string` | The id of the shape where the binding begins. |
-| `toId`   | `string` | The id of the shape where the binding begins. |
-| `meta`   | `{}`     | Any additional data attached to the binding.  |
+| Property | Type     | Description                                  |
+| -------- | -------- | -------------------------------------------- |
+| `id`     | `string` | A unique id for the binding                  |
+| `fromId` | `string` | The id of the shape where the binding begins |
+| `toId`   | `string` | The id of the shape where the binding begins |
 
 ### `TLSnapLine`
 
@@ -262,12 +260,12 @@ The `TLShapeUtil` is an abstract class that you can extend to create utilities f
 
 A `TLUser` is the presence information for a multiplayer user. The user's pointer location and selections will be shown on the canvas. If the `TLUser`'s id matches the `Renderer`'s `userId` prop, then the user's cursor and selections will not be shown.
 
-| Property        | Type       | Description                              |
-| --------------- | ---------- | ---------------------------------------- |
-| `id`            | `string`   | A unique id for the user.                |
-| `color`         | `string`   | The user's color, used for indicators.   |
-| `point`         | `number[]` | The user's pointer location on the page. |
-| `selectedIds[]` | `string[]` | The user's selected shape ids.           |
+| Property        | Type       | Description                             |
+| --------------- | ---------- | --------------------------------------- |
+| `id`            | `string`   | A unique id for the user                |
+| `color`         | `string`   | The user's color, used for indicators   |
+| `point`         | `number[]` | The user's pointer location on the page |
+| `selectedIds[]` | `string[]` | The user's selected shape ids           |
 
 ### `Utils`
 
@@ -329,16 +327,16 @@ Your component can return HTML elements or SVG elements. If your shape is return
 
 The component will receive the following props:
 
-| Name            | Type       | Description                                                                             |
-| --------------- | ---------- | --------------------------------------------------------------------------------------- |
-| `shape`         | `TLShape`  | The shape from `page.shapes` that is being rendered.                                    |
-| `meta`          | {}         | The value provided to the `Renderer`'s `meta` prop.                                     |
-| `events`        | {}         | Several pointer events that should be set on the container element.                     |
-| `isSelected`    | `boolean`  | Whether the current shape is selected (true if its `id` is in `pageState.selectedIds`). |
-| `isHovered`     | `boolean`  | Whether the current shape is hovered (true if its `id` is `pageState.hoveredId`).       |
-| `isEditing`     | `boolean`  | Whether the current shape is editing (true if its `id` is `pageState.editingId`).       |
-| `onShapeChange` | `Function` | The callback provided to the `Renderer`'s `onShapeChange` prop.                         |
-| `onShapeBlur`   | `Function` | The callback provided to the `Renderer`'s `onShapeBlur` prop.                           |
+| Name            | Type       | Description                                                                            |
+| --------------- | ---------- | -------------------------------------------------------------------------------------- |
+| `shape`         | `TLShape`  | The shape from `page.shapes` that is being rendered                                    |
+| `meta`          | `{}`       | The value provided to the `Renderer`'s `meta` prop                                     |
+| `events`        | `{}`       | Several pointer events that should be set on the container element                     |
+| `isSelected`    | `boolean`  | Whether the current shape is selected (true if its `id` is in `pageState.selectedIds`) |
+| `isHovered`     | `boolean`  | Whether the current shape is hovered (true if its `id` is `pageState.hoveredId`)       |
+| `isEditing`     | `boolean`  | Whether the current shape is editing (true if its `id` is `pageState.editingId`)       |
+| `onShapeChange` | `Function` | The callback provided to the `Renderer`'s `onShapeChange` prop                         |
+| `onShapeBlur`   | `Function` | The callback provided to the `Renderer`'s `onShapeBlur` prop                           |
 
 ### Indicator
 
@@ -362,13 +360,13 @@ export const BoxIndicator = TLShapeUtil.Indicator<BoxShape>(({ shape }) => {
 
 The indicator component will receive the following props:
 
-| Name         | Type      | Description                                                                             |
-| ------------ | --------- | --------------------------------------------------------------------------------------- |
-| `shape`      | `TLShape` | The shape from `page.shapes` that is being rendered.                                    |
-| `meta`       | {}        | The value provided to the `Renderer`'s `meta` prop.                                     |
-| `user`       | `TLUser`  | The user when shown in a multiplayer session.                                           |
-| `isSelected` | `boolean` | Whether the current shape is selected (true if its `id` is in `pageState.selectedIds`). |
-| `isHovered`  | `boolean` | Whether the current shape is hovered (true if its `id` is `pageState.hoveredId`).       |
+| Name         | Type      | Description                                                                            |
+| ------------ | --------- | -------------------------------------------------------------------------------------- |
+| `shape`      | `TLShape` | The shape from `page.shapes` that is being rendered                                    |
+| `meta`       | {}        | The value provided to the `Renderer`'s `meta` prop                                     |
+| `user`       | `TLUser`  | The user when shown in a multiplayer session                                           |
+| `isSelected` | `boolean` | Whether the current shape is selected (true if its `id` is in `pageState.selectedIds`) |
+| `isHovered`  | `boolean` | Whether the current shape is hovered (true if its `id` is `pageState.hoveredId`)       |
 
 ### ShapeUtil
 
@@ -408,11 +406,11 @@ Set the `Component` field to your component and the `Indicator` field to your in
 
 You may also set the following fields:
 
-| Name               | Type      | Default | Description                                                                                            |
-| ------------------ | --------- | ------- | ------------------------------------------------------------------------------------------------------ |
-| `showCloneHandles` | `boolean` | `false` | Whether to display clone handles when the shape is the only selected shape.                            |
-| `hideBounds`       | `boolean` | `false` | Whether to hide the bounds when the shape is the only selected shape.                                  |
-| `isStateful`       | `boolean` | `false` | Whether the shape has its own React state. When true, the shape will not be unmounted when off-screen. |
+| Name               | Type      | Default | Description                                                                                           |
+| ------------------ | --------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| `showCloneHandles` | `boolean` | `false` | Whether to display clone handles when the shape is the only selected shape                            |
+| `hideBounds`       | `boolean` | `false` | Whether to hide the bounds when the shape is the only selected shape                                  |
+| `isStateful`       | `boolean` | `false` | Whether the shape has its own React state. When true, the shape will not be unmounted when off-screen |
 
 ### ShapeUtils Object
 
