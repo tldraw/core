@@ -1,13 +1,15 @@
 import { useTLContext } from '~hooks'
 import * as React from 'react'
 import { Utils } from '~utils'
+import type { TLBounds } from '~types'
 
-export function useResizeObserver<T extends Element>(ref: React.RefObject<T>) {
+export function useResizeObserver<T extends Element>(
+  ref: React.RefObject<T>,
+  onBoundsChange: (bounds: TLBounds) => void
+) {
   const { inputs, callbacks } = useTLContext()
 
   const rIsMounted = React.useRef(false)
-
-  const forceUpdate = React.useReducer((x) => x + 1, 0)[1]
 
   // When the element resizes, update the bounds (stored in inputs)
   // and broadcast via the onBoundsChange callback prop.
@@ -16,7 +18,7 @@ export function useResizeObserver<T extends Element>(ref: React.RefObject<T>) {
       const rect = ref.current?.getBoundingClientRect()
 
       if (rect) {
-        inputs.bounds = {
+        const bounds: TLBounds = {
           minX: rect.left,
           maxX: rect.left + rect.width,
           minY: rect.top,
@@ -25,16 +27,17 @@ export function useResizeObserver<T extends Element>(ref: React.RefObject<T>) {
           height: rect.height,
         }
 
-        callbacks.onBoundsChange?.(inputs.bounds)
+        inputs.bounds = bounds
 
-        // Force an update for a second mount
-        forceUpdate()
+        onBoundsChange(bounds)
+
+        callbacks.onBoundsChange?.(bounds)
       }
     } else {
       // Skip the first mount
       rIsMounted.current = true
     }
-  }, [ref, forceUpdate, inputs, callbacks.onBoundsChange])
+  }, [ref, inputs, callbacks.onBoundsChange])
 
   React.useEffect(() => {
     const debouncedupdateBounds = Utils.debounce(updateBounds, 100)

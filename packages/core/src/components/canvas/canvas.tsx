@@ -8,7 +8,7 @@ import {
   useCameraCss,
   useKeyEvents,
 } from '~hooks'
-import type { TLBinding, TLPage, TLPageState, TLShape, TLSnapLine, TLUsers } from '~types'
+import type { TLBinding, TLBounds, TLPage, TLPageState, TLShape, TLSnapLine, TLUsers } from '~types'
 import { ErrorFallback } from '~components/error-fallback'
 import { ErrorBoundary } from '~components/error-boundary'
 import { Brush } from '~components/brush'
@@ -39,6 +39,7 @@ interface CanvasProps<T extends TLShape, M extends Record<string, unknown>> {
   externalContainerRef?: React.RefObject<HTMLElement>
   meta?: M
   id?: string
+  onBoundsChange: (bounds: TLBounds) => void
 }
 
 export function Canvas<T extends TLShape, M extends Record<string, unknown>>({
@@ -56,6 +57,7 @@ export function Canvas<T extends TLShape, M extends Record<string, unknown>>({
   hideBindingHandles,
   hideCloneHandles,
   hideRotateHandle,
+  onBoundsChange,
 }: CanvasProps<T, M>): JSX.Element {
   const rCanvas = React.useRef<HTMLDivElement>(null)
   const rContainer = React.useRef<HTMLDivElement>(null)
@@ -63,13 +65,13 @@ export function Canvas<T extends TLShape, M extends Record<string, unknown>>({
 
   inputs.zoom = pageState.camera.zoom
 
-  useResizeObserver(rCanvas)
+  useResizeObserver(rCanvas, onBoundsChange)
 
   useZoomEvents(pageState.camera.zoom, externalContainerRef || rCanvas)
 
   useSafariFocusOutFix()
 
-  usePreventNavigation(rCanvas, inputs.bounds.width)
+  usePreventNavigation(rCanvas)
 
   useCameraCss(rLayer, rContainer, pageState)
 

@@ -35,16 +35,9 @@ export const Page = React.memo(function Page<T extends TLShape, M extends Record
   hideRotateHandle,
   meta,
 }: PageProps<T, M>): JSX.Element {
-  const { callbacks, shapeUtils, inputs } = useTLContext()
+  const { bounds: rendererBounds, shapeUtils, inputs } = useTLContext()
 
-  const shapeTree = useShapeTree(
-    page,
-    pageState,
-    shapeUtils,
-    [inputs.bounds.width, inputs.bounds.height],
-    meta,
-    callbacks.onRenderCountChange
-  )
+  const shapeTree = useShapeTree(page, pageState, meta)
 
   const { bounds, isLinked, isLocked, rotation } = useSelection(page, pageState, shapeUtils)
 
@@ -95,7 +88,7 @@ export const Page = React.memo(function Page<T extends TLShape, M extends Record
         <Bounds
           zoom={zoom}
           bounds={bounds}
-          viewportWidth={inputs.bounds.width}
+          viewportWidth={rendererBounds.width}
           isLocked={isLocked}
           rotation={rotation}
           isHidden={hideBounds}
