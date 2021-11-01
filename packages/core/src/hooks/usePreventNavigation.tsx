@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as React from 'react'
+import { useTLContext } from '~hooks'
 
-export function usePreventNavigation(
-  rCanvas: React.RefObject<HTMLDivElement>,
-  width: number
-): void {
+export function usePreventNavigation(rCanvas: React.RefObject<HTMLDivElement>): void {
+  const { bounds } = useTLContext()
+
   React.useEffect(() => {
     const preventGestureNavigation = (event: TouchEvent) => {
       event.preventDefault()
@@ -20,7 +20,7 @@ export function usePreventNavigation(
       // if the touch area overlaps with the screen edges
       // it's likely to trigger the navigation. We prevent the
       // touchstart event in that case.
-      if (touchXPosition - touchXRadius < 10 || touchXPosition + touchXRadius > width - 10) {
+      if (touchXPosition - touchXRadius < 10 || touchXPosition + touchXRadius > bounds.width - 10) {
         event.preventDefault()
       }
     }
@@ -56,5 +56,5 @@ export function usePreventNavigation(
         elm.removeEventListener('touchstart', preventNavigation)
       }
     }
-  }, [rCanvas, width])
+  }, [rCanvas, bounds.width])
 }

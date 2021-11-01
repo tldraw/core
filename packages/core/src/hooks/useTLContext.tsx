@@ -11,6 +11,7 @@ export interface TLContextType<T extends TLShape> {
   rPageState: React.MutableRefObject<TLPageState>
   rSelectionBounds: React.MutableRefObject<TLBounds | null>
   inputs: Inputs
+  bounds: TLBounds
 }
 
 export const TLContext = React.createContext({} as TLContextType<TLShape>)

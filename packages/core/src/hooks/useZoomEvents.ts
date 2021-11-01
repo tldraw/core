@@ -11,7 +11,7 @@ export function useZoomEvents<T extends HTMLElement>(zoom: number, ref: React.Re
   const rPinchPoint = React.useRef<number[] | undefined>(undefined)
   const rDelta = React.useRef<number[]>([0, 0])
 
-  const { inputs, callbacks } = useTLContext()
+  const { inputs, bounds, callbacks } = useTLContext()
 
   React.useEffect(() => {
     const preventGesture = (event: TouchEvent) => {
@@ -35,7 +35,7 @@ export function useZoomEvents<T extends HTMLElement>(zoom: number, ref: React.Re
     {
       onWheel: ({ delta, event: e }) => {
         if (e.altKey && e.buttons === 0) {
-          const point = inputs.pointer?.point ?? [inputs.bounds.width / 2, inputs.bounds.height / 2]
+          const point = inputs.pointer?.point ?? [bounds.width / 2, bounds.height / 2]
 
           const info = inputs.pinch(point, point)
 

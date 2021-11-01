@@ -1,18 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as React from 'react'
-import type {
-  IShapeTreeNode,
-  TLPage,
-  TLPageState,
-  TLShape,
-  TLCallbacks,
-  TLBinding,
-  TLBounds,
-} from '~types'
+import type { IShapeTreeNode, TLPage, TLPageState, TLShape, TLBinding, TLBounds } from '~types'
 import { Utils } from '~utils'
 import { Vec } from '@tldraw/vec'
-import type { TLShapeUtilsMap } from '~shape-utils'
+import { useTLContext } from '~hooks'
 
 function addToShapeTree<T extends TLShape, M extends Record<string, unknown>>(
   shape: T,
@@ -65,11 +57,10 @@ function shapeIsInViewport(bounds: TLBounds, viewport: TLBounds) {
 export function useShapeTree<T extends TLShape, M extends Record<string, unknown>>(
   page: TLPage<T, TLBinding>,
   pageState: TLPageState,
-  shapeUtils: TLShapeUtilsMap<T>,
-  size: number[],
-  meta?: M,
-  onRenderCountChange?: TLCallbacks<T>['onRenderCountChange']
+  meta?: M
 ) {
+  const { callbacks, shapeUtils, bounds } = useTLContext()
+
   const rTimeout = React.useRef<unknown>()
   const rPreviousCount = React.useRef(0)
   const rShapesIdsToRender = React.useRef(new Set<string>())
@@ -83,7 +74,7 @@ export function useShapeTree<T extends TLShape, M extends Record<string, unknown
   // - OR are selected
 
   const [minX, minY] = Vec.sub(Vec.div([0, 0], camera.zoom), camera.point)
-  const [maxX, maxY] = Vec.sub(Vec.div(size, camera.zoom), camera.point)
+  const [maxX, maxY] = Vec.sub(Vec.div([bounds.width, bounds.height], camera.zoom), camera.point)
   const viewport = {
     minX,
     minY,
@@ -135,7 +126,7 @@ export function useShapeTree<T extends TLShape, M extends Record<string, unknown
       clearTimeout(rTimeout.current as number)
     }
     rTimeout.current = requestAnimationFrame(() => {
-      onRenderCountChange?.(Array.from(shapesIdsToRender.values()))
+      callbacks.onRenderCountChange?.(Array.from(shapesIdsToRender.values()))
     })
     rPreviousCount.current = shapesToRender.size
   }
