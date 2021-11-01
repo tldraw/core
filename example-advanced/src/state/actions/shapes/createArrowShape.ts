@@ -1,18 +1,13 @@
-import { TLBinding, TLPointerInfo, Utils } from '@tldraw/core'
-import { intersectLineSegmentBounds } from '@tldraw/intersect'
-import Vec from '@tldraw/vec'
 import { nanoid } from 'nanoid'
-import { getShapeUtils, Shape } from 'shapes'
-import type { ArrowShape } from 'shapes/arrow'
-import type { Action } from 'state/constants'
+import Vec from '@tldraw/vec'
+import { TLBinding, TLPointerInfo, Utils } from '@tldraw/core'
+import { getShapeUtils, Shape, shapeUtils } from 'shapes'
 import { getPagePoint } from 'state/helpers'
 import { mutables } from 'state/mutables'
+import type { Action } from 'state/constants'
 
 export const createArrowShape: Action = (data, payload: TLPointerInfo) => {
-  const shape: ArrowShape = {
-    id: nanoid(),
-    type: 'arrow',
-    name: 'arrow',
+  const shape = shapeUtils.arrow.getShape({
     parentId: 'page1',
     point: getPagePoint(payload.point, data.pageState),
     handles: {
@@ -28,12 +23,7 @@ export const createArrowShape: Action = (data, payload: TLPointerInfo) => {
       },
     },
     childIndex: Object.values(data.page.shapes).length,
-  }
-
-  data.page.shapes[shape.id] = shape
-  data.pageState.selectedIds = [shape.id]
-
-  mutables.pointedHandleId = 'end'
+  })
 
   // Create binding for start point
 
@@ -76,4 +66,13 @@ export const createArrowShape: Action = (data, payload: TLPointerInfo) => {
     data.page.bindings[binding.id] = binding
     handle.bindingId = binding.id
   }
+
+  // Set pointed handle to end for upcoming translateHandle actions
+
+  mutables.pointedHandleId = 'end'
+
+  // Save shape to page and set it as the selected shape
+
+  data.page.shapes[shape.id] = shape
+  data.pageState.selectedIds = [shape.id]
 }

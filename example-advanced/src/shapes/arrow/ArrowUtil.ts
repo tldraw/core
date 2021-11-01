@@ -1,5 +1,6 @@
 import { Utils, TLBounds } from '@tldraw/core'
 import Vec from '@tldraw/vec'
+import { nanoid } from 'nanoid'
 import { CustomShapeUtil } from 'shapes/CustomShapeUtil'
 import { ArrowComponent } from './ArrowComponent'
 import { ArrowIndicator } from './ArrowIndicator'
@@ -27,6 +28,30 @@ export class ArrowUtil extends CustomShapeUtil<T, E> {
   hideBounds = true
 
   canBind = false
+
+  getShape = (props: Partial<T>): T => {
+    return {
+      id: nanoid(),
+      type: 'arrow',
+      name: 'arrow',
+      parentId: 'page1',
+      point: [0, 0],
+      handles: {
+        start: {
+          id: 'start',
+          index: 1,
+          point: [0, 0],
+        },
+        end: {
+          id: 'end',
+          index: 2,
+          point: [100, 100],
+        },
+      },
+      childIndex: 1,
+      ...props,
+    }
+  }
 
   shouldRender = (prev: T, next: T) => {
     return true

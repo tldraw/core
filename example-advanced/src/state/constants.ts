@@ -78,14 +78,19 @@ export const INITIAL_PAGE: TLPage<Shape> = {
 export const INITIAL_PAGE_STATE: TLPageState = {
   id: 'page1',
   selectedIds: [],
-  hoveredId: undefined,
   camera: {
     point: [0, 0],
     zoom: 1,
   },
+  brush: null,
+  pointedId: null,
+  hoveredId: null,
+  editingId: null,
+  bindingId: null,
 }
 
 export const INITIAL_DATA = {
+  id: 'myDocument',
   version: VERSION,
   page: INITIAL_PAGE,
   pageState: INITIAL_PAGE_STATE,
@@ -99,7 +104,6 @@ export const INITIAL_DATA = {
 
 export type AppDocument = {
   id: string
-  version: number
   page: TLPage<Shape>
 }
 

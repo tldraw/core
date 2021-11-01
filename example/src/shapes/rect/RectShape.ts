@@ -1,6 +1,6 @@
 import type { TLShape } from '@tldraw/core'
 
-export interface BoxShape extends TLShape {
+export interface RectShape extends TLShape {
   type: 'box'
   size: number[]
 }

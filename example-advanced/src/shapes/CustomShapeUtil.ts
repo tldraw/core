@@ -10,5 +10,7 @@ export abstract class CustomShapeUtil<
 
   abstract getCenter: (shape: T) => number[]
 
+  abstract getShape: (shape: Partial<T>) => T
+
   abstract transform: (shape: T, bounds: TLBounds, initialShape: T, scale: number[]) => void
 }

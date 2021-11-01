@@ -1,6 +1,5 @@
 import type { TLBounds } from '@tldraw/core'
 import Vec from '@tldraw/vec'
-import { current } from 'immer'
 import type { Action } from 'state/constants'
 import { mutables } from 'state/mutables'
 

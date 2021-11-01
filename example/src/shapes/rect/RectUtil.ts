@@ -1,15 +1,15 @@
-import { Utils, TLBounds, TLShapeUtil } from '@tldraw/core'
-import { BoxComponent } from './BoxComponent'
-import { BoxIndicator } from './BoxIndicator'
-import type { BoxShape } from './BoxShape'
+import { TLBounds, TLShapeUtil } from '@tldraw/core'
+import { RectComponent } from './RectComponent'
+import { RectIndicator } from './RectIndicator'
+import type { RectShape } from './RectShape'
 
-type T = BoxShape
+type T = RectShape
 type E = SVGSVGElement
 
 export class BoxUtil extends TLShapeUtil<T, E> {
-  Component = BoxComponent
+  Component = RectComponent
 
-  Indicator = BoxIndicator
+  Indicator = RectIndicator
 
   getBounds = (shape: T) => {
     const [x, y] = shape.point

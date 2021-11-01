@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { TLShapeUtil, SVGContainer } from '@tldraw/core'
-import type { BoxShape } from './BoxShape'
+import type { RectShape } from './RectShape'
 
-export const BoxComponent = TLShapeUtil.Component<BoxShape, SVGSVGElement>(
+export const RectComponent = TLShapeUtil.Component<RectShape, SVGSVGElement>(
   ({ shape, events, meta }, ref) => {
     const color = meta.isDarkMode ? 'white' : 'black'
 

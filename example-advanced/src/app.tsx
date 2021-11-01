@@ -13,6 +13,7 @@ import { machine } from './state/machine'
 import { Toolbar } from './components/toolbar'
 import './styles.css'
 import styled from 'stitches.config'
+import { Api } from 'state/api'
 
 const onHoverShape: TLPointerEventHandler = (info, e) => {
   machine.send('HOVERED_SHAPE', info)
@@ -161,8 +162,19 @@ const onKeyUp: TLKeyboardEventHandler = (key, info, e) => {
   }
 }
 
-export default function App(): JSX.Element {
+interface AppProps {
+  onMount?: (api: Api) => void
+}
+
+export default function App({ onMount }: AppProps): JSX.Element {
   const appState = useStateDesigner(machine)
+
+  React.useEffect(() => {
+    const api = new Api(appState)
+    onMount?.(api)
+    // @ts-ignore
+    window['api'] = api
+  }, [])
 
   const hideBounds = appState.isInAny('transformingSelection', 'translating', 'creating')
 

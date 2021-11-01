@@ -1,4 +1,4 @@
-import { TLPointerInfo, TLSnapLine, Utils } from '@tldraw/core'
+import { TLBinding, TLPointerInfo, TLSnapLine, Utils } from '@tldraw/core'
 import Vec from '@tldraw/vec'
 import { nanoid } from 'nanoid'
 import { Action, SNAP_DISTANCE } from 'state/constants'
@@ -26,6 +26,9 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
     // Restore any deleted bindings
     data.page.bindings = snapshot.page.bindings
 
+    const cloneMap: Record<string, string> = {}
+
+    // Create clones
     const cloneIds = selectedIds.map((id) => {
       // move the dragging shape back to its initial point
       const initialShape = snapshot.page.shapes[id]
@@ -33,10 +36,37 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
 
       // create the clone and add it to the page AND snapshot
       const clone = { ...initialShape, id: nanoid() }
+
+      cloneMap[initialShape.id] = clone.id
       data.page.shapes[clone.id] = clone
       snapshot.page.shapes[clone.id] = { ...clone }
 
       return clone.id
+    })
+
+    // Create cloned bindings
+    cloneIds.forEach((id) => {
+      const clone = data.page.shapes[id]
+      if (clone.type === 'arrow') {
+        Object.values(clone.handles).forEach((handle) => {
+          if (handle.bindingId === undefined) return
+
+          const binding = data.page.bindings[handle.bindingId]
+
+          if (cloneMap[binding.toId]) {
+            const newBinding: TLBinding = {
+              id: nanoid(),
+              fromId: clone.id,
+              toId: cloneMap[binding.toId],
+            }
+
+            console.log(newBinding)
+
+            data.page.bindings[newBinding.id] = newBinding
+            handle.bindingId = newBinding.id
+          }
+        })
+      }
     })
 
     data.pageState.selectedIds = cloneIds
@@ -46,21 +76,6 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
     selectedIds.forEach((id) => delete data.page.shapes[id])
     data.pageState.selectedIds = [...snapshot.pageState.selectedIds]
   }
-
-  // Remove bindings to shapes that aren't also selected
-
-  selectedIds.forEach((id) => {
-    const shape = data.page.shapes[id]
-    if (shape.type === 'arrow') {
-      Object.values(shape.handles).forEach((handle) => {
-        if (!handle.bindingId) return
-        const binding = data.page.bindings[handle.bindingId]
-        if (selectedIds.includes(binding.toId)) return
-        delete data.page.bindings[handle.bindingId]
-        delete handle.bindingId
-      })
-    }
-  })
 
   // Snapping
 

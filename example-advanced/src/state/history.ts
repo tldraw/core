@@ -56,7 +56,8 @@ export function makeHistory(ID = '@tldraw/core_advanced_example') {
   function reset(data = INITIAL_DATA) {
     stack = [data]
     pointer = 0
-    localStorage.set(data)
+    localStorage.setItem(ID, JSON.stringify(data))
+    persist(data)
     return data
   }
 
