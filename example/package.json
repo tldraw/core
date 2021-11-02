@@ -1,5 +1,5 @@
 {
-  "version": "0.1.13",
+  "version": "0.1.14",
   "name": "@tldraw/core-example",
   "description": "An example project for @tldraw/core.",
   "author": "@steveruizok",
@@ -15,7 +15,7 @@
   "files": [],
   "sideEffects": false,
   "dependencies": {
-    "@tldraw/core": "^0.1.13",
+    "@tldraw/core": "^0.1.14",
     "@tldraw/vec": "^0.0.130",
     "react": ">=16.8",
     "react-dom": "^16.8 || ^17.0"
