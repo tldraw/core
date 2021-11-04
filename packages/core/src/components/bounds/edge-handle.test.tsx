@@ -29,7 +29,7 @@ describe('EdgeHandle', () => {
         isHidden={false}
       />
     )
-    const edgeHandle = screen.getByLabelText('edge handle')
+    const edgeHandle = screen.getByLabelText('top_edge handle')
 
     expect(edgeHandle).toHaveAttribute('height', '10')
     expect(edgeHandle).toHaveAttribute('width', '91')
@@ -46,7 +46,7 @@ describe('EdgeHandle', () => {
         isHidden={false}
       />
     )
-    const edgeHandle = screen.getByLabelText('edge handle')
+    const edgeHandle = screen.getByLabelText('bottom_edge handle')
 
     expect(edgeHandle).toHaveAttribute('height', '10')
     expect(edgeHandle).toHaveAttribute('width', '91')
@@ -63,7 +63,7 @@ describe('EdgeHandle', () => {
         isHidden={false}
       />
     )
-    const edgeHandle = screen.getByLabelText('edge handle')
+    const edgeHandle = screen.getByLabelText('left_edge handle')
 
     expect(edgeHandle).toHaveAttribute('height', '91')
     expect(edgeHandle).toHaveAttribute('width', '10')
@@ -80,7 +80,7 @@ describe('EdgeHandle', () => {
         isHidden={false}
       />
     )
-    const edgeHandle = screen.getByLabelText('edge handle')
+    const edgeHandle = screen.getByLabelText('right_edge handle')
 
     expect(edgeHandle).toHaveAttribute('height', '91')
     expect(edgeHandle).toHaveAttribute('width', '10')
