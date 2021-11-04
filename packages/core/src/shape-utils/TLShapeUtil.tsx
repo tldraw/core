@@ -27,7 +27,7 @@ export abstract class TLShapeUtil<T extends TLShape, E extends Element = any, M 
 
   abstract getBounds: (shape: T) => TLBounds
 
-  shouldRender: (prev: T, next: T) => boolean = () => true
+  shouldRender = (prev: T, next: T): boolean => true
 
   getRef = (shape: T): React.RefObject<E> => {
     if (!this.refMap.has(shape.id)) {

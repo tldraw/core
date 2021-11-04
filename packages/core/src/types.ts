@@ -94,7 +94,6 @@ export interface TLShapeProps<T extends TLShape, E = any, M = any>
 
 export interface TLBinding {
   id: string
-  type: string
   toId: string
   fromId: string
 }

@@ -19,17 +19,6 @@ export function useAppState() {
         point: [0, 0],
         size: [100, 100],
       },
-      label1: {
-        id: 'label1',
-        type: 'label',
-        parentId: 'page1',
-        name: 'Label',
-        childIndex: 1,
-        rotation: 0,
-        point: [220, 200],
-        size: [100, 100],
-        text: 'Hello world!',
-      },
     },
     bindings: {},
   })

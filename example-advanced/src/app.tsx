@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {
   Renderer,
+  TLBounds,
   TLKeyboardEventHandler,
   TLPinchEventHandler,
   TLPointerEventHandler,
@@ -8,65 +9,70 @@ import {
 } from '@tldraw/core'
 import { useStateDesigner } from '@state-designer/react'
 import { shapeUtils } from './shapes'
-import { state, setBounds } from './state/machine'
+import { machine } from './state/machine'
 import { Toolbar } from './components/toolbar'
 import './styles.css'
 import styled from 'stitches.config'
+import { Api } from 'state/api'
 
 const onHoverShape: TLPointerEventHandler = (info, e) => {
-  state.send('HOVERED_SHAPE', info)
+  machine.send('HOVERED_SHAPE', info)
 }
 
 const onUnhoverShape: TLPointerEventHandler = (info, e) => {
-  state.send('UNHOVERED_SHAPE', info)
+  machine.send('UNHOVERED_SHAPE', info)
 }
 
 const onPointShape: TLPointerEventHandler = (info, e) => {
-  state.send('POINTED_SHAPE', info)
+  machine.send('POINTED_SHAPE', info)
 }
 
 const onPointCanvas: TLPointerEventHandler = (info, e) => {
-  state.send('POINTED_CANVAS', info)
+  machine.send('POINTED_CANVAS', info)
 }
 
 const onPointBounds: TLPointerEventHandler = (info, e) => {
-  state.send('POINTED_BOUNDS', info)
+  machine.send('POINTED_BOUNDS', info)
 }
 
 const onPointHandle: TLPointerEventHandler = (info, e) => {
-  state.send('POINTED_HANDLE', info)
+  machine.send('POINTED_HANDLE', info)
 }
 
 const onPointerDown: TLPointerEventHandler = (info, e) => {
-  state.send('STARTED_POINTING', info)
+  machine.send('STARTED_POINTING', info)
 }
 
 const onPointerUp: TLPointerEventHandler = (info, e) => {
-  state.send('STOPPED_POINTING', info)
+  machine.send('STOPPED_POINTING', info)
 }
 
 const onPointerMove: TLPointerEventHandler = (info, e) => {
-  state.send('MOVED_POINTER', info)
+  machine.send('MOVED_POINTER', info)
 }
 
 const onPan: TLWheelEventHandler = (info, e) => {
-  state.send('PANNED', info)
+  machine.send('PANNED', info)
 }
 
 const onPinchStart: TLPinchEventHandler = (info, e) => {
-  state.send('STARTED_PINCHING', info)
+  machine.send('STARTED_PINCHING', info)
 }
 
 const onPinch: TLPinchEventHandler = (info, e) => {
-  state.send('PINCHED', info)
+  machine.send('PINCHED', info)
 }
 
 const onPinchEnd: TLPinchEventHandler = (info, e) => {
-  state.send('STOPPED_PINCHING', info)
+  machine.send('STOPPED_PINCHING', info)
 }
 
 const onPointBoundsHandle: TLPinchEventHandler = (info, e) => {
-  state.send('POINTED_BOUNDS_HANDLE', info)
+  machine.send('POINTED_BOUNDS_HANDLE', info)
+}
+
+const onBoundsChange = (bounds: TLBounds) => {
+  machine.send('RESIZED', { bounds })
 }
 
 const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
@@ -75,63 +81,68 @@ const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
     case 'metaKey':
     case 'ctrlKey':
     case 'shiftKey': {
-      state.send('TOGGLED_MODIFIER', info)
+      machine.send('TOGGLED_MODIFIER', info)
       break
     }
     case 'Backspace': {
-      state.send('DELETED', info)
+      machine.send('DELETED', info)
       break
     }
     case 'Escape': {
-      state.send('CANCELLED', info)
+      machine.send('CANCELLED', info)
       break
     }
     case '0': {
-      state.send('ZOOMED_TO_ACTUAL', info)
+      machine.send('ZOOMED_TO_ACTUAL', info)
       break
     }
     case '1': {
-      state.send('ZOOMED_TO_FIT', info)
+      machine.send('ZOOMED_TO_FIT', info)
       break
     }
     case '2': {
-      state.send('ZOOMED_TO_SELECTION', info)
+      machine.send('ZOOMED_TO_SELECTION', info)
       break
     }
     case '=': {
       if (info.metaKey || info.ctrlKey) {
         e.preventDefault()
-        state.send('ZOOMED_IN', info)
+        machine.send('ZOOMED_IN', info)
       }
       break
     }
     case '-': {
       if (info.metaKey || info.ctrlKey) {
         e.preventDefault()
-        state.send('ZOOMED_OUT', info)
+        machine.send('ZOOMED_OUT', info)
       }
       break
     }
     case 's':
     case 'v': {
-      state.send('SELECTED_TOOL', { name: 'select' })
+      machine.send('SELECTED_TOOL', { name: 'select' })
       break
     }
     case 'r':
     case 'b': {
-      state.send('SELECTED_TOOL', { name: 'box' })
+      machine.send('SELECTED_TOOL', { name: 'box' })
       break
     }
     case 'a': {
-      state.send('SELECTED_TOOL', { name: 'arrow' })
+      if (info.metaKey || info.ctrlKey) {
+        machine.send('SELECTED_ALL')
+        e.preventDefault()
+      } else {
+        machine.send('SELECTED_TOOL', { name: 'arrow' })
+      }
       break
     }
     case 'z': {
       if (info.metaKey || info.ctrlKey) {
         if (info.shiftKey) {
-          state.send('REDO')
+          machine.send('REDO')
         } else {
-          state.send('UNDO')
+          machine.send('UNDO')
         }
       }
       break
@@ -145,14 +156,25 @@ const onKeyUp: TLKeyboardEventHandler = (key, info, e) => {
     case 'metaKey':
     case 'ctrlKey':
     case 'shiftKey': {
-      state.send('TOGGLED_MODIFIER', info)
+      machine.send('TOGGLED_MODIFIER', info)
       break
     }
   }
 }
 
-export default function App(): JSX.Element {
-  const appState = useStateDesigner(state)
+interface AppProps {
+  onMount?: (api: Api) => void
+}
+
+export default function App({ onMount }: AppProps): JSX.Element {
+  const appState = useStateDesigner(machine)
+
+  React.useEffect(() => {
+    const api = new Api(appState)
+    onMount?.(api)
+    // @ts-ignore
+    window['api'] = api
+  }, [])
 
   const hideBounds = appState.isInAny('transformingSelection', 'translating', 'creating')
 
@@ -178,14 +200,14 @@ export default function App(): JSX.Element {
         onPinchEnd={onPinchEnd}
         onPinch={onPinch}
         onPointerUp={onPointerUp}
-        onBoundsChange={setBounds}
+        onBoundsChange={onBoundsChange}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
         hideBounds={hideBounds}
         hideHandles={hideBounds}
         hideBindingHandles={true}
       />
-      <Toolbar activeStates={state.active} lastEvent={state.log[0]} />
+      <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
     </AppContainer>
   )
 }

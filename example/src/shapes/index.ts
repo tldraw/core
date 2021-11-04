@@ -1,7 +1,5 @@
-import type { BoxShape } from './box'
-import type { LabelShape } from './label'
+import type { RectShape } from './rect'
 
-export * from './box'
-export * from './label'
+export * from './rect'
 
-export type Shape = BoxShape | LabelShape
+export type Shape = RectShape
