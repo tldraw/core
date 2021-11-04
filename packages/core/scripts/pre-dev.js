@@ -21,7 +21,7 @@ async function main() {
     tsconfig: './tsconfig.build.json',
     jsxFactory: 'React.createElement',
     jsxFragment: 'React.Fragment',
-    external: ['react', 'react-dom'],
+    external: ['react', 'react-dom', '@use-gesture/react', '@tldraw/intersect', '@tldraw/vec'],
   })
 }
 

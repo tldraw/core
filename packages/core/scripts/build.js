@@ -25,7 +25,7 @@ async function main() {
       jsxFactory: 'React.createElement',
       jsxFragment: 'React.Fragment',
       tsconfig: './tsconfig.build.json',
-      external: ['react', 'react-dom', '@tldraw/intersect', '@tldraw/vec'],
+      external: ['react', 'react-dom', '@use-gesture/react', '@tldraw/intersect', '@tldraw/vec'],
       metafile: true,
       sourcemap: true,
     })
@@ -40,7 +40,7 @@ async function main() {
       tsconfig: './tsconfig.build.json',
       jsxFactory: 'React.createElement',
       jsxFragment: 'React.Fragment',
-      external: ['react', 'react-dom', '@tldraw/intersect', '@tldraw/vec'],
+      external: ['react', 'react-dom', '@use-gesture/react', '@tldraw/intersect', '@tldraw/vec'],
       metafile: true,
       sourcemap: true,
     })
