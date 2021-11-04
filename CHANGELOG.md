@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.17
+
+- More dependency fixes.
+
 ## 0.1.16
 
 - Fix dependencies, remove `@use-gesture/react` from bundle.
