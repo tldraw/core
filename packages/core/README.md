@@ -15,7 +15,7 @@ You can use this package to build projects like [tldraw](https://tldraw.com), wh
 Use your package manager of choice to install `@tldraw/core` and its peer dependencies.
 
 ```bash
-yarn add @tldraw/core --peer
+yarn add @tldraw/core
 # or
 npm i @tldraw/core
 ```

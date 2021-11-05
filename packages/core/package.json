@@ -8,7 +8,6 @@
     "url": "git+https://github.com/tldraw/core.git"
   },
   "license": "MIT",
-  "private": false,
   "keywords": [
     "react",
     "canvas",
@@ -22,12 +21,9 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
-  "typings": "./dist/types/index.d.ts",
   "scripts": {
-    "start:pre": "node scripts/pre-dev && yarn types:pre",
     "start": "node scripts/dev & yarn types:dev",
     "build": "node scripts/build && yarn types:build && node scripts/copy-readme",
-    "types:pre": "tsc",
     "types:dev": "tsc -w --p tsconfig.build.json",
     "types:build": "tsc -p tsconfig.build.json && tsconfig-replace-paths -p tsconfig.build.json",
     "lint": "eslint src/ --ext .ts,.tsx",
@@ -38,13 +34,11 @@
     "docs:watch": "typedoc --watch"
   },
   "dependencies": {
-    "@tldraw/intersect": "^0.1.3",
-    "@tldraw/vec": "^0.1.3",
+    "@tldraw/intersect": "latest",
+    "@tldraw/vec": "latest",
     "@use-gesture/react": "^10.1.3"
   },
   "peerDependencies": {
-    "@tldraw/intersect": "latest",
-    "@tldraw/vec": "latest",
     "react": ">=16.8",
     "react-dom": "^16.8 || ^17.0"
   },

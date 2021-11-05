@@ -16,18 +16,18 @@
     "whiteboard"
   ],
   "workspaces": [
+    "packages/core",
     "example",
-    "example-advanced",
-    "packages/core"
+    "example-advanced"
   ],
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",
     "lerna": "lerna",
     "build": "lerna run build && lerna run docs",
-    "start": "lerna run start:pre & cd packages/core && yarn start & cd example-advanced && yarn start",
-    "start:simple": "lerna run start:pre & cd packages/core && yarn start & cd example && yarn start",
-    "start:all": "lerna run start:pre && lerna run start --stream --parallel",
+    "start": "cd packages/core && yarn start & cd example-advanced && yarn start",
+    "start:simple": "cd packages/core && yarn start & cd example && yarn start",
+    "start:all": "lerna run start --stream --parallel",
     "publish:patch": "yarn build && lerna publish patch",
     "docs": "lerna run docs",
     "docs:watch": "lerna run docs:watch"
@@ -54,13 +54,13 @@
   },
   "peerDependencies": {
     "react": ">=16.8",
-    "react-dom": "^16.8 || ^17.0",
-    "tslib": "^2.3.1"
+    "react-dom": "^16.8 || ^17.0"
   },
   "dependencies": {
     "@tldraw/intersect": "^0.0.130",
     "@tldraw/vec": "^0.0.130",
-    "@use-gesture/react": "^10.0.2"
+    "@use-gesture/react": "^10.0.2",
+    "tslib": "^2.3.1"
   },
   "prettier": {
     "trailingComma": "es5",
