@@ -40,7 +40,6 @@
     "@types/node": "^16.7.10",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
-    "@types/testing-library__react": "^10.2.0",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
     "esbuild": "^0.13.10",
