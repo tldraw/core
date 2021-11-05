@@ -1,7 +1,6 @@
+import * as React from 'react'
 import { renderWithContext } from '~test'
 import { screen } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import * as React from 'react'
 import { EdgeHandle } from './edge-handle'
 import { TLBoundsEdge } from '~types'
 
