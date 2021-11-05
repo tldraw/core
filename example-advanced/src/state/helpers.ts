@@ -11,22 +11,22 @@ export function getScreenPoint(point: number[], pageState: TLPageState) {
 }
 
 export function getZoomFitCamera(
-  rendererBounds: TLBounds,
+  viewport: TLBounds,
   commonBounds: TLBounds,
   pageState: TLPageState
 ) {
   const { camera } = pageState
 
   let zoom = Math.min(
-    (rendererBounds.width - FIT_TO_SCREEN_PADDING) / commonBounds.width,
-    (rendererBounds.height - FIT_TO_SCREEN_PADDING) / commonBounds.height
+    (viewport.width - FIT_TO_SCREEN_PADDING) / commonBounds.width,
+    (viewport.height - FIT_TO_SCREEN_PADDING) / commonBounds.height
   )
 
   zoom = camera.zoom === zoom || camera.zoom < 1 ? Math.min(1, zoom) : zoom
 
   const delta = [
-    (rendererBounds.width - commonBounds.width * zoom) / 2 / zoom,
-    (rendererBounds.height - commonBounds.height * zoom) / 2 / zoom,
+    (viewport.width - commonBounds.width * zoom) / 2 / zoom,
+    (viewport.height - commonBounds.height * zoom) / 2 / zoom,
   ]
 
   return {

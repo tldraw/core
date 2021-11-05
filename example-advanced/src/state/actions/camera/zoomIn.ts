@@ -7,7 +7,7 @@ export const zoomIn: Action = (data) => {
   const { camera } = data.pageState
   const i = Math.round((data.pageState.camera.zoom * 100) / 25)
   const zoom = (i + 1) * 0.25
-  const center = Utils.getBoundsCenter(mutables.rendererBounds)
+  const center = Utils.getBoundsCenter(mutables.viewport)
   const p0 = Vec.sub(Vec.div(center, camera.zoom), camera.point)
   const p1 = Vec.sub(Vec.div(center, zoom), camera.point)
   const point = Vec.round(Vec.add(camera.point, Vec.sub(p1, p0)))

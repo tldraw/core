@@ -2,8 +2,7 @@
 const fs = require('fs')
 const esbuild = require('esbuild')
 const { gzip } = require('zlib')
-
-const name = process.env.npm_package_name || ''
+const pkg = require('../package.json')
 
 async function main() {
   if (fs.existsSync('./dist')) {
@@ -18,14 +17,14 @@ async function main() {
     esbuild.buildSync({
       entryPoints: ['./src/index.ts'],
       outdir: 'dist/cjs',
-      minify: true,
+      minify: false,
       bundle: true,
       format: 'cjs',
       target: 'es6',
       jsxFactory: 'React.createElement',
       jsxFragment: 'React.Fragment',
       tsconfig: './tsconfig.build.json',
-      external: ['react', 'react-dom', '@tldraw/intersect', '@tldraw/vec'],
+      external: Object.keys(pkg.dependencies).concat(Object.keys(pkg.peerDependencies)),
       metafile: true,
       sourcemap: true,
     })
@@ -33,14 +32,14 @@ async function main() {
     const esmResult = esbuild.buildSync({
       entryPoints: ['./src/index.ts'],
       outdir: 'dist/esm',
-      minify: true,
+      minify: false,
       bundle: true,
       format: 'esm',
       target: 'es6',
       tsconfig: './tsconfig.build.json',
       jsxFactory: 'React.createElement',
       jsxFragment: 'React.Fragment',
-      external: ['react', 'react-dom', '@tldraw/intersect', '@tldraw/vec'],
+      external: Object.keys(pkg.dependencies).concat(Object.keys(pkg.peerDependencies)),
       metafile: true,
       sourcemap: true,
     })
@@ -53,14 +52,14 @@ async function main() {
     fs.readFile('./dist/esm/index.js', (_err, data) => {
       gzip(data, (_err, result) => {
         console.log(
-          `✔ ${name}: Built package. ${(esmSize / 1000).toFixed(2)}kb (${(
+          `✔ ${pkg.name}: Built package. ${(esmSize / 1000).toFixed(2)}kb (${(
             result.length / 1000
           ).toFixed(2)}kb minified)`
         )
       })
     })
   } catch (e) {
-    console.log(`× ${name}: Build failed due to an error.`)
+    console.log(`× ${pkg.name}: Build failed due to an error.`)
     console.log(e)
   }
 }

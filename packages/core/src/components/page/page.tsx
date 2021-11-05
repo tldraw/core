@@ -35,7 +35,7 @@ export const Page = React.memo(function Page<T extends TLShape, M extends Record
   hideRotateHandle,
   meta,
 }: PageProps<T, M>): JSX.Element {
-  const { bounds: rendererBounds, shapeUtils, inputs } = useTLContext()
+  const { bounds: rendererBounds, shapeUtils } = useTLContext()
 
   const shapeTree = useShapeTree(page, pageState, meta)
 

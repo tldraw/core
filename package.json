@@ -16,19 +16,19 @@
     "whiteboard"
   ],
   "workspaces": [
-    "example",
-    "example-advanced",
-    "packages/core"
+    "packages/core",
+    "example-simple",
+    "example-advanced"
   ],
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",
     "lerna": "lerna",
     "build": "lerna run build && lerna run docs",
-    "start": "lerna run start:pre & cd packages/core && yarn start & cd example-advanced && yarn start",
-    "start:simple": "lerna run start:pre & cd packages/core && yarn start & cd example && yarn start",
-    "start:all": "lerna run start:pre && lerna run start --stream --parallel",
-    "publish:patch": "yarn build && lerna publish patch",
+    "start": "cd packages/core && yarn start & cd example-advanced && yarn start",
+    "start:simple": "cd packages/core && yarn start & cd example-simple && yarn start",
+    "start:all": "lerna run start --stream --parallel",
+    "publish:patch": "yarn test && yarn build && lerna publish patch",
     "docs": "lerna run docs",
     "docs:watch": "lerna run docs:watch"
   },
@@ -47,11 +47,8 @@
     "fake-indexeddb": "^3.1.7",
     "jest": "^27.1.0",
     "lerna": "^3.22.1",
-    "react-dom": "^16.8 || ^17.0",
-    "react": ">=16.8",
     "resize-observer-polyfill": "^1.5.1",
     "tsconfig-replace-paths": "^0.0.5",
-    "tslib": "^2.3.1",
     "typedoc": "^0.22.3",
     "typescript": "^4.4.2"
   },
@@ -62,7 +59,8 @@
   "dependencies": {
     "@tldraw/intersect": "^0.0.130",
     "@tldraw/vec": "^0.0.130",
-    "@use-gesture/react": "^10.0.2"
+    "@use-gesture/react": "^10.0.2",
+    "tslib": "^2.3.1"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -89,8 +87,8 @@
     ],
     "modulePathIgnorePatterns": [
       "<rootDir>/example-advanced/dist",
-      "<rootDir>/packages/core/dist",
-      "<rootDir>/example/dist"
+      "<rootDir>/example-simple/dist",
+      "<rootDir>/packages/core/dist"
     ],
     "moduleNameMapper": {
       "@tldraw/core": "<rootDir>/packages/core/src",
