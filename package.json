@@ -28,7 +28,7 @@
     "start": "cd packages/core && yarn start & cd example-advanced && yarn start",
     "start:simple": "cd packages/core && yarn start & cd example && yarn start",
     "start:all": "lerna run start --stream --parallel",
-    "publish:patch": "yarn build && lerna publish patch",
+    "publish:patch": "yarn test && yarn build && lerna publish patch",
     "docs": "lerna run docs",
     "docs:watch": "lerna run docs:watch"
   },
