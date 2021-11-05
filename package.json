@@ -17,7 +17,7 @@
   ],
   "workspaces": [
     "packages/core",
-    "example",
+    "example-simple",
     "example-advanced"
   ],
   "scripts": {
@@ -26,7 +26,7 @@
     "lerna": "lerna",
     "build": "lerna run build && lerna run docs",
     "start": "cd packages/core && yarn start & cd example-advanced && yarn start",
-    "start:simple": "cd packages/core && yarn start & cd example && yarn start",
+    "start:simple": "cd packages/core && yarn start & cd example-simple && yarn start",
     "start:all": "lerna run start --stream --parallel",
     "publish:patch": "yarn test && yarn build && lerna publish patch",
     "docs": "lerna run docs",
@@ -87,8 +87,8 @@
     ],
     "modulePathIgnorePatterns": [
       "<rootDir>/example-advanced/dist",
-      "<rootDir>/packages/core/dist",
-      "<rootDir>/example/dist"
+      "<rootDir>/example-simple/dist",
+      "<rootDir>/packages/core/dist"
     ],
     "moduleNameMapper": {
       "@tldraw/core": "<rootDir>/packages/core/src",
