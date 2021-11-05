@@ -19,6 +19,7 @@ export const BoundsBg = React.memo(({ bounds, rotation, isHidden }: BoundsBgProp
       <SVGContainer>
         <rect
           className="tl-bounds-bg"
+          aria-label="bounds bg"
           width={bounds.width}
           height={bounds.height}
           opacity={isHidden ? 0 : 1}

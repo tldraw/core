@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useBoundsHandleEvents, useTLContext } from '~hooks'
+import { useBoundsHandleEvents } from '~hooks'
 import type { TLBounds } from '~types'
 
 interface LinkHandleProps {

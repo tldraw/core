@@ -28,6 +28,7 @@ export const CornerHandle = React.memo(
       <g opacity={isHidden ? 0 : 1}>
         <rect
           className={'tl-transparent ' + (isHidden ? '' : cornerBgClassnames[corner])}
+          aria-label="corner transparent"
           x={(isLeft ? -1 : bounds.width + 1) - targetSize}
           y={(isTop ? -1 : bounds.height + 1) - targetSize}
           width={targetSize * 2}
@@ -37,6 +38,7 @@ export const CornerHandle = React.memo(
         />
         <rect
           className="tl-corner-handle"
+          aria-label="corner handle"
           x={(isLeft ? -1 : bounds.width + 1) - size / 2}
           y={(isTop ? -1 : bounds.height + 1) - size / 2}
           width={size}

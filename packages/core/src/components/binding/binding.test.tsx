@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { Binding } from './binding'
 
@@ -9,18 +9,20 @@ describe('binding', () => {
     render(<Binding point={[0, 0]} type={'anchor'} />)
   })
   test('validate attributes rendered properly for anchor binding type', () => {
-    const { container } = render(<Binding point={[10, 20]} type={'anchor'} />)
-    const use = container.querySelector('use')
-    expect(use?.getAttribute('href')).toBe('#cross')
-    expect(use?.getAttribute('x')).toBe('10')
-    expect(use?.getAttribute('y')).toBe('20')
+    render(<Binding point={[10, 20]} type={'anchor'} />)
+
+    const use = screen.getByLabelText('binding cross')
+    expect(use).toHaveAttribute('href', '#cross')
+    expect(use).toHaveAttribute('x', '10')
+    expect(use).toHaveAttribute('y', '20')
   })
   test('validate attributes rendered properly for center binding type', () => {
-    const { container } = render(<Binding point={[10, 20]} type={'center'} />)
-    const circle = container.querySelector('circle')
-    expect(circle?.getAttribute('cx')).toBe('10')
-    expect(circle?.getAttribute('cy')).toBe('20')
-    expect(circle?.getAttribute('r')).toBe('8')
+    render(<Binding point={[10, 20]} type={'center'} />)
+
+    const circle = screen.getByLabelText('binding circle')
+    expect(circle).toHaveAttribute('cx', '10')
+    expect(circle).toHaveAttribute('cy', '20')
+    expect(circle).toHaveAttribute('r', '8')
   })
   test('validate no children should be rendered for pin binding type', () => {
     const { container } = render(<Binding point={[10, 20]} type={'pin'} />)
