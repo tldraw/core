@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.18
+
+- Even more dependency fixes.
+
 ## 0.1.17
 
 - More dependency fixes.
