@@ -10,7 +10,7 @@ interface RenderedShapeProps<T extends TLShape, E extends Element, M>
 }
 
 export const RenderedShape = React.memo(
-  <T extends TLShape, E extends Element, M>({
+  function RenderedShape<T extends TLShape, E extends Element, M>({
     shape,
     utils,
     isEditing,
@@ -21,7 +21,7 @@ export const RenderedShape = React.memo(
     onShapeBlur,
     events,
     meta,
-  }: RenderedShapeProps<T, E, M>) => {
+  }: RenderedShapeProps<T, E, M>) {
     const ref = utils.getRef(shape)
 
     // consider using layout effect to update bounds cache if the ref is filled

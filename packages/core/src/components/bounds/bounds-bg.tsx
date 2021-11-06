@@ -11,7 +11,11 @@ interface BoundsBgProps {
   isHidden: boolean
 }
 
-export const BoundsBg = React.memo(({ bounds, rotation, isHidden }: BoundsBgProps): JSX.Element => {
+export const BoundsBg = React.memo(function BoundsBg({
+  bounds,
+  rotation,
+  isHidden,
+}: BoundsBgProps): JSX.Element {
   const events = useBoundsEvents()
 
   return (

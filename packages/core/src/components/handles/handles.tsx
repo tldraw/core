@@ -8,7 +8,10 @@ interface HandlesProps {
   zoom: number
 }
 
-export const Handles = React.memo(({ shape, zoom }: HandlesProps): JSX.Element | null => {
+export const Handles = React.memo(function Handles({
+  shape,
+  zoom,
+}: HandlesProps): JSX.Element | null {
   if (shape.handles === undefined) {
     return null
   }
