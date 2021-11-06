@@ -55,7 +55,7 @@ export function CloneButton({ bounds, side, targetSize, size }: CloneButtonProps
   )
 
   return (
-    <g className="tl-clone-target" transform={`translate(${x}, ${y})`}>
+    <g className="tl-clone-target" transform={`translate(${x}, ${y})`} aria-label="clone button">
       <rect
         className="tl-transparent"
         width={targetSize * 4}

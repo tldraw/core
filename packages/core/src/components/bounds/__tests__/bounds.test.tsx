@@ -1,7 +1,7 @@
 import { renderWithContext } from '~test'
 import { screen } from '@testing-library/react'
 import * as React from 'react'
-import { Bounds } from './bounds'
+import { Bounds } from '../bounds'
 
 describe('bounds', () => {
   test('mounts component without crashing', () => {
@@ -41,5 +41,10 @@ describe('bounds', () => {
     expect(screen.getByLabelText('right_edge handle')).toBeDefined()
     expect(screen.getAllByLabelText('corner transparent').length).toBe(4)
     expect(screen.getAllByLabelText('corner handle').length).toBe(4)
+    expect(screen.getByLabelText('rotate handle transparent')).toBeDefined()
+    expect(screen.getByLabelText('rotate handle')).toBeDefined()
+    expect(screen.getAllByLabelText('clone button').length).toBe(8)
+    expect(screen.getByLabelText('link handle')).toBeDefined()
+    expect(screen.getByLabelText('link rotate handle')).toBeDefined()
   })
 })

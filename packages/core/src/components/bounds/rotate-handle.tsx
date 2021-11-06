@@ -21,6 +21,7 @@ export const RotateHandle = React.memo(function RotateHandle({
     <g cursor="grab" opacity={isHidden ? 0 : 1}>
       <circle
         className="tl-transparent"
+        aria-label="rotate handle transparent"
         cx={bounds.width / 2}
         cy={size * -2}
         r={targetSize}
@@ -29,6 +30,7 @@ export const RotateHandle = React.memo(function RotateHandle({
       />
       <circle
         className="tl-rotate-handle"
+        aria-label="rotate handle"
         cx={bounds.width / 2}
         cy={size * -2}
         r={size / 2}
