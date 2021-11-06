@@ -3,7 +3,7 @@ import { Container } from '~components/container'
 import type { TLBounds } from '~types'
 import * as React from 'react'
 
-export const Brush = React.memo(({ brush }: { brush: TLBounds }): JSX.Element | null => {
+export const Brush = React.memo(function Brush({ brush }: { brush: TLBounds }): JSX.Element | null {
   return (
     <Container bounds={brush} rotation={0}>
       <SVGContainer>

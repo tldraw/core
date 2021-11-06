@@ -11,38 +11,36 @@ interface IndicatorProps<T extends TLShape, M = any> {
   user?: TLUser<T>
 }
 
-export const ShapeIndicator = React.memo(
-  <T extends TLShape, M = any>({
-    isHovered = false,
-    isSelected = false,
-    shape,
-    user,
-    meta,
-  }: IndicatorProps<T, M>) => {
-    const { shapeUtils } = useTLContext()
-    const utils = shapeUtils[shape.type]
-    const bounds = utils.getBounds(shape)
-    const rPositioned = usePosition(bounds, shape.rotation)
+export const ShapeIndicator = React.memo(function ShapeIndicator<T extends TLShape, M = any>({
+  isHovered = false,
+  isSelected = false,
+  shape,
+  user,
+  meta,
+}: IndicatorProps<T, M>) {
+  const { shapeUtils } = useTLContext()
+  const utils = shapeUtils[shape.type]
+  const bounds = utils.getBounds(shape)
+  const rPositioned = usePosition(bounds, shape.rotation)
 
-    return (
-      <div
-        ref={rPositioned}
-        className={
-          'tl-indicator tl-absolute ' + (user ? '' : isSelected ? 'tl-selected' : 'tl-hovered')
-        }
-      >
-        <svg width="100%" height="100%">
-          <g className="tl-centered-g" stroke={user?.color}>
-            <utils.Indicator
-              shape={shape}
-              meta={meta}
-              user={user}
-              isSelected={isSelected}
-              isHovered={isHovered}
-            />
-          </g>
-        </svg>
-      </div>
-    )
-  }
-)
+  return (
+    <div
+      ref={rPositioned}
+      className={
+        'tl-indicator tl-absolute ' + (user ? '' : isSelected ? 'tl-selected' : 'tl-hovered')
+      }
+    >
+      <svg width="100%" height="100%">
+        <g className="tl-centered-g" stroke={user?.color}>
+          <utils.Indicator
+            shape={shape}
+            meta={meta}
+            user={user}
+            isSelected={isSelected}
+            isHovered={isHovered}
+          />
+        </g>
+      </svg>
+    </div>
+  )
+})

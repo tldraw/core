@@ -5,7 +5,10 @@ interface SvgContainerProps extends React.SVGProps<SVGSVGElement> {
 }
 
 export const SVGContainer = React.memo(
-  React.forwardRef<SVGSVGElement, SvgContainerProps>(({ id, children, ...rest }, ref) => {
+  React.forwardRef<SVGSVGElement, SvgContainerProps>(function SVGContainer(
+    { id, children, ...rest },
+    ref
+  ) {
     return (
       <svg ref={ref} className="tl-positioned-svg" {...rest}>
         <g id={id} className="tl-centered-g">

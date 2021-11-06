@@ -9,7 +9,7 @@ interface HandleProps {
   point: number[]
 }
 
-export const Handle = React.memo(({ id, point }: HandleProps) => {
+export const Handle = React.memo(function Handle({ id, point }: HandleProps) {
   const events = useHandleEvents(id)
 
   return (
