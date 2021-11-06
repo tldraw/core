@@ -10,14 +10,18 @@ interface ContainerProps {
   children: React.ReactNode
 }
 
-export const Container = React.memo(
-  ({ id, bounds, rotation = 0, className, children }: ContainerProps) => {
-    const rPositioned = usePosition(bounds, rotation)
+export const Container = React.memo(function Container({
+  id,
+  bounds,
+  rotation = 0,
+  className,
+  children,
+}: ContainerProps) {
+  const rPositioned = usePosition(bounds, rotation)
 
-    return (
-      <div id={id} ref={rPositioned} className={['tl-positioned', className || ''].join(' ')}>
-        {children}
-      </div>
-    )
-  }
-)
+  return (
+    <div id={id} ref={rPositioned} className={['tl-positioned', className || ''].join(' ')}>
+      {children}
+    </div>
+  )
+})

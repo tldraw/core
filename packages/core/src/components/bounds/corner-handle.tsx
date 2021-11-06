@@ -17,35 +17,39 @@ interface CornerHandleProps {
   isHidden?: boolean
 }
 
-export const CornerHandle = React.memo(
-  ({ size, targetSize, isHidden, corner, bounds }: CornerHandleProps): JSX.Element => {
-    const events = useBoundsHandleEvents(corner)
+export const CornerHandle = React.memo(function CornerHandle({
+  size,
+  targetSize,
+  isHidden,
+  corner,
+  bounds,
+}: CornerHandleProps): JSX.Element {
+  const events = useBoundsHandleEvents(corner)
 
-    const isTop = corner === TLBoundsCorner.TopLeft || corner === TLBoundsCorner.TopRight
-    const isLeft = corner === TLBoundsCorner.TopLeft || corner === TLBoundsCorner.BottomLeft
+  const isTop = corner === TLBoundsCorner.TopLeft || corner === TLBoundsCorner.TopRight
+  const isLeft = corner === TLBoundsCorner.TopLeft || corner === TLBoundsCorner.BottomLeft
 
-    return (
-      <g opacity={isHidden ? 0 : 1}>
-        <rect
-          className={'tl-transparent ' + (isHidden ? '' : cornerBgClassnames[corner])}
-          aria-label="corner transparent"
-          x={(isLeft ? -1 : bounds.width + 1) - targetSize}
-          y={(isTop ? -1 : bounds.height + 1) - targetSize}
-          width={targetSize * 2}
-          height={targetSize * 2}
-          pointerEvents={isHidden ? 'none' : 'all'}
-          {...events}
-        />
-        <rect
-          className="tl-corner-handle"
-          aria-label="corner handle"
-          x={(isLeft ? -1 : bounds.width + 1) - size / 2}
-          y={(isTop ? -1 : bounds.height + 1) - size / 2}
-          width={size}
-          height={size}
-          pointerEvents="none"
-        />
-      </g>
-    )
-  }
-)
+  return (
+    <g opacity={isHidden ? 0 : 1}>
+      <rect
+        className={'tl-transparent ' + (isHidden ? '' : cornerBgClassnames[corner])}
+        aria-label="corner transparent"
+        x={(isLeft ? -1 : bounds.width + 1) - targetSize}
+        y={(isTop ? -1 : bounds.height + 1) - targetSize}
+        width={targetSize * 2}
+        height={targetSize * 2}
+        pointerEvents={isHidden ? 'none' : 'all'}
+        {...events}
+      />
+      <rect
+        className="tl-corner-handle"
+        aria-label="corner handle"
+        x={(isLeft ? -1 : bounds.width + 1) - size / 2}
+        y={(isTop ? -1 : bounds.height + 1) - size / 2}
+        width={size}
+        height={size}
+        pointerEvents="none"
+      />
+    </g>
+  )
+})

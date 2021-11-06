@@ -6,7 +6,10 @@ interface ErrorFallbackProps {
   resetErrorBoundary: () => void
 }
 
-export const ErrorFallback = React.memo(({ error, resetErrorBoundary }: ErrorFallbackProps) => {
+export const ErrorFallback = React.memo(function ErrorFallback({
+  error,
+  resetErrorBoundary,
+}: ErrorFallbackProps) {
   const { callbacks } = useTLContext()
 
   React.useEffect(() => {
