@@ -18,13 +18,18 @@ export function LinkHandle({ size, bounds, isHidden }: LinkHandleProps) {
     <g
       cursor="grab"
       transform={`translate(${bounds.width / 2 - size * 4}, ${bounds.height + size * 2})`}
+      aria-label="link handle"
     >
       <g className="tl-transparent" pointerEvents={isHidden ? 'none' : 'all'}>
         <rect x={0} y={0} width={size * 2} height={size * 2} {...leftEvents} />
         <rect x={size * 3} y={0} width={size * 2} height={size * 2} {...centerEvents} />
         <rect x={size * 6} y={0} width={size * 2} height={size * 2} {...rightEvents} />
       </g>
-      <g className="tl-rotate-handle" transform={`translate(${size / 2}, ${size / 2})`}>
+      <g
+        className="tl-rotate-handle"
+        transform={`translate(${size / 2}, ${size / 2})`}
+        aria-label="link rotate handle"
+      >
         <path
           d={`M 0,${size / 2} L ${size},${size} ${size},0 Z`}
           pointerEvents="none"
