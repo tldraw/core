@@ -15,8 +15,8 @@ async function main() {
     await esbuildServe(
       {
         entryPoints: ['src/index.tsx'],
-        bundle: true,
         outfile: 'dist/bundle.js',
+        bundle: true,
         minify: false,
         sourcemap: true,
         incremental: true,
@@ -26,13 +26,12 @@ async function main() {
         },
         watch: {
           onRebuild(err) {
-            serve.update()
             err ? error('❌ Failed') : log('✅ Updated')
           },
         },
       },
       {
-        port: 5000,
+        port: 5420,
         root: './dist',
         live: true,
       }

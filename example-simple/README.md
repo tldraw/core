@@ -1,6 +1,8 @@
-# @tldraw/core-example-simple
+# @tldraw/core Simple Example
 
 A (relatively) simple example project with a very fast dev server.
 
-You probably do not need to start the server here: it is started as
-part of `yarn start:simple` in the root directory.
+To start this project:
+
+- run `yarn start:simple` in the root directory
+- open `http://localhost:5420` in your browser

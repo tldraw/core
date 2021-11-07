@@ -10,11 +10,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node scripts/dev.mjs -w",
+    "start:simple": "node scripts/dev.mjs -w",
     "build": "node scripts/build.mjs"
   },
   "files": [],
-  "sideEffects": false,
   "devDependencies": {
     "@tldraw/core": "^0.1.18",
     "@tldraw/vec": "^0.0.130",

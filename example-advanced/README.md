@@ -1,6 +1,8 @@
-# @tldraw/core-example-advanced
+# @tldraw/core Advanced Example
 
-An advanced example project with a very fast dev server.
+An advanced example project for `@tldraw/core`.
 
-You probably do not need to start the server here: it is started as
-part of `yarn start` in the root directory.
+To start this project:
+
+- run `yarn start` in the root directory
+- open `http://localhost:5420` in your browser

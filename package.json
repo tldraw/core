@@ -21,16 +21,16 @@
     "example-advanced"
   ],
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watchAll",
-    "lerna": "lerna",
+    "start": "yarn start:advanced",
+    "start:simple": "lerna run start:simple --stream --parallel",
+    "start:advanced": "lerna run start:advanced --stream --parallel",
     "build": "lerna run build && lerna run docs",
-    "start": "cd packages/core && yarn start & cd example-advanced && yarn start",
-    "start:simple": "cd packages/core && yarn start & cd example-simple && yarn start",
-    "start:all": "lerna run start --stream --parallel",
     "publish:patch": "yarn test && yarn build && lerna publish patch",
     "docs": "lerna run docs",
-    "docs:watch": "lerna run docs:watch"
+    "docs:watch": "lerna run docs:watch",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "lerna": "lerna"
   },
   "devDependencies": {
     "@swc-node/jest": "^1.3.3",
