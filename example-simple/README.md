@@ -1,6 +1,6 @@
 # @tldraw/core Simple Example
 
-A (relatively) simple example project with a very fast dev server.
+A (relatively) simple example project for `@tldraw/core`.
 
 To start this project:
 
