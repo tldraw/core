@@ -434,15 +434,19 @@ export function App() {
 
 ## Local Development
 
+To start the development servers for the package and the advanced example:
+
 - Run `yarn` to install dependencies.
+- Run `yarn start`.
+- Open `localhost:5420`.
 
-- Run `yarn start` to start the development server for the package and for the example.
+You can also run:
 
-- Open `localhost:5000` to view the example project.
-
-- Run `yarn test` to execute unit tests via [Jest](https://jestjs.io).
-
-- Run `yarn docs` to build the docs via [ts-doc](https://typedoc.org/).
+- `start:advanced` to start development servers for the package and the advanced example.
+- `start:simple` to start development servers for the package and the simple example.
+- `test` to execute unit tests via [Jest](https://jestjs.io).
+- `docs` to build the docs via [ts-doc](https://typedoc.org/).
+- `build` to build the package.
 
 ## Example
 
