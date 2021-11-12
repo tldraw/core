@@ -12,9 +12,10 @@ describe('page', () => {
         hideIndicators={false}
         hideHandles={false}
         hideBindingHandles={false}
+        hideResizeHandles={false}
         hideCloneHandles={false}
         hideRotateHandle={false}
-        onBoundsChange={(bounds) => {}}
+        onBoundsChange={() => {}}
       />
     )
   })

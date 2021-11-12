@@ -18,6 +18,7 @@ interface PageProps<T extends TLShape, M extends Record<string, unknown>> {
   hideBindingHandles: boolean
   hideCloneHandles: boolean
   hideRotateHandle: boolean
+  hideResizeHandles: boolean
   meta?: M
 }
 
@@ -33,6 +34,7 @@ export const Page = React.memo(function Page<T extends TLShape, M extends Record
   hideBindingHandles,
   hideCloneHandles,
   hideRotateHandle,
+  hideResizeHandles,
   meta,
 }: PageProps<T, M>): JSX.Element {
   const { bounds: rendererBounds, shapeUtils } = useTLContext()
@@ -93,6 +95,7 @@ export const Page = React.memo(function Page<T extends TLShape, M extends Record
           rotation={rotation}
           isHidden={hideBounds}
           hideRotateHandle={hideRotateHandle}
+          hideResizeHandles={hideResizeHandles}
           hideBindingHandles={hideBindingHandles || !isLinked}
           hideCloneHandles={_hideCloneHandles}
         />

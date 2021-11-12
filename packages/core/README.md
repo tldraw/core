@@ -87,19 +87,20 @@ To avoid unnecessary renders, be sure to pass "stable" values as props to the `R
 | `pageState`  | [`TLPageState`](#tlpagestate)   | The current page's state.                      |
 | `shapeUtils` | [`TLShapeUtils`](#tlshapeutils) | The shape utilities used to render the shapes. |
 
-In addition to these required props, the Renderer accents many optional props.
+In addition to these required props, the Renderer accents many other **optional** props.
 
-| Property             | Type                          | Description                                                            |
-| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
-| `containerRef`       | `React.MutableRefObject`      | A React ref for the container, where CSS variables will be added.      |
-| `theme`              | `object`                      | (optional) an object with overrides for the Renderer's default colors. |
-| `hideBounds`         | `boolean`                     | (optional) an object with overrides for the Renderer's default colors. |
-| `hideHandles`        | `boolean`                     | (optional) an object with overrides for the Renderer's default colors. |
-| `hideBindingHandles` | `boolean`                     | (optional) an object with overrides for the Renderer's default colors. |
-| `hideRotateHandles`  | `boolean`                     | (optional) an object with overrides for the Renderer's default colors. |
-| `snapLines`          | [`TLSnapLine`](#tlsnapline)[] | (optional) an object with overrides for the Renderer's default colors. |
-| `users`              | `TLUser`                      | (optional) an object with overrides for the Renderer's default colors. |
-| `userId`             | `object`                      | (optional) an object with overrides for the Renderer's default colors. |
+| Property             | Type                          | Description                                                       |
+| -------------------- | ----------------------------- | ----------------------------------------------------------------- |
+| `containerRef`       | `React.MutableRefObject`      | A React ref for the container, where CSS variables will be added. |
+| `theme`              | `object`                      | An object with overrides for the Renderer's default colors.       |
+| `hideBounds`         | `boolean`                     | Do not show the bounding box for selected shapes.                 |
+| `hideHandles`        | `boolean`                     | Do not show handles for shapes with handles.                      |
+| `hideBindingHandles` | `boolean`                     | Do not show binding controls for selected shapes with bindings.   |
+| `hideResizeHandles`  | `boolean`                     | Do not show resize handles for selected shapes.                   |
+| `hideRotateHandles`  | `boolean`                     | Do not show rotate handles for selected shapes.                   |
+| `snapLines`          | [`TLSnapLine`](#tlsnapline)[] | An array of "snap" lines.                                         |
+| `users`              | `object`                      | A table of [`TLUser`](#tluser)s.                                  |
+| `userId`             | `object`                      | The current user's [`TLUser`](#tluser) id.                        |
 
 The theme object accepts valid CSS colors for the following properties:
 

@@ -16,6 +16,7 @@ describe('bounds', () => {
         hideBindingHandles={false}
         hideCloneHandles={false}
         hideRotateHandle={false}
+        hideResizeHandles={false}
       />
     )
   })
@@ -31,6 +32,7 @@ describe('bounds', () => {
         hideBindingHandles={false}
         hideCloneHandles={false}
         hideRotateHandle={false}
+        hideResizeHandles={false}
       />
     )
 
@@ -47,4 +49,13 @@ describe('bounds', () => {
     expect(screen.getByLabelText('link handle')).toBeDefined()
     expect(screen.getByLabelText('link rotate handle')).toBeDefined()
   })
+
+  test.todo('Renders correctly when zoomed')
+  test.todo('Renders correctly when rotated')
+  test.todo('Renders correctly when locked')
+  test.todo('Renders correctly when hidden')
+  test.todo('Renders correctly when hideBindingHandles is true')
+  test.todo('Renders correctly when hideCloneHandles is true')
+  test.todo('Renders correctly when hideRotateHandle is true')
+  test.todo('Renders correctly when hideResizeHandles is true')
 })
