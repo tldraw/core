@@ -14,6 +14,7 @@ describe('page', () => {
         hideBindingHandles={false}
         hideCloneHandles={false}
         hideRotateHandle={false}
+        hideResizeHandles={false}
       />
     )
   })

@@ -19,6 +19,7 @@ interface BoundsProps {
   hideCloneHandles: boolean
   hideRotateHandle: boolean
   hideBindingHandles: boolean
+  hideResizeHandles: boolean
   viewportWidth: number
   children?: React.ReactNode
 }
@@ -31,6 +32,7 @@ export const Bounds = React.memo(function Bounds({
   isHidden,
   isLocked,
   hideCloneHandles,
+  hideResizeHandles,
   hideRotateHandle,
   hideBindingHandles,
 }: BoundsProps): JSX.Element {
@@ -48,67 +50,73 @@ export const Bounds = React.memo(function Bounds({
   const showCornerHandles = !isHidden && !isLocked && smallDimension > 20
   // If the bounds are very small, don't show the clone handles
   const showCloneHandles = !hideCloneHandles && smallDimension > 24
+  // Unless we're hiding the resize handles, show them
+  const showResizeHandles = !hideResizeHandles && !isLocked
 
   return (
     <Container bounds={bounds} rotation={rotation}>
       <SVGContainer>
         <CenterHandle bounds={bounds} isLocked={isLocked} isHidden={isHidden} />
-        <EdgeHandle
-          targetSize={targetSize}
-          size={size}
-          bounds={bounds}
-          edge={TLBoundsEdge.Top}
-          isHidden={!showEdgeHandles}
-        />
-        <EdgeHandle
-          targetSize={targetSize}
-          size={size}
-          bounds={bounds}
-          edge={TLBoundsEdge.Right}
-          isHidden={!showEdgeHandles}
-        />
-        <EdgeHandle
-          targetSize={targetSize}
-          size={size}
-          bounds={bounds}
-          edge={TLBoundsEdge.Bottom}
-          isHidden={!showEdgeHandles}
-        />
-        <EdgeHandle
-          targetSize={targetSize}
-          size={size}
-          bounds={bounds}
-          edge={TLBoundsEdge.Left}
-          isHidden={!showEdgeHandles}
-        />
-        <CornerHandle
-          targetSize={targetSize}
-          size={size}
-          bounds={bounds}
-          isHidden={isHidden || !showCornerHandles}
-          corner={TLBoundsCorner.TopLeft}
-        />
-        <CornerHandle
-          targetSize={targetSize}
-          size={size}
-          bounds={bounds}
-          isHidden={isHidden || !showCornerHandles}
-          corner={TLBoundsCorner.TopRight}
-        />
-        <CornerHandle
-          targetSize={targetSize}
-          size={size}
-          bounds={bounds}
-          isHidden={isHidden || !showCornerHandles}
-          corner={TLBoundsCorner.BottomRight}
-        />
-        <CornerHandle
-          targetSize={targetSize}
-          size={size}
-          bounds={bounds}
-          isHidden={isHidden || !showCornerHandles}
-          corner={TLBoundsCorner.BottomLeft}
-        />
+        {showResizeHandles && (
+          <>
+            <EdgeHandle
+              targetSize={targetSize}
+              size={size}
+              bounds={bounds}
+              edge={TLBoundsEdge.Top}
+              isHidden={!showEdgeHandles}
+            />
+            <EdgeHandle
+              targetSize={targetSize}
+              size={size}
+              bounds={bounds}
+              edge={TLBoundsEdge.Right}
+              isHidden={!showEdgeHandles}
+            />
+            <EdgeHandle
+              targetSize={targetSize}
+              size={size}
+              bounds={bounds}
+              edge={TLBoundsEdge.Bottom}
+              isHidden={!showEdgeHandles}
+            />
+            <EdgeHandle
+              targetSize={targetSize}
+              size={size}
+              bounds={bounds}
+              edge={TLBoundsEdge.Left}
+              isHidden={!showEdgeHandles}
+            />
+            <CornerHandle
+              targetSize={targetSize}
+              size={size}
+              bounds={bounds}
+              isHidden={isHidden || !showCornerHandles}
+              corner={TLBoundsCorner.TopLeft}
+            />
+            <CornerHandle
+              targetSize={targetSize}
+              size={size}
+              bounds={bounds}
+              isHidden={isHidden || !showCornerHandles}
+              corner={TLBoundsCorner.TopRight}
+            />
+            <CornerHandle
+              targetSize={targetSize}
+              size={size}
+              bounds={bounds}
+              isHidden={isHidden || !showCornerHandles}
+              corner={TLBoundsCorner.BottomRight}
+            />
+            <CornerHandle
+              targetSize={targetSize}
+              size={size}
+              bounds={bounds}
+              isHidden={isHidden || !showCornerHandles}
+              corner={TLBoundsCorner.BottomLeft}
+            />
+          </>
+        )}
         {showRotateHandle && (
           <RotateHandle
             targetSize={targetSize}

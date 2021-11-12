@@ -35,6 +35,7 @@ interface CanvasProps<T extends TLShape, M extends Record<string, unknown>> {
   hideIndicators: boolean
   hideBindingHandles: boolean
   hideCloneHandles: boolean
+  hideResizeHandles: boolean
   hideRotateHandle: boolean
   externalContainerRef?: React.RefObject<HTMLElement>
   meta?: M
@@ -56,6 +57,7 @@ export function Canvas<T extends TLShape, M extends Record<string, unknown>>({
   hideIndicators,
   hideBindingHandles,
   hideCloneHandles,
+  hideResizeHandles,
   hideRotateHandle,
   onBoundsChange,
 }: CanvasProps<T, M>): JSX.Element {
@@ -92,6 +94,7 @@ export function Canvas<T extends TLShape, M extends Record<string, unknown>>({
               hideHandles={hideHandles}
               hideBindingHandles={hideBindingHandles}
               hideCloneHandles={hideCloneHandles}
+              hideResizeHandles={hideResizeHandles}
               hideRotateHandle={hideRotateHandle}
               meta={meta}
             />

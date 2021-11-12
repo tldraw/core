@@ -65,6 +65,10 @@ export interface RendererProps<T extends TLShape, M = any> extends Partial<TLCal
    */
   hideHandles?: boolean
   /**
+   * (optional) When true, the renderer will not show resize handles for selected objects.
+   */
+  hideResizeHandles?: boolean
+  /**
    * (optional) When true, the renderer will not show rotate handles for selected objects.
    */
   hideRotateHandles?: boolean
@@ -114,6 +118,7 @@ export function Renderer<T extends TLShape, M extends Record<string, unknown>>({
   hideIndicators = false,
   hideCloneHandles = false,
   hideBindingHandles = false,
+  hideResizeHandles = false,
   hideRotateHandles = false,
   hideBounds = false,
   ...rest
@@ -167,6 +172,7 @@ export function Renderer<T extends TLShape, M extends Record<string, unknown>>({
         hideCloneHandles={hideCloneHandles}
         hideBindingHandles={hideBindingHandles}
         hideRotateHandle={hideRotateHandles}
+        hideResizeHandles={hideResizeHandles}
         onBoundsChange={onBoundsChange}
         meta={meta}
       />

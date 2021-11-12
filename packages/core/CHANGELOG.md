@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.20
+
+- Update docs.
+- Adds `hideResizeHandles` prop.
+
 ## 0.1.19
 
 - Remove stray `index.js` files.
