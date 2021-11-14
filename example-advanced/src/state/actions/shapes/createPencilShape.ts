@@ -5,11 +5,9 @@ import { getPagePoint } from 'state/helpers'
 import { mutables } from 'state/mutables'
 
 export const createPencilShape: Action = (data, payload: TLPointerInfo) => {
-  const pagePoint = getPagePoint(payload.point, data.pageState)
-
   const shape = shapeUtils.pencil.getShape({
     parentId: 'page1',
-    point: pagePoint,
+    point: mutables.currentPoint,
     points: [[0, 0]],
     childIndex: Object.values(data.page.shapes).length,
   })

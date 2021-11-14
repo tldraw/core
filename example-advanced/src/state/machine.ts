@@ -10,6 +10,7 @@ export const machine = createState({
   data: INITIAL_DATA,
   onEnter: ['restoreSavedDocument', 'updateBoundShapes'],
   on: {
+    MOVED_POINTER: 'updatePointer',
     SELECTED_TOOL: { to: (_, payload) => payload.name },
     STARTED_POINTING: ['setInitialPoint', 'setSnapshot'],
     PANNED: 'panCamera',
@@ -379,7 +380,7 @@ export const machine = createState({
   },
   conditions: {
     hasLeftDeadZone(data, payload: TLPointerInfo) {
-      return Vec.dist(getPagePoint(payload.point, data.pageState), mutables.initialPoint) > 2
+      return Vec.dist(mutables.currentPoint, mutables.initialPoint) > 2
     },
     shapeIsSelected(data, payload: { target: string }) {
       return data.pageState.selectedIds.includes(payload.target)

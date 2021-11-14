@@ -7,15 +7,11 @@ import { mutables } from 'state/mutables'
 export const eraseShapes: Action = (data, payload: TLPointerInfo) => {
   const { previousPoint } = mutables
 
-  const currentPoint = getPagePoint(payload.point, data.pageState)
-
   Object.values(data.page.shapes)
     .filter((shape) => !shape.isGhost)
     .forEach((shape) => {
-      if (getShapeUtils(shape).hitTestLineSegment(shape, previousPoint, currentPoint)) {
+      if (getShapeUtils(shape).hitTestLineSegment(shape, previousPoint, mutables.currentPoint)) {
         shape.isGhost = true
       }
     })
-
-  mutables.previousPoint = currentPoint
 }

@@ -9,7 +9,7 @@ import type { Action, CustomBinding } from 'state/constants'
 export const createArrowShape: Action = (data, payload: TLPointerInfo) => {
   const shape = shapeUtils.arrow.getShape({
     parentId: 'page1',
-    point: getPagePoint(payload.point, data.pageState),
+    point: mutables.currentPoint,
     handles: {
       start: {
         id: 'start',

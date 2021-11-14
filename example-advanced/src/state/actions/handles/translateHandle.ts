@@ -12,8 +12,7 @@ export const translateHandle: Action = (data, payload: TLPointerInfo) => {
 
   if (!pointedHandleId) return
 
-  const point = getPagePoint(payload.point, data.pageState)
-  let delta = Vec.sub(point, initialPoint)
+  let delta = Vec.sub(mutables.currentPoint, initialPoint)
 
   data.pageState.selectedIds.forEach((id) => {
     const initialShape = snapshot.page.shapes[id] as ArrowShape

@@ -15,10 +15,8 @@ export const resizeSelectedShapes: Action = (data, payload: TLPointerInfo) => {
       .map((shape) => getShapeUtils(shape).getBounds(shape))
   )
 
-  const point = getPagePoint(payload.point, data.pageState)
-
   let rotation = 0
-  let delta = Vec.sub(point, initialPoint)
+  let delta = Vec.sub(mutables.currentPoint, initialPoint)
 
   if (selectedIds.length === 1) {
     rotation = snapshot.page.shapes[selectedIds[0]].rotation || 0

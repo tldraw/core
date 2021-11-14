@@ -7,7 +7,7 @@ import { mutables } from 'state/mutables'
 export const createBoxShape: Action = (data, payload: TLPointerInfo) => {
   const shape = shapeUtils.box.getShape({
     parentId: 'page1',
-    point: getPagePoint(payload.point, data.pageState),
+    point: mutables.currentPoint,
     size: [1, 1],
     childIndex: Object.values(data.page.shapes).length,
   })

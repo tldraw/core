@@ -19,8 +19,7 @@ export const rotateSelectedShapes: Action = (data, payload: TLPointerInfo) => {
   )
 
   const initialAngle = Vec.angle(initialCommonCenter, initialPoint)
-  const point = getPagePoint(payload.point, data.pageState)
-  const currentAngle = Vec.angle(initialCommonCenter, point)
+  const currentAngle = Vec.angle(initialCommonCenter, mutables.currentPoint)
 
   let angleDelta = currentAngle - initialAngle
 

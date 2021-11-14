@@ -16,6 +16,7 @@ interface Mutables {
   viewport: TLBounds
   history: ReturnType<typeof makeHistory>
   initialPoint: number[]
+  currentPoint: number[]
   previousPoint: number[]
   initialShape?: Shape
   isCloning: boolean
@@ -34,6 +35,7 @@ interface Mutables {
 export const mutables: Mutables = {
   snapshot: INITIAL_DATA,
   initialPoint: [0, 0],
+  currentPoint: [0, 0],
   previousPoint: [0, 0],
   history: makeHistory(),
   viewport: Utils.getBoundsFromPoints([

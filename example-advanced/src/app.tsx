@@ -78,10 +78,10 @@ const onBoundsChange = (bounds: TLBounds) => {
 
 const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
   switch (key) {
-    case 'altKey':
-    case 'metaKey':
-    case 'ctrlKey':
-    case 'shiftKey': {
+    case 'Alt':
+    case 'Meta':
+    case 'Control':
+    case 'Shift': {
       machine.send('TOGGLED_MODIFIER', info)
       break
     }
@@ -161,10 +161,10 @@ const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
 
 const onKeyUp: TLKeyboardEventHandler = (key, info, e) => {
   switch (key) {
-    case 'altKey':
-    case 'metaKey':
-    case 'ctrlKey':
-    case 'shiftKey': {
+    case 'Alt':
+    case 'Meta':
+    case 'Control':
+    case 'Shift': {
       machine.send('TOGGLED_MODIFIER', info)
       break
     }

@@ -8,9 +8,7 @@ import { mutables } from 'state/mutables'
 export const extendPencilShape: Action = (data, payload: TLPointerInfo) => {
   const { initialPoint, previousPoint, rawPoints, pointedShapeId } = mutables
 
-  const currentPoint = getPagePoint(payload.point, data.pageState)
-
-  if (Vec.isEqual(previousPoint, currentPoint)) return
+  if (Vec.isEqual(previousPoint, mutables.currentPoint)) return
 
   const shape = data.page.shapes[pointedShapeId!]
 
@@ -19,7 +17,7 @@ export const extendPencilShape: Action = (data, payload: TLPointerInfo) => {
   }
 
   // The point relative to the initial point
-  const relativePoint = Vec.sub(currentPoint, initialPoint)
+  const relativePoint = Vec.sub(mutables.currentPoint, initialPoint)
 
   // The raw points array holds the relative points
   rawPoints.push(relativePoint)
@@ -30,6 +28,4 @@ export const extendPencilShape: Action = (data, payload: TLPointerInfo) => {
   const offset = Utils.getCommonTopLeft(rawPoints)
   shape.point = Vec.add(initialPoint, offset)
   shape.points = rawPoints.map((point) => Vec.sub(point, offset))
-
-  mutables.previousPoint = currentPoint
 }

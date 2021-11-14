@@ -7,10 +7,7 @@ import { getShapeUtils } from 'shapes'
 export const updateBrush: Action = (data, payload: TLPointerInfo) => {
   const { initialPoint, snapshot } = mutables
 
-  const brushBounds = Utils.getBoundsFromPoints([
-    getPagePoint(payload.point, data.pageState),
-    initialPoint,
-  ])
+  const brushBounds = Utils.getBoundsFromPoints([mutables.currentPoint, initialPoint])
 
   data.pageState.brush = brushBounds
 

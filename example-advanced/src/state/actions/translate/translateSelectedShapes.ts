@@ -6,10 +6,10 @@ import { getPagePoint } from 'state/helpers'
 import { mutables } from 'state/mutables'
 
 export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) => {
-  const { initialPoint, viewport, snapshot, snapInfo } = mutables
+  const { initialPoint, currentPoint, previousPoint, viewport, snapshot, snapInfo } = mutables
   const { selectedIds } = data.pageState
 
-  let delta = Vec.sub(getPagePoint(payload.point, data.pageState), initialPoint)
+  let delta = Vec.sub(currentPoint, initialPoint)
 
   if (payload.shiftKey) {
     if (Math.abs(delta[0]) > Math.abs(delta[1])) {
@@ -74,7 +74,7 @@ export const translateSelectedShapes: Action = (data, payload: TLPointerInfo) =>
 
   let snapLines: TLSnapLine[] = []
 
-  const speed = Vec.len2(payload.delta) / data.pageState.camera.zoom
+  const speed = Vec.len2(Vec.sub(currentPoint, previousPoint)) / data.pageState.camera.zoom
 
   if (snapInfo && !payload.metaKey && speed < 5) {
     const snappingBounds = Utils.getBoundsWithCenter(
