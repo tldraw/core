@@ -27,6 +27,7 @@ export const machine = createState({
       do: 'loadDocument',
       to: 'select.idle',
     },
+    // These events are called from the API only, see api.ts
     CREATED_SHAPES: ['createShapes', 'addToHistory'],
     UPDATED_SHAPES: ['updateShapes', 'updateBoundShapes', 'addToHistory'],
     DELETED_SHAPES: ['deleteShapes', 'updateBoundShapes', 'addToHistory'],
@@ -44,8 +45,8 @@ export const machine = createState({
           on: {
             SELECTED_ALL: 'selectAllShapes',
             DESELECTED_ALL: 'deselectAllShapes',
-            CANCELLED: 'deselectAllShapes',
-            DELETED: 'deleteSelectedShapes',
+            CANCELLED: ['deselectAllShapes', 'updateBoundShapes'],
+            DELETED: ['deleteSelectedShapes', 'updateBoundShapes'],
             UNDO: 'undo',
             REDO: 'redo',
             HOVERED_SHAPE: 'setHoveredShape',
@@ -210,6 +211,75 @@ export const machine = createState({
         },
       },
     },
+    eraser: {
+      initial: 'idle',
+      states: {
+        idle: {
+          on: {
+            STARTED_POINTING: {
+              do: 'setInitialPoint',
+              to: 'eraser.pointing',
+            },
+          },
+        },
+        pointing: {
+          on: {
+            MOVED_POINTER: {
+              if: 'hasLeftDeadZone',
+              to: 'eraser.erasing',
+            },
+            STOPPED_POINTING: {
+              do: ['eraseShapesAtPoint', 'updateBoundShapes', 'addToHistory'],
+              to: 'select',
+            },
+          },
+        },
+        erasing: {
+          onEnter: ['setSnapshot'],
+          on: {
+            MOVED_POINTER: 'eraseShapes',
+            PANNED: 'eraseShapes',
+            CANCELLED: {
+              do: 'restoreSnapshot',
+              to: 'select',
+            },
+            STOPPED_POINTING: {
+              do: ['eraseGhostShapes', 'updateBoundShapes', 'addToHistory'],
+              to: 'select',
+            },
+          },
+        },
+      },
+    },
+    pencil: {
+      initial: 'idle',
+      states: {
+        idle: {
+          on: {
+            STARTED_POINTING: {
+              do: 'setInitialPoint',
+              to: 'pencil.creating',
+            },
+          },
+        },
+        creating: {
+          onEnter: ['createPencilShape', 'setSnapshot'],
+          on: {
+            TOGGLED_MODIFIER: 'extendPencilShape',
+            MOVED_POINTER: 'extendPencilShape',
+            PANNED: 'extendPencilShape',
+            CANCELLED: {
+              do: 'deleteSelectedShapes',
+              to: 'select',
+            },
+            STOPPED_POINTING: {
+              do: 'addToHistory',
+              to: 'select',
+            },
+          },
+        },
+      },
+    },
     box: {
       initial: 'idle',
       states: {
@@ -294,7 +364,7 @@ export const machine = createState({
   },
   conditions: {
     hasLeftDeadZone(data, payload: TLPointerInfo) {
-      return Vec.dist(getPagePoint(payload.point, data.pageState), mutables.initialPoint) > 3
+      return Vec.dist(getPagePoint(payload.point, data.pageState), mutables.initialPoint) > 2
     },
     shapeIsSelected(data, payload: { target: string }) {
       return data.pageState.selectedIds.includes(payload.target)
@@ -306,5 +376,5 @@ export const machine = createState({
       return payload.shiftKey
     },
   },
-  actions,
+  actions, // See actions folder
 })

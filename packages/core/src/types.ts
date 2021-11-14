@@ -60,9 +60,9 @@ export interface TLShape {
   rotation?: number
   children?: string[]
   handles?: Record<string, TLHandle>
-  isLocked?: boolean
+  isGhost?: boolean
   isHidden?: boolean
-  isEditing?: boolean
+  isLocked?: boolean
   isGenerated?: boolean
   isAspectRatioLocked?: boolean
 }
@@ -73,6 +73,8 @@ export interface TLComponentProps<T extends TLShape, E = any, M = any> {
   isBinding: boolean
   isHovered: boolean
   isSelected: boolean
+  isGhost?: boolean
+  isChildOfSelected?: boolean
   meta: M extends any ? M : never
   onShapeChange?: TLCallbacks<T>['onShapeChange']
   onShapeBlur?: TLCallbacks<T>['onShapeBlur']
@@ -323,6 +325,8 @@ export type Snap =
 export interface IShapeTreeNode<T extends TLShape, M = any> {
   shape: T
   children?: IShapeTreeNode<TLShape, M>[]
+  isGhost: boolean
+  isChildOfSelected: boolean
   isEditing: boolean
   isBinding: boolean
   isHovered: boolean

@@ -1,4 +1,5 @@
 import { Utils, TLBounds } from '@tldraw/core'
+import { intersectBoundsLineSegment, intersectLineSegmentLineSegment } from '@tldraw/intersect'
 import Vec from '@tldraw/vec'
 import { nanoid } from 'nanoid'
 import { CustomShapeUtil } from 'shapes/CustomShapeUtil'
@@ -59,6 +60,39 @@ export class ArrowUtil extends CustomShapeUtil<T, E> {
 
   getCenter = (shape: T) => {
     return Utils.getBoundsCenter(this.getBounds(shape))
+  }
+
+  hitTestPoint = (shape: T, point: number[]) => {
+    const { start, end } = shape.handles
+    return (
+      Vec.distanceToLineSegment(
+        Vec.add(shape.point, start.point),
+        Vec.add(shape.point, end.point),
+        point
+      ) < 4
+    )
+  }
+
+  hitTestLineSegment = (shape: T, A: number[], B: number[]) => {
+    const { start, end } = shape.handles
+    return intersectLineSegmentLineSegment(
+      Vec.add(shape.point, start.point),
+      Vec.add(shape.point, end.point),
+      A,
+      B
+    ).didIntersect
+  }
+
+  hitTestBounds = (shape: T, bounds: TLBounds) => {
+    const { start, end } = shape.handles
+    return (
+      Utils.boundsContain(bounds, this.getBounds(shape)) ||
+      intersectBoundsLineSegment(
+        Utils.translateBounds(bounds, Vec.neg(shape.point)),
+        start.point,
+        end.point
+      ).length > 0
+    )
   }
 
   transform = (shape: T, bounds: TLBounds, initialShape: T, scale: number[]) => {

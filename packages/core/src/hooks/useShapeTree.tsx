@@ -13,12 +13,16 @@ function addToShapeTree<T extends TLShape, M extends Record<string, unknown>>(
   pageState: TLPageState & {
     bindingTargetId?: string | null
   },
+  isChildOfGhost = false,
+  isChildOfSelected = false,
   meta?: M
 ) {
   // Create a node for this shape
   const node: IShapeTreeNode<T, M> = {
     shape,
     meta: meta as any,
+    isChildOfSelected,
+    isGhost: shape.isGhost || isChildOfGhost,
     isEditing: pageState.editingId === shape.id,
     isBinding: pageState.bindingTargetId === shape.id,
     isSelected: pageState.selectedIds.includes(shape.id),
@@ -45,7 +49,15 @@ function addToShapeTree<T extends TLShape, M extends Record<string, unknown>>(
       .sort((a, b) => a.childIndex - b.childIndex)
       .forEach((childShape) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        addToShapeTree(childShape, node.children!, shapes, pageState, meta)
+        addToShapeTree(
+          childShape,
+          node.children!,
+          shapes,
+          pageState,
+          node.isGhost,
+          node.isSelected || node.isChildOfSelected,
+          meta
+        )
       )
   }
 }
@@ -100,7 +112,6 @@ export function useShapeTree<T extends TLShape, M extends Record<string, unknown
         // Otherwise, only render shapes that are in view
         shapeIsInViewport(shapeUtils[shape.type as T['type']].getBounds(shape as any), viewport)
     )
-    .sort((a, b) => a.childIndex - b.childIndex)
     .forEach((shape) => {
       // If the shape's parent is the page, add it to our sets of shapes to render
       if (shape.parentId === page.id) {
@@ -137,9 +148,19 @@ export function useShapeTree<T extends TLShape, M extends Record<string, unknown
 
   const tree: IShapeTreeNode<T, M>[] = []
 
-  const info = { ...pageState, bindingTargetId }
+  shapesToRender.forEach((shape) =>
+    addToShapeTree(
+      shape,
+      tree,
+      page.shapes,
+      { ...pageState, bindingTargetId },
+      shape.isGhost,
+      false,
+      meta
+    )
+  )
 
-  shapesToRender.forEach((shape) => addToShapeTree(shape, tree, page.shapes, info, meta))
+  tree.sort((a, b) => a.shape.childIndex - b.shape.childIndex)
 
   return tree
 }

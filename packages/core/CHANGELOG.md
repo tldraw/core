@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.21
+
+New:
+
+- Adds the `isGhost` prop to `TLShape`. In `TLComponentProps`, the `isGhost` prop will be true if either a shape has its `isGhost` set to `true` OR if a shape is the descendant of a shape with `isGhost` set to `true`. A ghost shape will have the `tl-ghost` class name, though this is not used in the Renderer. You can set it yourself in your app.
+- Adds the `isChildOfSelected` prop for `TLComponentProps`. If a shape is the child of a selected shape, its `isChildOfSelected` prop will be true.
+
+Improved:
+
+- Fixes a bug that could occur with the order of grouped shapes.
+- Adds an Eraser tool to the advanced example.
+- Adds a Pencil tool to the advanced example.
+
 ## 0.1.20
 
 - Update docs.

@@ -1,5 +1,5 @@
 import { Utils, TLBounds } from '@tldraw/core'
-import Vec from '@tldraw/vec'
+import { intersectLineSegmentBounds } from '@tldraw/intersect'
 import { nanoid } from 'nanoid'
 import { CustomShapeUtil } from 'shapes/CustomShapeUtil'
 import { BoxComponent } from './BoxComponent'
@@ -13,19 +13,6 @@ export class BoxUtil extends CustomShapeUtil<T, E> {
   Component = BoxComponent
 
   Indicator = BoxIndicator
-
-  getShape = (props: Partial<T>): T => {
-    return {
-      id: nanoid(),
-      type: 'box',
-      name: 'Box',
-      parentId: 'page1',
-      point: [0, 0],
-      size: [100, 100],
-      childIndex: 1,
-      ...props,
-    }
-  }
 
   getBounds = (shape: T) => {
     const bounds = Utils.getFromCache(this.boundsCache, shape, () => {
@@ -48,8 +35,29 @@ export class BoxUtil extends CustomShapeUtil<T, E> {
 
   canBind = true
 
+  getShape = (props: Partial<T>): T => {
+    return {
+      id: nanoid(),
+      type: 'box',
+      name: 'Box',
+      parentId: 'page1',
+      point: [0, 0],
+      size: [100, 100],
+      childIndex: 1,
+      ...props,
+    }
+  }
+
   getCenter = (shape: T) => {
     return Utils.getBoundsCenter(this.getBounds(shape))
+  }
+
+  hitTestPoint = (shape: T, point: number[]) => {
+    return Utils.pointInBounds(point, this.getBounds(shape))
+  }
+
+  hitTestLineSegment = (shape: T, A: number[], B: number[]) => {
+    return intersectLineSegmentBounds(A, B, this.getBounds(shape)).length > 0
   }
 
   transform = (shape: T, bounds: TLBounds, initialShape: T, scale: number[]) => {

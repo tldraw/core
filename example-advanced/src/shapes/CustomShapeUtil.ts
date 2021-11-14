@@ -13,4 +13,8 @@ export abstract class CustomShapeUtil<
   abstract getShape: (shape: Partial<T>) => T
 
   abstract transform: (shape: T, bounds: TLBounds, initialShape: T, scale: number[]) => void
+
+  abstract hitTestPoint: (shape: T, point: number[]) => boolean
+
+  abstract hitTestLineSegment: (shape: T, A: number[], B: number[]) => boolean
 }

@@ -16,11 +16,8 @@ interface ShapeProps<T extends TLShape, M> extends IShapeTreeNode<T, M> {
 export const Shape = React.memo(function Shape<T extends TLShape, M>({
   shape,
   utils,
-  isEditing,
-  isBinding,
-  isHovered,
-  isSelected,
   meta,
+  ...rest
 }: ShapeProps<T, M>) {
   const { callbacks } = useTLContext()
   const bounds = utils.getBounds(shape)
@@ -32,15 +29,12 @@ export const Shape = React.memo(function Shape<T extends TLShape, M>({
     <Container id={shape.id} bounds={bounds} rotation={shape.rotation}>
       <RenderedShape
         shape={shape}
-        isBinding={isBinding}
-        isEditing={isEditing}
-        isHovered={isHovered}
-        isSelected={isSelected}
         utils={utils as any}
         meta={meta}
         events={events}
         onShapeChange={callbacks.onShapeChange}
         onShapeBlur={callbacks.onShapeBlur}
+        {...rest}
       />
     </Container>
   )

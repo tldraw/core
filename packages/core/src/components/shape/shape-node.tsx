@@ -10,24 +10,13 @@ interface ShapeNodeProps<T extends TLShape> extends IShapeTreeNode<T> {
 export const ShapeNode = React.memo(function ShapeNode<T extends TLShape>({
   shape,
   utils,
-  children,
-  isEditing,
-  isBinding,
-  isHovered,
-  isSelected,
   meta,
+  children,
+  ...rest
 }: ShapeNodeProps<T>) {
   return (
     <>
-      <Shape
-        shape={shape}
-        isEditing={isEditing}
-        isBinding={isBinding}
-        isHovered={isHovered}
-        isSelected={isSelected}
-        utils={utils[shape.type as T['type']]}
-        meta={meta}
-      />
+      <Shape shape={shape} utils={utils[shape.type as T['type']]} meta={meta} {...rest} />
       {children &&
         children.map((childNode) => (
           <ShapeNode key={childNode.shape.id} utils={utils} {...childNode} />

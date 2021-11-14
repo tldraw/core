@@ -972,12 +972,28 @@ export class Utils {
 
   /**
    * Get whether a point is inside of a bounds.
-   * @param A
-   * @param b
+   * @param A The point to check.
+   * @param b The bounds to check.
    * @returns
    */
   static pointInBounds(A: number[], b: TLBounds): boolean {
     return !(A[0] < b.minX || A[0] > b.maxX || A[1] < b.minY || A[1] > b.maxY)
+  }
+
+  /**
+   * Hit test a point and a polyline using a minimum distance.
+   * @param A The point to check.
+   * @param points The points that make up the polyline.
+   * @param distance (optional) The mininum distance that qualifies a hit.
+   */
+  static pointInPolyline(A: number[], points: number[][], distance = 3): boolean {
+    for (let i = 1; i < points.length; i++) {
+      if (Vec.distanceToLineSegment(points[i - 1], points[i], A) < distance) {
+        return true
+      }
+    }
+
+    return false
   }
 
   /**

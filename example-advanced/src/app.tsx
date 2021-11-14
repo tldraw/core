@@ -128,6 +128,14 @@ const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
       machine.send('SELECTED_TOOL', { name: 'box' })
       break
     }
+    case 'd': {
+      machine.send('SELECTED_TOOL', { name: 'pencil' })
+      break
+    }
+    case 'e': {
+      machine.send('SELECTED_TOOL', { name: 'eraser' })
+      break
+    }
     case 'a': {
       if (info.metaKey || info.ctrlKey) {
         machine.send('SELECTED_ALL')
@@ -178,6 +186,8 @@ export default function App({ onMount }: AppProps): JSX.Element {
 
   const hideBounds = appState.isInAny('transformingSelection', 'translating', 'creating')
 
+  // const hideBounds = appState.isInAny('transformingSelection', 'translating', 'creating')
+
   return (
     <AppContainer>
       <Renderer
@@ -205,6 +215,7 @@ export default function App({ onMount }: AppProps): JSX.Element {
         onKeyUp={onKeyUp}
         hideBounds={hideBounds}
         hideHandles={hideBounds}
+        hideIndicators={hideBounds}
         hideBindingHandles={true}
       />
       <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />

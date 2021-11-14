@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ArrowUpRight, MousePointer, Square } from 'react-feather'
+import { ArrowUpRight, Edit2, MousePointer, PenTool, Square, X } from 'react-feather'
 import { machine } from 'state/machine'
 import styled from 'stitches.config'
 
@@ -12,6 +12,10 @@ const onToolSelect = (e: React.MouseEvent) => {
   machine.send('SELECTED_TOOL', { name: e.currentTarget.id })
 }
 
+const onReset = () => {
+  machine.send('RESET')
+}
+
 export function Toolbar({ activeStates, lastEvent }: ToolbarProps) {
   return (
     <ToolbarContainer>
@@ -19,6 +23,16 @@ export function Toolbar({ activeStates, lastEvent }: ToolbarProps) {
         <PrimaryToolButton id="select" isActive={machine.isIn('select')} onClick={onToolSelect}>
           <Highlight>
             <MousePointer />
+          </Highlight>
+        </PrimaryToolButton>
+        <PrimaryToolButton id="eraser" isActive={machine.isIn('eraser')} onClick={onToolSelect}>
+          <Highlight>
+            <X />
+          </Highlight>
+        </PrimaryToolButton>
+        <PrimaryToolButton id="pencil" isActive={machine.isIn('pencil')} onClick={onToolSelect}>
+          <Highlight>
+            <Edit2 />
           </Highlight>
         </PrimaryToolButton>
         <PrimaryToolButton id="box" isActive={machine.isIn('box')} onClick={onToolSelect}>
@@ -39,6 +53,7 @@ export function Toolbar({ activeStates, lastEvent }: ToolbarProps) {
             .map((name) => name.split('#state_1.root')[1])
             .join(' - ')}
         </div>
+        <button onClick={onReset}>Reset</button>
         <div>{lastEvent}</div>
       </StatusBar>
     </ToolbarContainer>
@@ -123,4 +138,12 @@ const StatusBar = styled('div', {
   backgroundColor: '$background',
   overflow: 'hidden',
   whiteSpace: 'nowrap',
+
+  '& button': {
+    background: 'none',
+    border: 'none',
+    fontFamily: 'inherit',
+    fontSize: 'inherit',
+    cursor: 'pointer',
+  },
 })

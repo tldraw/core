@@ -15,10 +15,9 @@ describe('shape', () => {
         isBinding={false}
         isHovered={false}
         isSelected={false}
+        isGhost={false}
+        isChildOfSelected={false}
       />
     )
   })
 })
-
-// { shape: TLShape; ref: ForwardedRef<Element>; } & TLComponentProps<any, any> & RefAttributes<Element>
-// { shape: BoxShape; ref: ForwardedRef<any>; } & TLComponentProps<any, any> & RefAttributes<any>'

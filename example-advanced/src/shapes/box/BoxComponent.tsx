@@ -3,7 +3,7 @@ import { TLShapeUtil, SVGContainer } from '@tldraw/core'
 import type { BoxShape } from './BoxShape'
 
 export const BoxComponent = TLShapeUtil.Component<BoxShape, SVGSVGElement>(
-  ({ shape, events, meta }, ref) => {
+  ({ shape, events, isGhost, meta }, ref) => {
     const color = meta.isDarkMode ? 'white' : 'black'
 
     return (
@@ -16,6 +16,7 @@ export const BoxComponent = TLShapeUtil.Component<BoxShape, SVGSVGElement>(
           strokeLinejoin="round"
           fill="none"
           rx={4}
+          opacity={isGhost ? 0.3 : 1}
           pointerEvents="all"
         />
       </SVGContainer>

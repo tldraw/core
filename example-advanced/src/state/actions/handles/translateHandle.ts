@@ -1,13 +1,11 @@
 import type { Action, CustomBinding } from 'state/constants'
 import { getPagePoint } from 'state/helpers'
 import { getShapeUtils, Shape } from 'shapes'
-import { intersectLineSegmentBounds } from '@tldraw/intersect'
 import { mutables } from 'state/mutables'
 import { nanoid } from 'nanoid'
-import { TLBinding, TLPointerInfo, Utils } from '@tldraw/core'
+import { TLPointerInfo, Utils } from '@tldraw/core'
 import type { ArrowShape } from 'shapes/arrow'
 import Vec from '@tldraw/vec'
-import { getBoundHandlePoint } from '../bindings/getBoundHandlePoint'
 
 export const translateHandle: Action = (data, payload: TLPointerInfo) => {
   const { initialPoint, snapshot, pointedHandleId } = mutables

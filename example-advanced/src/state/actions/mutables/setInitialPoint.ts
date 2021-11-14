@@ -5,4 +5,5 @@ import { mutables } from 'state/mutables'
 
 export const setInitialPoint: Action = (data, payload: TLPointerInfo) => {
   mutables.initialPoint = getPagePoint(payload.origin, data.pageState)
+  mutables.previousPoint = [...mutables.initialPoint]
 }

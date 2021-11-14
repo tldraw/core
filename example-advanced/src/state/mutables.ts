@@ -1,4 +1,5 @@
 import { TLBounds, TLBoundsHandle, TLBoundsWithCenter, Utils } from '@tldraw/core'
+import type { Shape } from 'shapes'
 import type { ArrowShape } from 'shapes/arrow'
 import { AppData, INITIAL_DATA } from './constants'
 import { makeHistory } from './history'
@@ -15,11 +16,14 @@ interface Mutables {
   viewport: TLBounds
   history: ReturnType<typeof makeHistory>
   initialPoint: number[]
+  previousPoint: number[]
+  initialShape?: Shape
   isCloning: boolean
   pointedShapeId?: string
   pointedHandleId?: keyof ArrowShape['handles']
   pointedBoundsHandleId?: TLBoundsHandle
   initialCommonBounds?: TLBounds
+  rawPoints: number[][]
   snapInfo?: {
     initialBounds: TLBoundsWithCenter
     all: TLBoundsWithCenter[]
@@ -30,11 +34,13 @@ interface Mutables {
 export const mutables: Mutables = {
   snapshot: INITIAL_DATA,
   initialPoint: [0, 0],
+  previousPoint: [0, 0],
   history: makeHistory(),
   viewport: Utils.getBoundsFromPoints([
     [0, 0],
     [100, 100],
   ]),
+  rawPoints: [],
   isCloning: false,
   pointedShapeId: undefined,
   pointedHandleId: undefined,

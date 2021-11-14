@@ -10,36 +10,11 @@ interface RenderedShapeProps<T extends TLShape, E extends Element, M>
 }
 
 export const RenderedShape = React.memo(
-  function RenderedShape<T extends TLShape, E extends Element, M>({
-    shape,
-    utils,
-    isEditing,
-    isBinding,
-    isHovered,
-    isSelected,
-    onShapeChange,
-    onShapeBlur,
-    events,
-    meta,
-  }: RenderedShapeProps<T, E, M>) {
-    const ref = utils.getRef(shape)
-
-    // consider using layout effect to update bounds cache if the ref is filled
-
-    return (
-      <utils.Component
-        ref={ref}
-        shape={shape}
-        isEditing={isEditing}
-        isBinding={isBinding}
-        isHovered={isHovered}
-        isSelected={isSelected}
-        meta={meta}
-        events={events}
-        onShapeChange={onShapeChange}
-        onShapeBlur={onShapeBlur}
-      />
-    )
+  function RenderedShape<T extends TLShape, E extends Element, M>(
+    props: RenderedShapeProps<T, E, M>
+  ) {
+    const ref = props.utils.getRef(props.shape)
+    return <props.utils.Component ref={ref} {...props} />
   },
   (prev, next) => {
     // If these have changed, then definitely render
@@ -48,6 +23,7 @@ export const RenderedShape = React.memo(
       prev.isSelected !== next.isSelected ||
       prev.isEditing !== next.isEditing ||
       prev.isBinding !== next.isBinding ||
+      prev.isGhost !== next.isGhost ||
       prev.meta !== next.meta
     ) {
       return false

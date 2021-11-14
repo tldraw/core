@@ -4,7 +4,7 @@ import type { ArrowShape } from './ArrowShape'
 import Vec from '@tldraw/vec'
 
 export const ArrowComponent = TLShapeUtil.Component<ArrowShape, SVGSVGElement>(
-  ({ shape, events, meta }, ref) => {
+  ({ shape, events, isGhost, meta }, ref) => {
     const color = meta.isDarkMode ? 'white' : 'black'
     const { start, end } = shape.handles
 
@@ -31,6 +31,7 @@ export const ArrowComponent = TLShapeUtil.Component<ArrowShape, SVGSVGElement>(
           strokeLinecap="round"
           fill="none"
           pointerEvents="none"
+          opacity={isGhost ? 0.3 : 1}
         />
       </SVGContainer>
     )
