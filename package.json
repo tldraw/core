@@ -30,7 +30,7 @@
     "docs:watch": "lerna run docs:watch",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "lerna": "lerna"
+    "lerna": "lerna",
   },
   "devDependencies": {
     "@swc-node/jest": "^1.3.3",

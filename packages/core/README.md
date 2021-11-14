@@ -221,6 +221,7 @@ An object that describes a shape on the page. The shapes in your document should
 | `rotation`            | `number`   | (optiona) The shape's current rotation in radians                                     |
 | `children`            | `string[]` | (optional) An array containing the ids of this shape's children                       |
 | `handles`             | `{}`       | (optional) A table of [`TLHandle`](#tlhandle) objects                                 |
+| `isGhost`             | `boolean`  | (optional) True if the shape is "ghosted", e.g. while deleting                        |
 | `isLocked`            | `boolean`  | (optional) True if the shape is locked                                                |
 | `isHidden`            | `boolean`  | (optional) True if the shape is hidden                                                |
 | `isEditing`           | `boolean`  | (optional) True if the shape is currently editing                                     |
@@ -328,16 +329,18 @@ Your component can return HTML elements or SVG elements. If your shape is return
 
 The component will receive the following props:
 
-| Name            | Type       | Description                                                                            |
-| --------------- | ---------- | -------------------------------------------------------------------------------------- |
-| `shape`         | `TLShape`  | The shape from `page.shapes` that is being rendered                                    |
-| `meta`          | `{}`       | The value provided to the `Renderer`'s `meta` prop                                     |
-| `events`        | `{}`       | Several pointer events that should be set on the container element                     |
-| `isSelected`    | `boolean`  | Whether the current shape is selected (true if its `id` is in `pageState.selectedIds`) |
-| `isHovered`     | `boolean`  | Whether the current shape is hovered (true if its `id` is `pageState.hoveredId`)       |
-| `isEditing`     | `boolean`  | Whether the current shape is editing (true if its `id` is `pageState.editingId`)       |
-| `onShapeChange` | `Function` | The callback provided to the `Renderer`'s `onShapeChange` prop                         |
-| `onShapeBlur`   | `Function` | The callback provided to the `Renderer`'s `onShapeBlur` prop                           |
+| Name                | Type       | Description                                                        |
+| ------------------- | ---------- | ------------------------------------------------------------------ |
+| `shape`             | `TLShape`  | The shape from `page.shapes` that is being rendered                |
+| `meta`              | `{}`       | The value provided to the `Renderer`'s `meta` prop                 |
+| `events`            | `{}`       | Several pointer events that should be set on the container element |
+| `isSelected`        | `boolean`  | The shape is selected (its `id` is in `pageState.selectedIds`)     |
+| `isHovered`         | `boolean`  | The shape is hovered (its `id` is `pageState.hoveredId`)           |
+| `isEditing`         | `boolean`  | The shape is being edited (its `id` is `pageState.editingId`)      |
+| `isGhost`           | `boolean`  | The shape is ghosted or is the child of a ghosted shape.           |
+| `isChildOfSelected` | `boolean`  | The shape is the child of a selected shape.                        |
+| `onShapeChange`     | `Function` | The callback provided to the `Renderer`'s `onShapeChange` prop     |
+| `onShapeBlur`       | `Function` | The callback provided to the `Renderer`'s `onShapeBlur` prop       |
 
 ### Indicator
 
