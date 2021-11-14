@@ -48,12 +48,12 @@ export function Toolbar({ activeStates, lastEvent }: ToolbarProps) {
       </PrimaryTools>
       <StatusBar>
         <div>
+          <button onClick={onReset}>Reset</button>
           {activeStates
             .slice(1)
             .map((name) => name.split('#state_1.root')[1])
             .join(' - ')}
         </div>
-        <button onClick={onReset}>Reset</button>
         <div>{lastEvent}</div>
       </StatusBar>
     </ToolbarContainer>
@@ -141,7 +141,9 @@ const StatusBar = styled('div', {
 
   '& button': {
     background: 'none',
-    border: 'none',
+    border: '1px solid $text',
+    borderRadius: 3,
+    marginRight: '$3',
     fontFamily: 'inherit',
     fontSize: 'inherit',
     cursor: 'pointer',

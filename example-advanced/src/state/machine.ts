@@ -220,6 +220,9 @@ export const machine = createState({
               do: 'setInitialPoint',
               to: 'eraser.pointing',
             },
+            CANCELLED: {
+              to: 'select',
+            },
           },
         },
         pointing: {
@@ -245,7 +248,7 @@ export const machine = createState({
             },
             STOPPED_POINTING: {
               do: ['eraseGhostShapes', 'updateBoundShapes', 'addToHistory'],
-              to: 'select',
+              to: 'eraser.idle',
             },
           },
         },
@@ -260,6 +263,9 @@ export const machine = createState({
               do: 'setInitialPoint',
               to: 'pencil.creating',
             },
+            CANCELLED: {
+              to: 'select',
+            },
           },
         },
         creating: {
@@ -270,11 +276,10 @@ export const machine = createState({
             PANNED: 'extendPencilShape',
             CANCELLED: {
               do: 'deleteSelectedShapes',
-              to: 'select',
             },
             STOPPED_POINTING: {
               do: 'addToHistory',
-              to: 'select',
+              to: 'pencil.idle',
             },
           },
         },
@@ -327,6 +332,9 @@ export const machine = createState({
           on: {
             STARTED_POINTING: {
               to: 'arrow.pointing',
+            },
+            CANCELLED: {
+              to: 'select',
             },
           },
         },
