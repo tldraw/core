@@ -216,6 +216,9 @@ export const machine = createState({
       states: {
         idle: {
           on: {
+            UNDO: 'undo',
+            REDO: 'redo',
+            SELECTED_ALL: { do: 'selectAllShapes', to: 'select' },
             STARTED_POINTING: {
               do: 'setInitialPoint',
               to: 'eraser.pointing',
@@ -259,6 +262,9 @@ export const machine = createState({
       states: {
         idle: {
           on: {
+            UNDO: 'undo',
+            REDO: 'redo',
+            SELECTED_ALL: { do: 'selectAllShapes', to: 'select' },
             STARTED_POINTING: {
               do: 'setInitialPoint',
               to: 'pencil.creating',
@@ -278,7 +284,7 @@ export const machine = createState({
               do: 'deleteSelectedShapes',
             },
             STOPPED_POINTING: {
-              do: 'addToHistory',
+              do: ['deselectAllShapes', 'addToHistory'],
               to: 'pencil.idle',
             },
           },
