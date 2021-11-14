@@ -74,12 +74,12 @@ Improved:
 ## 0.1.8
 
 - Expands README.
-- Removes properties specific to the TLDraw app.
+- Removes properties specific to the tldraw app.
 
 ## 0.1.7
 
 - Fixes selection bug with SVGContainer.
-- Removes various properties specific to the TLDraw app.
+- Removes various properties specific to the tldraw app.
 
 ## 0.1.0
 

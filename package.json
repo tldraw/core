@@ -1,6 +1,6 @@
 {
   "name": "@tldraw/core-repo",
-  "description": "The TLDraw core renderer and utilities.",
+  "description": "The tldraw core renderer and utilities.",
   "author": "@steveruizok",
   "repository": {
     "type": "git",

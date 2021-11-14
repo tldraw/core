@@ -1,7 +1,7 @@
 {
   "version": "0.1.21",
   "name": "@tldraw/core",
-  "description": "The TLDraw core renderer and utilities.",
+  "description": "The tldraw core renderer and utilities.",
   "author": "@steveruizok",
   "repository": {
     "type": "git",
