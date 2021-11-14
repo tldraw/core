@@ -10,7 +10,8 @@ import {
 import { useStateDesigner } from '@state-designer/react'
 import { shapeUtils } from './shapes'
 import { machine } from './state/machine'
-import { Toolbar } from './components/toolbar'
+import { Toolbar } from './components/Toolbar'
+import { TitleLinks } from './components/TitleLinks'
 import './styles.css'
 import styled from 'stitches.config'
 import { Api } from 'state/api'
@@ -219,6 +220,7 @@ export default function App({ onMount }: AppProps): JSX.Element {
         hideBindingHandles={true}
       />
       <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
+      <TitleLinks />
     </AppContainer>
   )
 }
@@ -231,4 +233,5 @@ const AppContainer = styled('div', {
   bottom: '0px',
   width: '100%',
   height: '100%',
+  zIndex: 101,
 })
