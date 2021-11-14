@@ -49,6 +49,10 @@ export class PencilUtil extends CustomShapeUtil<T, E> {
     }
   }
 
+  shouldRender = (prev: T, next: T): boolean => {
+    return prev.points !== next.points
+  }
+
   getCenter = (shape: T) => {
     return Utils.getBoundsCenter(this.getBounds(shape))
   }
