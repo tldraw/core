@@ -17,12 +17,14 @@ export const updateBrush: Action = (data, payload: TLPointerInfo) => {
   const initialSelectedIds = snapshot.pageState.selectedIds
 
   const hits = Object.values(snapshot.page.shapes)
-    .filter((shape) => getShapeUtils(shape).hitTestBounds(shape, brushBounds))
+    .filter((shape) =>
+      payload.metaKey || payload.ctrlKey
+        ? Utils.boundsContain(brushBounds, getShapeUtils(shape).getBounds(shape))
+        : getShapeUtils(shape).hitTestBounds(shape, brushBounds)
+    )
     .map((shape) => shape.id)
 
-  if (payload.shiftKey) {
-    data.pageState.selectedIds = Array.from(new Set([...initialSelectedIds, ...hits]).values())
-  } else {
-    data.pageState.selectedIds = hits
-  }
+  data.pageState.selectedIds = payload.shiftKey
+    ? Array.from(new Set([...initialSelectedIds, ...hits]).values())
+    : hits
 }

@@ -1483,10 +1483,10 @@
   resolved "https://registry.yarnpkg.com/@state-designer/core/-/core-2.0.3.tgz#a04a0b51cbbd31a5c5b9ee6605e2880f11e642fc"
   integrity sha512-sgRiMrw+mkp01fJOLyeX8pWCTdChL581TXjHc65b/ZmhcLWZ/N7MLwmu4PVh9kPcclm7git9jdsHkp3m97fK4g==
 
-"@state-designer/react@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@state-designer/react/-/react-2.0.3.tgz#6815e378a7e72d485394102b5c4c7bc3c433781b"
-  integrity sha512-bTKvvlHQ/hR1jE62qDZo6vPDwvv1ZwM7dxyF1jC+PwkeHosUpgEszmyR4hFeRmyabrv5AA9NxIRX24PTXeRgEw==
+"@state-designer/react@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@state-designer/react/-/react-3.0.0.tgz#da3e9a6627341b3a59c242155a3931417d9a18a5"
+  integrity sha512-FPke45GKptw0ainn5QLM0qAUYkotCM23YaejtTHWQ+6Xbz+PmyfNXZc2gs4qQwsc8JHUIhfVXpRwREAJlIZZyg==
   dependencies:
     "@state-designer/core" latest
 

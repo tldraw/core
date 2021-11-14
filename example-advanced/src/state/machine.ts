@@ -199,6 +199,7 @@ export const machine = createState({
         brushSelecting: {
           onExit: 'clearBrush',
           on: {
+            TOGGLED_MODIFIER: 'updateBrush',
             MOVED_POINTER: 'updateBrush',
             PANNED: 'updateBrush',
             CANCELLED: {
