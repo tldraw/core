@@ -13,6 +13,7 @@ state, so we can throw it all into a regular object.
 
 interface Mutables {
   snapshot: AppData
+  rendererBounds: TLBounds
   viewport: TLBounds
   history: ReturnType<typeof makeHistory>
   initialPoint: number[]
@@ -38,6 +39,10 @@ export const mutables: Mutables = {
   currentPoint: [0, 0],
   previousPoint: [0, 0],
   history: makeHistory(),
+  rendererBounds: Utils.getBoundsFromPoints([
+    [0, 0],
+    [100, 100],
+  ]),
   viewport: Utils.getBoundsFromPoints([
     [0, 0],
     [100, 100],

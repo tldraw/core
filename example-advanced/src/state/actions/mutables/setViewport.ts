@@ -10,6 +10,8 @@ export const setViewport: Action = (data, payload: { bounds: TLBounds }) => {
   const [minX, minY] = Vec.sub(Vec.div([0, 0], camera.zoom), camera.point)
   const [maxX, maxY] = Vec.sub(Vec.div([width, height], camera.zoom), camera.point)
 
+  mutables.rendererBounds = { ...payload.bounds }
+
   mutables.viewport = {
     minX,
     minY,
