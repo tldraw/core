@@ -34,7 +34,7 @@ export class PencilUtil extends CustomShapeUtil<T, E> {
 
   hideBounds = true
 
-  canBind = true
+  canBind = false
 
   getShape = (props: Partial<T>): T => {
     return {
