@@ -1,4 +1,4 @@
-<div style="text-align: center; transform: scale(.5);">
+<div style="text-align: center; transform: scale(.5); color: black;">
   <img src="card-repo.png"/>
 </div>
 
